@@ -184,6 +184,7 @@
     <Content Include="Views\General\Login.cshtml" />
     <Content Include="Views\General\RegistroCliente.cshtml" />
     <Content Include="Views\Shared\_Modal.cshtml" />
+    <Content Include="Views\General\RegistroMascota.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
