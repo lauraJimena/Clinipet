@@ -1,0 +1,69 @@
+﻿@import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;700;800;900&family=Quicksand:wght@300..700&display=swap');
+
+
+body {
+    font-family: "Quicksand", sans-serif;
+    font-size: 1.8em;
+
+   
+}
+h2 {
+    font-weight: 900;
+    font-size: 2.05em;
+    color: #d9a86c;
+    text-align: center;
+    text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 3px 2.3px 0 black; /* Crea el borde negro */
+}
+label {
+    font-weight: 600;
+   
+}
+
+.contBoton {
+    text-align: center;
+}
+button {
+    margin-top: 18px;
+    background-color: #d9a86c;
+    padding: 13px;
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.3);
+    border: 1px solid black;
+    font-weight: bold;
+    border-radius: 30px;
+    margin-left: auto;
+}
+.boton {
+    font-size: 0.8em;
+    margin-top: 18px;
+    background-color: #4f7768;
+    padding: 13px;
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.3);
+    border: 0.5px solid #545454;
+    font-weight: bold;
+    border-radius: 30px;
+    margin-left: auto;
+}
+.boton:hover {
+    background-color: bisque;
+}
+ button:hover {
+        background-color: bisque;
+}
+input {
+    margin-bottom:10px;
+    width: 900px;
+    border-radius: 20px;
+    border: 1px solid black;
+    box-sizing: border-box;
+}
+
+select {
+    width: 900px;
+    margin-bottom: 10px;
+    border-radius: 20px;
+    border: 1px solid black;
+    box-sizing: border-box;
+}
+.bodyForm {
+    background-color: rgba(120, 168, 144, 0.92);
+}

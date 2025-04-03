@@ -1,0 +1,55 @@
+﻿
+@{
+    ViewBag.Title = "Login";
+}
+<link rel="stylesheet" href="@Url.Content("~/Estilos/estilos.css")">
+<body class="bodyForm">
+    <div class="contenedor">
+        <div class="cont">
+            <h2 class="titulo">Login</h2>
+            <form action="@Url.Action("Login", "General")" method="post">
+                <label for="numeroIdentidad">Número de Identidad:</label><br />
+                <input type="text" id="numeroIdentidad" name="num_ident" required pattern="\d+" title="Solo se permiten números"/><br />
+
+                <label for="contraseña">Contraseña:</label><br />
+                <input type="password" id="contraseña" name="contras_usu" required /><br />
+                <div class="contBoton">
+                <button type="submit">Ingresar</button>
+                </div>
+            </form>
+        </div>
+        <img class="perro"src="~/Imagenes/login.jpg" alt="">
+    </div>
+</body>
+<style>
+    .titulo {
+        margin-top: 0px;
+        margin-bottom: 50px;
+       
+    }
+    .contenedor {
+        padding:0;
+        display: flex;  
+        align-items: center; /* Alinea verticalmente */
+        justify-content: center; /* centra horizontalmente */
+        gap: 110px; /* Espacia entre el formulario y la imagen */
+        margin: auto;
+    }
+    .cont {
+        height:430px;
+        width: 700px;
+        margin-top: 0;
+        margin-left: 150px;
+        flex-direction: column; /* Elementos en columna */
+    }
+    .perro {
+        margin-top: 0;     
+        margin-left: 70px;
+        width: 65%;
+        border-radius: 10px;
+        object-fit: cover;
+    }
+    
+   
+    
+</style>

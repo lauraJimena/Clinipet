@@ -1,0 +1,90 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Mi aplicación ASP.NET</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <style>
+        /* Estilos para que se carguen primero que los que vienen por defecto en ASP.NET*/
+        .navbar {
+            padding-top: 6px;
+            background-color: #9fb2a9;
+            box-shadow: 0px 7px 15px rgba(0, 0, 0, 0.22);
+            border-color: #9fb2a9;
+            height: 11%;
+        }
+
+            .navbar .navbar-brand {
+                padding-top: 0;
+                font-size: 1.3em;
+                font-weight: bold;
+                color: #2f2f2f;
+            }
+
+        .navbar-brand .nav2 {
+            padding-top: 19px;
+        }
+
+        .tit {
+            margin-top: 15px;
+            text-shadow: -1px -1px 0 gray;
+        }
+
+        .navbar-brand img.logo {
+            margin-top: 1px;
+            margin-right: 8px; /* Espacio entre el logo y el texto */
+        }
+
+        .navbar-collapse .nav .links {
+            color: #2f2f2f;
+            font-weight: 500;
+            font-size: 1.1em;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <a href="@Url.Action("Index", "Home")" class="navbar-brand">
+                    <img src="@Url.Content("~/Imagenes/logo_clinipet.png")" alt="CliniPet Logo"  width="65" height="55" class="logo">
+                </a>
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+
+                @Html.ActionLink("CliniPet", "Index", "Home", new { area = "" }, new { @class = "navbar-brand tit" })
+
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li>@Html.ActionLink("Inicio", "Index", "Home", new { area = "" }, new { @class = "links" })</li>
+                    <li>@Html.ActionLink("Acerca de", "About", "Home", new { area = "" }, new { @class = "links" })</li>
+                    <li>@Html.ActionLink("Contacto", "Contact", "Home", new { area = "" }, new { @class = "links" })</li>
+                    <li>@Html.ActionLink("Login", "Login", "General", new { area = "" }, new { @class = "links" })</li>
+                    <li>@Html.ActionLink("Registro Cliente", "RegistroCliente", "General", new { area = "" }, new { @class = "links" })</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - Mi aplicación ASP.NET</p>
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+    @Html.Partial("_Modal")
+</body>
+</html>
+
