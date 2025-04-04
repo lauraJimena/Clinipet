@@ -1,7 +1,108 @@
-﻿
+﻿@model Clinipet.Dtos.MascotaDto
 @{
-    ViewBag.Title = "RegistroMascota";
+    ViewBag.Title = "Registro Mascota";
 }
+<link rel="stylesheet" href="@Url.Content("~/Estilos/estilos.css")">
 
-<h2>RegistroMascota</h2>
+<body class="bodyForm">
+    <div class="contenedor">
+        <div class="cont">
+            <div class="cajaTitulo"><h2 class="titulo">Registro de Mascota</h2></div>
+
+            <form id="registroForm" method="post" asp-action="RegistroMascota" asp-controller="General">
+                <label for="nom_masc">Nombre:</label><br />
+                <input type="text" id="nom_masc" asp-for="nom_masc" name="nom_masc" required /><br />
+                @Html.ValidationMessageFor(model => model.nom_masc, "", new { @class = "text-danger" })
+
+                <label for="edad_masc">Edad:</label><br />
+                <input type="text" id="edad_masc" asp-for="edad_masc" name="edad_masc" required /><br />
+                @Html.ValidationMessageFor(model => model.edad_masc, "", new { @class = "text-danger" })
+
+                <label for="id_tipo">Tipo de mascota: </label><br />
+                <select id="id_tipo" name="id_tipo" asp-for="id_tipo" required>
+                    <option value="">-- Selecciona un tipo --</option>
+                    @foreach (var tipo in ViewBag.Tipos)
+                    {
+                        <option value="@tipo.Value">@tipo.Text</option>
+                    }
+                </select>
+                @Html.ValidationMessageFor(model => model.id_tipo, "", new { @class = "text-danger" })
+                <br />
+
+                <label for="id_raza">Raza:</label><br />
+                <select id="id_raza" name="id_raza" asp-for="id_raza" required>
+                    <option value="">-- Selecciona una raza --</option>
+                    @foreach (var raza in ViewBag.Razas)
+                    {
+                        <option value="@raza.Value" data-tipo="@raza.Group.Name">@raza.Text</option>
+                    }
+                </select>
+                @Html.ValidationMessageFor(model => model.id_raza, "", new { @class = "text-danger" })
+
+                <input type="hidden" id="id_usu" name="id_usu" value="@Session["UserID"]" />
+
+                <div class="contBoton">
+                    <button type="submit">Registrar</button>
+                </div>
+            </form>
+        </div>
+        <img class="imagenFondo" src="~/Imagenes/registro_masc.jpg" alt="">
+    </div>
+
+</body>
+<script>
+   
+        document.getElementById('id_tipo').addEventListener('change', function () {
+        var tipoSeleccionado = this.options[this.selectedIndex].text;
+        var razaSelect = document.getElementById('id_raza');
+        var opciones = razaSelect.options;
+
+        for (var i = 0; i < opciones.length; i++) {
+            var opcion = opciones[i];
+        var tipo = opcion.getAttribute('data-tipo');
+
+        if (!tipo || tipo === tipoSeleccionado) {
+            opcion.style.display = '';
+            } else {
+            opcion.style.display = 'none';
+            }
+        }
+
+        razaSelect.selectedIndex = 0; // Reiniciar selección
+    });
+
+
+</script>
+<style>
+    .bodyForm {
+        background-color: #c7cbca;
+    }
+
+    .cajaTitulo {
+        margin-top: 50px;
+        justify-items: center; /* Alinea verticalmente */
+    }
+
+    .titulo {
+        width: 150%;
+        margin-bottom: 30px;
+        margin-left: 0px;
+    }
+
+    .contenedor {
+        padding: 0;
+        display: flex;
+        align-items: center; /* Alinea verticalmente */
+        gap: 110px; /* Espacia entre el formulario y la imagen */
+        margin-left: 0px;
+    }
+
+    .cont {
+        height: 600px;
+        width: 400px;
+        margin-top: 0;
+        margin-left: 40px;
+        flex-direction: column; /* Elementos en columna */
+    }
+</style>
 

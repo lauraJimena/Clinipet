@@ -64,6 +64,13 @@ select {
     border: 1px solid black;
     box-sizing: border-box;
 }
+.imagenFondo {
+    margin-top: 0;
+    margin-left: 70px;
+    width: 65%;
+    border-radius: 10px;
+    object-fit: cover;
+}
 .bodyForm {
     background-color: rgba(120, 168, 144, 0.92);
 }

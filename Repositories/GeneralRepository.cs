@@ -116,10 +116,96 @@ namespace Clinipet.Repositories
 
             return userResult;
         }
+        public int RegistrarMascota(MascotaDto masc)
+        {
+
+            int comando = 0;
+            DBContextUtility Connection = new DBContextUtility();
+            Connection.Connect();
+
+            string SQL = "INSERT INTO [clinipet].[dbo].[mascota] " +
+             "(nom_masc, edad_masc, id_raza, id_tipo, id_usu) " +
+             "VALUES (@nom_masc, @edad_masc, @id_raza, @id_tipo, @id_usu)";
 
 
+            System.Diagnostics.Debug.WriteLine("Hola mascota " + masc.nom_masc);
+            using (SqlCommand command = new SqlCommand(SQL, Connection.CONN()))
+            {
+                command.Parameters.AddWithValue("@nom_masc", masc.nom_masc);
+                command.Parameters.AddWithValue("@edad_masc", masc.edad_masc);
+                command.Parameters.AddWithValue("@id_raza", masc.id_raza);
+                command.Parameters.AddWithValue("@id_tipo", masc.id_tipo);
+                command.Parameters.AddWithValue("@id_usu", masc.id_usu);
+                comando = command.ExecuteNonQuery();
+
+            }
+            System.Diagnostics.Debug.WriteLine(comando);
+            Connection.Disconnect();
+            return comando;
+        }
+        public List<MascotaDto> ObtenerRazas()
+        {
+            List<MascotaDto> razas= new List<MascotaDto>();
+
+            string sql = "SELECT r.id_raza, r.nom_raza, t.nom_tipo " +
+                 "FROM [clinipet].[dbo].[raza_masc] r " +
+                 "JOIN [clinipet].[dbo].[tipo_masc] t ON r.id_tipo = t.id_tipo"; // Unir con la tabla de tipos
+
+            DBContextUtility Connection = new DBContextUtility();
+            Connection.Connect();
+
+            using (SqlCommand command = new SqlCommand(sql, Connection.CONN()))
+            {
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        MascotaDto raza = new MascotaDto
+                        {
+                            id_raza = reader.GetInt16(0),
+                            nom_raza = reader.GetString(1),
+                            nom_tipo = reader.GetString(2)
 
 
+                        };
+                        razas.Add(raza);
+                    }
 
+                }
+            }
+            return razas;
+        }
+        public List<MascotaDto> ObtenerTipos()
+        {
+            List<MascotaDto> razas = new List<MascotaDto>();
+
+            string sql = "SELECT id_tipo, nom_tipo " +
+                             "FROM [clinipet].[dbo].[tipo_masc] ";
+            DBContextUtility Connection = new DBContextUtility();
+            Connection.Connect();
+            using (SqlCommand command = new SqlCommand(sql, Connection.CONN()))
+            {
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        MascotaDto tipo = new MascotaDto
+                        {
+                            id_tipo = reader.GetByte(0), //TinyInt se usa Byte
+                            nom_tipo = reader.GetString(1),
+                            
+
+                        };
+                        razas.Add(tipo);
+                    }
+
+                }
+            }
+            return razas;
+        }
     }
+
+
+
+
 }

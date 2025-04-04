@@ -26,6 +26,37 @@ namespace Clinipet.Controllers
             UserDto user = new UserDto();
             return View(user);
         }
+        public ActionResult RegistroMascota()
+        {
+            GeneralService generalService = new GeneralService();
+
+            /*List<MascotaDto> razas;     
+            razas = generalService.obtenerRazas();
+
+
+            //Convertir la lista raza en SelectList para pasar a la vista
+            ViewBag.Razas = razas.Select(r => new SelectListItem
+              {
+                  Value = r.id_raza.ToString(),
+                  Text = r.nom_raza,
+                 Group = new SelectListGroup { Name = r.nom_tipo } // Group para almacenar el tipo
+             }).ToList();*/
+
+            //List<MascotaDto> tipos;
+            //tipos = generalService.obtenerTipos();
+
+            // Convertir la lista tipo en SelectList para pasar a la vista
+            /*ViewBag.Tipos = tipos.Select(t => new SelectListItem
+            {
+                Value = t.id_tipo.ToString(),
+                Text = t.nom_tipo
+            }).ToList();*/
+
+            ViewBag.Razas = generalService.ObtenerRazasSelect();
+            ViewBag.Tipos = generalService.ObtenerTiposSelect();
+
+            return View();
+        }
         [HttpPost]
         public ActionResult Login(UserDto nuevoUsu)
         {
@@ -70,6 +101,9 @@ namespace Clinipet.Controllers
 
             return View();
         }
+
+
+
         [HttpPost]
         public ActionResult RegistroCliente(UserDto nuevoUsu)
         {
@@ -83,13 +117,12 @@ namespace Clinipet.Controllers
                     return Json(new { success = true, message = "Registro exitoso" });
                     //return RedirectToAction("Index", "Home");// Redirige a la vista principal si la creación fue exitosa.
                 }
-                
+
                 else
                 {
                     if (userResponse.Response == -1)
                     {
-                        //TempData["ErrorMessage"] = "El correo que ingreso ya existe. Intente nuevamente.";
-                        //return View("RegistroCliente", nuevoUsu); // No pierde TempData
+                        
                         return Json(new { success = false, message = "El correo ya existe. Intente nuevamente." });
                     }
                     else
@@ -105,11 +138,40 @@ namespace Clinipet.Controllers
                 string mensaje = ex.Message;
                 return View(); // Muestra la vista en caso de que ocurra una excepción.
             }
+
         }
+            [HttpPost]
+            public ActionResult RegistroMascota(MascotaDto nuevaMasc)
+            {
+                try
+                {
+                    System.Diagnostics.Debug.WriteLine(Session["Id"]);
+                    nuevaMasc.id_usu = Convert.ToInt32(Session["Id"]); // Asigna el ID del usuario logueado
+                    GeneralService mascService = new GeneralService(); // instancia el UserService.
+                    MascotaDto mascResponse = mascService.RegistrarMascota(nuevaMasc); // Llama al método de creación de usuario.
+               
+                if (mascResponse.Response == 1)
+                    {
+                        //return Json(new { success = true, message = "Registro exitoso" });
+                    return RedirectToAction("Index", "Home");
+                    //return RedirectToAction("Index", "Home");// Redirige a la vista principal si la creación fue exitosa.
+                }
 
+                   
+                        else
+                        {
+                            return RedirectToAction("About", "Home");
+                           
+                        }
 
+                    
+                }
+                catch (Exception ex)
+                {
+                    string mensaje = ex.Message;
+                    return View(); // Muestra la vista en caso de que ocurra una excepción.
+                }
+
+            }
     }
-
-
-
 }
