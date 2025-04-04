@@ -126,6 +126,7 @@
     <Compile Include="Controllers\GeneralController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\VeterinarioController.cs" />
+    <Compile Include="Dtos\MascotaDto.cs" />
     <Compile Include="Dtos\UserDto.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -154,6 +155,7 @@
     <Content Include="Imagenes\logo_clinipet.png" />
     <Content Include="Imagenes\perro_index.png" />
     <Content Include="Imagenes\registro.jpg" />
+    <Content Include="Imagenes\registro_masc.jpg" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
