@@ -13,7 +13,11 @@ namespace Clinipet.Controllers
         {
             return View();
         }
-        
+        public ActionResult CitasEspec()
+        {
+            return View();
+        }
+
 
     }
 }
