@@ -9,9 +9,11 @@ namespace Clinipet.Controllers
     public class ClienteController : Controller
     {
         // GET: Cliente
-        public ActionResult Index()
+        public ActionResult IndexCliente()
         {
             return View();
         }
+        
+
     }
 }

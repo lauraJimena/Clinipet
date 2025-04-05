@@ -147,15 +147,25 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Imagenes\acerca.png" />
+    <Content Include="Imagenes\cita_espec.png" />
+    <Content Include="Imagenes\contacto.png" />
+    <Content Include="Imagenes\facebook.png" />
     <Content Include="Imagenes\fondo_index.png" />
+    <Content Include="Imagenes\historial_cita.png" />
+    <Content Include="Imagenes\home.png" />
     <Content Include="Imagenes\img1_baner.png" />
     <Content Include="Imagenes\img2_baner.jpeg" />
     <Content Include="Imagenes\img3_baner.jpeg" />
+    <Content Include="Imagenes\instagram.png" />
     <Content Include="Imagenes\login.jpg" />
     <Content Include="Imagenes\logo_clinipet.png" />
+    <Content Include="Imagenes\mascota_regis.png" />
     <Content Include="Imagenes\perro_index.png" />
+    <Content Include="Imagenes\registrar_mascota.png" />
     <Content Include="Imagenes\registro.jpg" />
-    <Content Include="Imagenes\registro_masc.jpg" />
+    <Content Include="Imagenes\registro_masc_fondo.jpg" />
+    <Content Include="Imagenes\cita_serv_general.png" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
@@ -187,13 +197,13 @@
     <Content Include="Views\General\RegistroCliente.cshtml" />
     <Content Include="Views\Shared\_Modal.cshtml" />
     <Content Include="Views\General\RegistroMascota.cshtml" />
+    <Content Include="Views\Cliente\IndexCliente.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Repositories\Models\" />
     <Folder Include="Views\Admin\" />
     <Folder Include="Views\Asistente\" />
-    <Folder Include="Views\Cliente\" />
     <Folder Include="Views\Veterinario\" />
   </ItemGroup>
   <ItemGroup>

@@ -29,7 +29,7 @@ namespace Clinipet.Controllers
         public ActionResult RegistroMascota()
         {
             GeneralService generalService = new GeneralService();
-
+            
             /*List<MascotaDto> razas;     
             razas = generalService.obtenerRazas();
 
@@ -74,15 +74,19 @@ namespace Clinipet.Controllers
                 System.Diagnostics.Debug.WriteLine(Session["Rol"]);
                 
 
-                if (userResponse.id_rol == 1)
+                if (userResponse.id_rol == 1)//Administrador
                 {
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("IndexCliente", "Cliente");
                 }               
-                if (userResponse.id_rol == 2)
+                if (userResponse.id_rol == 2)//Asistente
                 {
                     return RedirectToAction("About", "Home");
                 }
-                if (userResponse.id_rol == 3)
+                if (userResponse.id_rol == 3)//Cliente
+                {
+                    return RedirectToAction("IndexCliente", "Cliente");
+                }
+                if (userResponse.id_rol == 4)//Veterinario
                 {
                     return RedirectToAction("Contact", "Home");
                 }

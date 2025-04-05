@@ -1,0 +1,96 @@
+﻿
+@{
+    ViewBag.Title = "IndexCliente";
+}
+<link rel="stylesheet" href="@Url.Content("~/Estilos/estilos.css")">
+
+<div class="contenedor">
+    <h2 class="tituloIndex">¡Hola! @Session["Nombre"]</h2>
+
+    <div class="opciones">
+        <div class="opcion">
+            <img src="~/Imagenes/registrar_mascota.png" alt="Registrar mascota">
+            <a href="@Url.Action("RegistroMascota", "General")" class="links"><p>Registrar mascota</p></a>
+
+        </div>
+        <div class="opcion opcion2">
+            <img src="~/Imagenes/cita_espec.png" alt="Citas especializadas">
+            <a href="@Url.Action("RegistroMascota", "General")" class="links"><p>Citas especializadas</p></a>
+            
+        </div>
+        <div class="opcion">
+            <img src="~/Imagenes/cita_serv_general.png" class="imgServ" alt="Cita servicios generales">
+            <a href="@Url.Action("RegistroMascota", "General")" class="links"><p>Cita servicios generales</p></a>
+            
+        </div>
+        <div class="opcion opcion2">
+            <img src="~/Imagenes/historial_cita.png" alt="Historial Citas">
+            <a href="@Url.Action("RegistroMascota", "General")" class="links"><p>Historial Citas</p></a>
+            
+        </div>
+        <div class="opcion">
+            <img src="~/Imagenes/mascota_regis.png" alt="Mascotas Registradas">
+            <a href="@Url.Action("RegistroMascota", "General")" class="links"><p>Mascotas Registradas</p></a>
+            
+        </div>
+    </div>
+</div>
+
+
+<style>
+    body {
+        background-color: #e0e0e0;
+        
+    }
+    .tituloIndex {
+        margin-top: 55px;
+    }
+    .contenedor {
+        text-align: center;
+        padding: 0px;
+        overflow-x: auto;
+        max-width: 100%; /* Que ocupe todo el ancho */
+    }
+
+    .opciones {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 20px;
+        max-width: 100%; /* Aprovecha más el espacio de la pantalla */
+        margin-top: 20px;
+    }
+
+    .opcion {
+        width: 200px;
+        background-color: #78a890;
+        border-radius: 20px;
+        text-align: center;
+        padding: 15px;
+        box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
+    }
+    .opcion2 {
+        background-color: #d9a86c;
+    }
+
+        .opcion img {
+            width: 100%;
+            border-radius: 25px;
+            margin-bottom: 20px;
+        }
+        .opcion .imgServ{
+            width:84%;
+            height:63%;
+        }
+   
+        .opcion p {
+            background-color: white;
+            padding: 10px;
+            font-weight:500;
+            border-radius: 10px;
+            margin-top: -10px;
+            
+        }
+        
+
+</style>
