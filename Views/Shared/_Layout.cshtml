@@ -1,11 +1,12 @@
 ﻿<!DOCTYPE html>
+<link href= "https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;700;800;900&family=Quicksand:wght@300..700&display=swap" rel="stylesheet">
 
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - Mi aplicación ASP.NET</title>
+    <title>@ViewBag.Title - CliniPet</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
     <style>
@@ -31,7 +32,7 @@
 
         .tit {
             margin-top: 15px;
-            text-shadow: -1px -1px 0 gray;
+            text-shadow: -1.5px -1.5px 0 gray;
         }
 
         .navbar-brand img.logo {
@@ -44,14 +45,77 @@
             font-weight: 500;
             font-size: 1.1em;
         }
+
+        footer {
+            border-radius: 10px;
+            margin-top: 30px;
+            background-color: #5a7b6b;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .footer-contenedor {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            text-align: left;
+            padding-bottom: 10px;
+        }
+
+        .footer-seccion {
+            flex: 1;
+            min-width: 200px;
+            margin: 8px;
+        }
+
+            .footer-seccion h4 {
+                margin-bottom: 10px;
+                font-size: 1em;
+                font-weight: 600;
+                display: inline-block;
+                padding-bottom: 5px;
+                text-shadow: 1px 1px 20px #948e8e;
+            }
+
+            .footer-seccion a {
+                color: #d9a86c;
+                text-decoration: none;
+                font-size: 0.84em;
+                font-weight: 500;
+            }
+
+            .footer-seccion p {
+                font-size: 0.8em;
+            }
+
+            .footer-seccion a:hover {
+                text-decoration: underline;
+            }
+
+        .footer-bottom {
+            border-top: 1px solid #ecf0f1;
+            padding-top: 10px;
+            font-size: 0.8em;
+        }
+
+        .icono-red {
+            width: 20px;
+            height: 20px;
+            vertical-align: middle;
+            margin-right: 6px;
+            transition: filter 0.3s ease;
+        }
     </style>
+
+
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
                 <a href="@Url.Action("Index", "Home")" class="navbar-brand">
-                    <img src="@Url.Content("~/Imagenes/logo_clinipet.png")" alt="CliniPet Logo"  width="65" height="55" class="logo">
+                    <img src="@Url.Content("~/Imagenes/logo_clinipet.png")" alt="CliniPet Logo" width="65" height="55" class="logo">
                 </a>
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                     <span class="icon-bar"></span>
@@ -73,11 +137,58 @@
             </div>
         </div>
     </div>
+
     <div class="container body-content">
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - Mi aplicación ASP.NET</p>
+            <div class="footer-contenedor">
+                <div class="footer-seccion">
+                    <h4>Contacto</h4>
+                    <p>📍 Dirección: Calle 123, Ciudad</p>
+                    <p>📞 Teléfono: +57 123 456 7890</p>
+                    <p>✉️ Correo: clinipet@gmail.com</p>
+
+                </div>
+
+                <div class="footer-seccion">
+                    <h4>Horarios de Atención</h4>
+                    <p>Lunes - Viernes: 8:00 AM - 6:00 PM</p>
+                    <p>Sábados: 9:00 AM - 2:00 PM</p>
+
+                </div>
+
+                <div class="footer-seccion">
+                    <h4>Síguenos</h4><br />
+                    <a href="https://facebook.com" target="_blank">
+                        <img src="~/Imagenes/facebook.png" alt="Facebook" class="icono-red"> Facebook
+                    </a> <br />
+                    <a href="https://instagram.com" target="_blank">
+                        <img src="~/Imagenes/instagram.png" alt="Instagram" class="icono-red"> Instagram
+                    </a><br />
+
+                </div>
+
+                <div class="footer-seccion">
+                    <h4>Enlaces Rápidos</h4><br />
+
+                    <a href="https://instagram.com" target="_blank">
+                        <img src="~/Imagenes/home.png" alt="Home" class="icono-red"> Home
+                    </a><br />
+                    <a href="https://instagram.com" target="_blank">
+                        <img src="~/Imagenes/acerca.png" alt="Acerca de" class="icono-red"> Acerca de
+                    </a><br />
+                    <a href="https://instagram.com" target="_blank">
+                        <img src="~/Imagenes/contacto.png" alt="Contacto" class="icono-red"> Contacto
+                    </a><br />
+
+
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; @DateTime.Now.Year - CliniPet </p>
+            </div>
         </footer>
     </div>
 

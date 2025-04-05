@@ -14,9 +14,14 @@ h2 {
     text-align: center;
     text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 3px 2.3px 0 black; /* Crea el borde negro */
 }
+
 label {
     font-weight: 600;
    
+}
+a p {
+    font-weight: 500;
+    color: #2f2f2f;
 }
 
 .contBoton {
@@ -66,8 +71,8 @@ select {
 }
 .imagenFondo {
     margin-top: 0;
-    margin-left: 70px;
-    width: 65%;
+    margin-left: 48px;
+    width: 67%;
     border-radius: 10px;
     object-fit: cover;
 }
