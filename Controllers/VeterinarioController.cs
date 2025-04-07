@@ -13,5 +13,9 @@ namespace Clinipet.Controllers
         {
             return View();
         }
+        public ActionResult PubCitas()
+        {
+            return View();
+        }
     }
 }

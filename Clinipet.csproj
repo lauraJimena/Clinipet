@@ -126,6 +126,7 @@
     <Compile Include="Controllers\GeneralController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\VeterinarioController.cs" />
+    <Compile Include="Dtos\DisponibDto.cs" />
     <Compile Include="Dtos\MascotaDto.cs" />
     <Compile Include="Dtos\UserDto.cs" />
     <Compile Include="Global.asax.cs">
@@ -133,6 +134,7 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\GeneralRepository.cs" />
+    <Compile Include="Repositories\VeterinarioRepository.cs" />
     <Compile Include="Services\AsistenteService.cs" />
     <Compile Include="Services\GeneralService.cs" />
     <Compile Include="Utilities\DBContextUtility.cs" />
@@ -199,13 +201,13 @@
     <Content Include="Views\General\RegistroMascota.cshtml" />
     <Content Include="Views\Cliente\IndexCliente.cshtml" />
     <Content Include="Views\Cliente\CitasEspec.cshtml" />
+    <Content Include="Views\Veterinario\PubCitas.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Repositories\Models\" />
     <Folder Include="Views\Admin\" />
     <Folder Include="Views\Asistente\" />
-    <Folder Include="Views\Veterinario\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
