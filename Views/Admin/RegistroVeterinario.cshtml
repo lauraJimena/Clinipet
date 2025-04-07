@@ -1,0 +1,96 @@
+﻿@model Clinipet.Dtos.UserDto
+
+@{
+    ViewBag.Title = "Registro Veterinario";
+}
+<link rel="stylesheet" href="@Url.Content("~/Estilos/estilos.css")">
+
+<body class="bodyForm">
+    <div class="contenedor">
+        <!-- Imagen izquierda -->
+        <img class="imagenFondo" src="~/Imagenes/RegistroVeterinario.jpg" alt="Registro Veterinario" />
+
+        <!-- Formulario derecha -->
+        <div class="cont">
+            <div class="cajaTitulo"><h2 class="titulo">Registro de Veterinario</h2></div>
+
+            @if (ViewBag.Error != null)
+            {
+                <div class="alert alert-danger">@ViewBag.Error</div>
+            }
+
+            @if (TempData["Success"] != null)
+            {
+                <div class="alert alert-success">@TempData["Success"]</div>
+            }
+
+        <form id="registroForm" method="post" asp-action="RegistrarVeterinario" asp-controller="Admin">
+            <label for="nom_usu">Nombres:</label><br />
+            <input type="text" asp-for="nom_usu" id="nom_usu" name="nom_usu" required /><br />
+
+            <label for="apel_usu">Apellidos:</label><br />
+            <input type="text" asp-for="apel_usu" id="apel_usu" name="apel_usu" required /><br />
+
+            <label for="id_tipo_ident">Tipo de Documento:</label><br />
+            <select id="id_tipo_ident" asp-for="id_tipo_ident" name="id_tipo_ident" required>
+                <option value="">Seleccione...</option>
+                <option value="1">Cédula</option>
+                <option value="2">Pasaporte</option>
+            </select><br />
+
+            <label for="num_ident">Número de Documento:</label><br />
+            <input type="text" id="num_ident" asp-for="num_ident" name="num_ident" required pattern="\d+" title="Solo se permiten números" /><br />
+
+            <label for="correo_usu">Correo:</label><br />
+            <input type="email" id="correo_usu" asp-for="correo_usu" name="correo_usu" required /><br />
+
+            <label for="tel_usu">Teléfono:</label><br />
+            <input type="tel" id="tel_usu" asp-for="tel_usu" name="tel_usu" required pattern="\d+" title="Solo se permiten números" /><br />
+
+            <label for="id_espec">Especialidad:</label><br />
+            <input type="text" id="id_espec" asp-for="id_espec" name="id_espec" required /><br />
+
+            <label for="contras_usu">Contraseña:</label><br />
+            <input type="password" id="contras_usu" asp-for="contras_usu" name="contras_usu" required /><br />
+
+            <div class="contBoton">
+                <button type="submit">Registrar</button>
+            </div>
+        </form>
+        </div>
+    </div>
+</body>
+
+<!-- Puedes copiar este estilo en la hoja de estilos general, o dejarlo aquí como inline -->
+<style>
+    .titulo {
+        width: 150%;
+        margin-top: 0px;
+        margin-bottom: 30px;
+        margin-left: 0px;
+    }
+
+    .contenedor {
+        padding: 0;
+        display: flex;
+        align-items: center;
+        gap: 108px;
+        margin-left: 0px;
+    }
+
+    .cont {
+        height: 600px;
+        width: 400px;
+        margin-top: 0;
+        margin-left: 40px;
+        flex-direction: column;
+    }
+
+    .imagenFondo {
+        width: 67.5%;
+    }
+
+    .contBoton button {
+        margin-top: 20px;
+    }
+</style>

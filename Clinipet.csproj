@@ -137,6 +137,7 @@
     <Compile Include="Repositories\VeterinarioRepository.cs" />
     <Compile Include="Services\AsistenteService.cs" />
     <Compile Include="Services\GeneralService.cs" />
+    <Compile Include="Services\VeterinarioService.cs" />
     <Compile Include="Utilities\DBContextUtility.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -154,6 +155,8 @@
     <Content Include="Imagenes\contacto.png" />
     <Content Include="Imagenes\facebook.png" />
     <Content Include="Imagenes\fondo_index.png" />
+    <Content Include="Imagenes\Regis_Asistente.jpg" />
+    <Content Include="Imagenes\RegistroVeterinario.jpg" />
     <Content Include="Imagenes\historial_cita.png" />
     <Content Include="Imagenes\home.png" />
     <Content Include="Imagenes\img1_baner.png" />
@@ -201,12 +204,16 @@
     <Content Include="Views\General\RegistroMascota.cshtml" />
     <Content Include="Views\Cliente\IndexCliente.cshtml" />
     <Content Include="Views\Cliente\CitasEspec.cshtml" />
+<<<<<<< HEAD
     <Content Include="Views\Veterinario\PubCitas.cshtml" />
+=======
+    <Content Include="Views\Admin\RegistroAsistente.cshtml" />
+    <Content Include="Views\Admin\RegistroVeterinario.cshtml" />
+>>>>>>> master
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Repositories\Models\" />
-    <Folder Include="Views\Admin\" />
     <Folder Include="Views\Asistente\" />
   </ItemGroup>
   <ItemGroup>
@@ -262,4 +269,7 @@
   </Target>
   <Target Name="AfterBuild">
   </Target> -->
+  <PropertyGroup>
+    <CopyRoslynCompilerFiles>true</CopyRoslynCompilerFiles>
+  </PropertyGroup>
 </Project>

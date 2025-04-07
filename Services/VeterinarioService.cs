@@ -8,23 +8,24 @@ using Clinipet.Repositories;
 
 namespace Clinipet.Services
 {
-    public class AsistenteService
+    public class VeterinarioService
     {
-        //Metodo Registro de asistente
-        public UserDto RegistrarAsistente(UserDto nuevoAsist)
+        //Metodo Registro de veterinatio
+        public UserDto RegistrarVeterinario(UserDto nuevoVete)
         {
             GeneralRepository userRepository = new GeneralRepository();
             UserDto userResponse = new UserDto();
-            Console.WriteLine("Estoy en registro de asistente");
+            Console.WriteLine("Estoy en registro de veterinario");
 
             //Validar datos
             try
             {
-                nuevoAsist.id_rol = 2;
-                nuevoAsist.id_nivel = 1;
-                nuevoAsist.id_estado = 1;
+                nuevoVete.id_rol = 4;
+                nuevoVete.id_espec = 1; //Para medicina general (prueba)
+                nuevoVete.id_nivel = 1;
+                nuevoVete.id_estado = 1;
 
-                if (userRepository.ExisteCorreo(nuevoAsist.correo_usu))
+                if (userRepository.ExisteCorreo(nuevoVete.correo_usu))
                 {
                     userResponse.Response = -1;
                     userResponse.Mensaje = "El correo ingresado ya existe";
@@ -32,15 +33,15 @@ namespace Clinipet.Services
                 else
                 {
                     //Que no se repita el documento
-                    if (userRepository.RegistrarUsuario(nuevoAsist) != 0)
+                    if (userRepository.RegistrarUsuario(nuevoVete) != 0)
                     {
                         userResponse.Response = 1;
-                        userResponse.Mensaje = "Asistente registrado con exito";
+                        userResponse.Mensaje = "Veterinario registrado con exito";
                     }
                     else
                     {
                         userResponse.Response = 0;
-                        userResponse.Mensaje = "Ocurrió un error al registrar asistente";
+                        userResponse.Mensaje = "Ocurrió un error al registrar veterinario";
                     }
                 }
                 return userResponse;

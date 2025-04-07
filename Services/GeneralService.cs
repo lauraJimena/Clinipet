@@ -55,7 +55,7 @@ namespace Clinipet.Services
                 return responseUserDto;
             }
         }
-        //Aqui va metodo RegistrarAsistente
+        //Aqui va metodo RegistrarAsistente (inicio de sesión)
         public UserDto Login(UserDto userModel)
         {
             GeneralRepository userRepository = new GeneralRepository();
