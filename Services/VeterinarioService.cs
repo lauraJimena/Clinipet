@@ -54,5 +54,33 @@ namespace Clinipet.Services
             }
 
         }
+
+
+        public DisponibDto PublicarDisponibilidad(DisponibDto dispon)
+        {
+            //GeneralRepository userRepository = new GeneralRepository();
+
+            VeterinarioRepository veterinarioRepository = new VeterinarioRepository();
+            DisponibDto disponibResponse = new DisponibDto();
+            try
+            {
+
+
+                if (veterinarioRepository.PublicarDispon(dispon) != 0)
+                {
+                    disponibResponse.Response = 1;
+                    disponibResponse.Mensaje = "Cita publicada correctamente";
+
+                }
+            }
+            catch (Exception e)
+            {
+                disponibResponse.Response = 0;
+                disponibResponse.Mensaje = e.InnerException?.ToString() ?? e.Message;
+                return disponibResponse;
+            }
+            return disponibResponse;
+
+        }
     }
 }

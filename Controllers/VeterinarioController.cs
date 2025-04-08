@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Clinipet.Dtos;
+using Clinipet.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -17,5 +19,39 @@ namespace Clinipet.Controllers
         {
             return View();
         }
+        [HttpPost]
+
+
+        public ActionResult PublicarDisponibilidad(DisponibDto disponib)
+        {
+            try
+            {
+               
+                disponib.id_usu = Convert.ToInt32(Session["Id"]); // Asigna el ID del usuario logueado
+                VeterinarioService veterinarioService = new VeterinarioService(); // instancia el UserService.
+                DisponibDto disponibResponse = veterinarioService.PublicarDisponibilidad(disponib); // Llama al método de creación de usuario.
+                //Me falta cambiar que no se guarda la fecha y la hora si no se se muestre un listado de la base de datos de las tablas hora y dia
+                if (disponibResponse.Response == 1)
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+                else
+                {
+                    return RedirectToAction("About", "Home");
+
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                string mensaje = ex.Message;
+                return View(); // Muestra la vista en caso de que ocurra una excepción.
+            }
+
+        }
+
     }
+    
+
 }
