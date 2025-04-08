@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 
 namespace Clinipet.Repositories
 {
@@ -31,6 +32,53 @@ namespace Clinipet.Repositories
 
             return comando;
         }
+        public List<DisponibDto> ObtenerDias()
+        {
+            List<DisponibDto> lista = new List<DisponibDto>();
+            string sql = "SELECT id_dia, nombre FROM dia";
+            DBContextUtility Connection = new DBContextUtility();
+            Connection.Connect();
+            using (SqlCommand command = new SqlCommand(sql, Connection.CONN()))
+            {
+
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        lista.Add(new DisponibDto
+                        {
+                            id_dia = reader.GetByte(0),
+                            nom_dia = reader.GetString(1),
+                        });
+                    }
+                }
+            }
+            return lista;
+        }
+        public List<DisponibDto> ObtenerHoras()
+        {
+            List<DisponibDto> listaHoras = new List<DisponibDto>();
+            string sql = "SELECT id_hora, nom_hora FROM hora";
+            DBContextUtility Connection = new DBContextUtility();
+            Connection.Connect();
+            using (SqlCommand command = new SqlCommand(sql, Connection.CONN()))
+            {
+
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        listaHoras.Add(new DisponibDto
+                        {
+                            id_hora = reader.GetInt16(0),
+                            nom_hora = reader.GetString(1),
+                        });
+                    }
+                }
+            }
+            return listaHoras;
+        }
+        
 
     }
 }

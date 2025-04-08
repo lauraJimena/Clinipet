@@ -17,11 +17,13 @@ namespace Clinipet.Controllers
         }
         public ActionResult PubCitas()
         {
+            VeterinarioService veterinarioService = new VeterinarioService(); // instancia el UserService.
+            
+            ViewBag.Dias = veterinarioService.ObtenerDiasSelect(); //Envia lista de dias a la vista
+            ViewBag.Horas = veterinarioService.ObtenerHorasSelect(); //Envia lista de horas a la vista
             return View();
         }
         [HttpPost]
-
-
         public ActionResult PublicarDisponibilidad(DisponibDto disponib)
         {
             try
@@ -29,8 +31,8 @@ namespace Clinipet.Controllers
                
                 disponib.id_usu = Convert.ToInt32(Session["Id"]); // Asigna el ID del usuario logueado
                 VeterinarioService veterinarioService = new VeterinarioService(); // instancia el UserService.
-                DisponibDto disponibResponse = veterinarioService.PublicarDisponibilidad(disponib); // Llama al método de creación de usuario.
-                //Me falta cambiar que no se guarda la fecha y la hora si no se se muestre un listado de la base de datos de las tablas hora y dia
+                DisponibDto disponibResponse = veterinarioService.PublicarDisponibilidad(disponib); // Llama al método de creación de usuario.            
+
                 if (disponibResponse.Response == 1)
                 {
                     return RedirectToAction("Index", "Home");
@@ -50,7 +52,13 @@ namespace Clinipet.Controllers
             }
 
         }
-
+        [HttpPost]
+        public ActionResult Testeo()
+        {
+            
+            Console.WriteLine("POR FAVORRRRRR");
+            return Content("¡Entró al POST!");
+        }
     }
     
 

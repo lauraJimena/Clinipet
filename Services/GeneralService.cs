@@ -29,23 +29,34 @@ namespace Clinipet.Services
                 if (userRepository.ExisteCorreo(userModel.correo_usu))
                 {
                     responseUserDto.Response = -1;
-                    responseUserDto.Mensaje = "Correo ya existe";
+                    responseUserDto.Mensaje = "El correo ya existe. Intente nuevamente.";
+                    //userResponse.Mensaje = "Asistente registrado con éxito";
                 }
                 else
                 {
-                    if (userRepository.RegistrarUsuario(userModel) != 0 )
+                    if (userRepository.ExisteDocumento(userModel.num_ident))
                     {
-                        responseUserDto.Response = 1;
-                        responseUserDto.Mensaje = "Creación exitosa";
-
+                        responseUserDto.Response = -2;
+                        responseUserDto.Mensaje = "El numero de documento ya existe. Intente nuevamente.";
+                        //userResponse.Mensaje = "Asistente registrado con éxito";
                     }
                     else
                     {
-                        responseUserDto.Response = 0;
-                        responseUserDto.Mensaje = "Algo pasó";
+                        if (userRepository.RegistrarUsuario(userModel) != 0)
+                        {
+                            responseUserDto.Response = 1;
+                            responseUserDto.Mensaje = "Creación exitosa";
+
+                        }
+                        else
+                        {
+                            responseUserDto.Response = 0;
+                            responseUserDto.Mensaje = "Algo pasó";
+                        }
                     }
                     
                 }
+                
                 return responseUserDto;
             }
             catch (Exception e)
