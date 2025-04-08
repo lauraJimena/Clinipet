@@ -53,7 +53,7 @@ namespace Clinipet.Controllers
             if (result.Response == 1)
             {
                 TempData["Success"] = result.Mensaje;
-                return RedirectToAction("IndexAdmin");
+                return RedirectToAction("IndexAdmin");//
             }
             else
             {
