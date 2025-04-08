@@ -1,41 +1,45 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using Clinipet.Dtos;
-using Clinipet.Services;
 using Clinipet.Repositories;
 
 namespace Clinipet.Services
 {
     public class AsistenteService
     {
-        //Metodo Registro de asistente
         public UserDto RegistrarAsistente(UserDto nuevoAsist)
         {
-            GeneralRepository userRepository = new GeneralRepository();
+            AdminRepository adminRepo = new AdminRepository(); 
             UserDto userResponse = new UserDto();
-            Console.WriteLine("Estoy en registro de asistente");
 
-            //Validar datos
             try
             {
-                nuevoAsist.id_rol = 2;
-                nuevoAsist.id_nivel = 1;
-                nuevoAsist.id_estado = 1;
+                Console.WriteLine("Estoy en registro de asistente");
 
-                if (userRepository.ExisteCorreo(nuevoAsist.correo_usu))
+                // Seteo de datos por defecto
+                nuevoAsist.id_rol = 2;        // Asistente
+                nuevoAsist.id_nivel = 1;      // Nivel básico
+                nuevoAsist.id_estado = 1;     // Activo
+                nuevoAsist.id_espec = 10;     // No aplica
+
+                System.Diagnostics.Debug.WriteLine($"Nombre: {nuevoAsist.nom_usu}, Apellido: {nuevoAsist.apel_usu}, ID Tipo Doc: {nuevoAsist.id_tipo_ident}, Especialidad: {nuevoAsist.id_espec}");
+
+                // Validaciones
+                if (adminRepo.ExisteCorreo(nuevoAsist.correo_usu))
                 {
                     userResponse.Response = -1;
                     userResponse.Mensaje = "El correo ingresado ya existe";
                 }
+                else if (adminRepo.ExisteDocumento(nuevoAsist.num_ident))
+                {
+                    userResponse.Response = -2;
+                    userResponse.Mensaje = "El número de documento ya está registrado";
+                }
                 else
                 {
-                    //Que no se repita el documento
-                    if (userRepository.RegistrarUsuario(nuevoAsist) != 0)
+                    if (adminRepo.RegistrarAsistente(nuevoAsist) != 0)
                     {
                         userResponse.Response = 1;
-                        userResponse.Mensaje = "Asistente registrado con exito";
+                        userResponse.Mensaje = "Asistente registrado con éxito";
                     }
                     else
                     {
@@ -43,15 +47,14 @@ namespace Clinipet.Services
                         userResponse.Mensaje = "Ocurrió un error al registrar asistente";
                     }
                 }
-                return userResponse;
             }
             catch (Exception e)
             {
                 userResponse.Response = 0;
-                userResponse.Mensaje = e.InnerException?.ToString() ?? e.Message;
-                return userResponse;
+                userResponse.Mensaje = $"Error interno: {e.Message}";
             }
 
+            return userResponse;
         }
     }
 }

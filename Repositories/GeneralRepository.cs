@@ -67,6 +67,28 @@ namespace Clinipet.Repositories
             Connection.Disconnect();
             return existe;
         }
+
+        public bool ExisteDocumento(string documento)
+        {
+            bool existe = false;
+            DBContextUtility Connection = new DBContextUtility();
+            Connection.Connect();
+
+            string SQL = "SELECT COUNT(*) FROM usuario WHERE num_ident = @num_ident";
+            using (SqlCommand command = new SqlCommand(SQL, Connection.CONN()))
+            {
+                command.Parameters.AddWithValue("@num_ident", documento);
+                int count = (int)command.ExecuteScalar();
+                if (count > 0)
+                {
+                    existe = true; // El numIdent ya existe
+                }
+            }
+
+            Connection.Disconnect();
+            return existe;
+        }
+
         public UserDto Login(UserDto user)
         {
             UserDto userResult = new UserDto();
