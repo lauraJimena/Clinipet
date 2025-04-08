@@ -1,7 +1,24 @@
-﻿
+﻿@model Clinipet.Dtos.DisponibDto
 @{
     ViewBag.Title = "PubCitas";
 }
 
 <h2>Publicar Citas</h2>
 
+
+@using (Html.BeginForm("PublicarDisponibilidad", "Veterinario", FormMethod.Post))
+{
+    <div>
+        @Html.LabelFor(m => m.id_dia)
+        @Html.TextBoxFor(m => m.id_dia, new { type = "date" })
+    </div>
+
+    <div>
+        @Html.LabelFor(m => m.id_hora)
+        @Html.TextBoxFor(m => m.id_hora, new { type = "time" })
+    </div>
+
+    <button type="submit">Publicar</button>
+}
+
+}
