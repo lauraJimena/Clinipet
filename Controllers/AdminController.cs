@@ -31,13 +31,11 @@ namespace Clinipet.Controllers
 
             if (result.Response == 1)
             {
-                TempData["Success"] = result.Mensaje;
-                return RedirectToAction("IndexAdmin");
+                return Json(new { success = true, message = result.Mensaje });
             }
             else
             {
-                ViewBag.Error = result.Mensaje;
-                return View(nuevoAsist);
+                return Json(new { success = false, message = result.Mensaje });
             }
         }
         //Registrar Veterinario
@@ -55,7 +53,7 @@ namespace Clinipet.Controllers
             if (result.Response == 1)
             {
                 TempData["Success"] = result.Mensaje;
-                return RedirectToAction("IndexAdmin");
+                return RedirectToAction("IndexAdmin");//
             }
             else
             {

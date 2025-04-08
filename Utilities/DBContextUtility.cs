@@ -26,18 +26,22 @@ namespace Clinipet.Utilities
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                throw new Exception("No se pudo conectar a la base de datos. Detalles: " + ex.Message);
+                //Console.WriteLine(ex.Message);
             }
         }
         //cierra la conexion sqlserver
         public void Disconnect()
         {
-            Con.Close();
+            if (Con.State == System.Data.ConnectionState.Open)
+            {
+                Con.Close();
+            }              
         }
 
         //devuelve la conexion sqlserver
         public SqlConnection CONN()
-        {
+        { 
             return Con;
         }
     }
