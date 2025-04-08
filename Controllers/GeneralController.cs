@@ -118,8 +118,8 @@ namespace Clinipet.Controllers
                 Console.WriteLine(userResponse.correo_usu);
                 if (userResponse.Response == 1)
                 {
-                    return Json(new { success = true, message = "Registro exitoso" });
-                    //return RedirectToAction("Index", "Home");// Redirige a la vista principal si la creación fue exitosa.
+                    return Json(new { success = true, message = userResponse.Mensaje }); // Si la creación fue exitosa.
+
                 }
 
                 else
@@ -127,12 +127,21 @@ namespace Clinipet.Controllers
                     if (userResponse.Response == -1)
                     {
                         
-                        return Json(new { success = false, message = "El correo ya existe. Intente nuevamente." });
+                        return Json(new { success = false, message = userResponse.Mensaje }); //Si el correo ya existe
                     }
                     else
                     {
-                        return RedirectToAction("About", "Home");
-                        //return View(userResponse); // Muestra la vista con la respuesta del servicio en caso de error.
+                        if (userResponse.Response == -2)
+                        {
+
+                            return Json(new { success = false, message = userResponse.Mensaje }); //Si el documento ya existe
+                        }
+                        else
+                        {
+                            return RedirectToAction("About", "Home"); // Si el registro falla
+                        }
+                        
+                       
                     }
 
                 }
@@ -160,15 +169,13 @@ namespace Clinipet.Controllers
                     return RedirectToAction("Index", "Home");
                     //return RedirectToAction("Index", "Home");// Redirige a la vista principal si la creación fue exitosa.
                 }
-
-                   
-                        else
-                        {
-                            return RedirectToAction("About", "Home");
+                 
+                else
+                {
+                    return RedirectToAction("About", "Home");
                            
-                        }
-
-                    
+                }
+   
                 }
                 catch (Exception ex)
                 {

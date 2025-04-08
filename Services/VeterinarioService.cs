@@ -5,6 +5,7 @@ using System.Web;
 using Clinipet.Dtos;
 using Clinipet.Services;
 using Clinipet.Repositories;
+using System.Web.Mvc;
 
 namespace Clinipet.Services
 {
@@ -65,7 +66,6 @@ namespace Clinipet.Services
             try
             {
 
-
                 if (veterinarioRepository.PublicarDispon(dispon) != 0)
                 {
                     disponibResponse.Response = 1;
@@ -81,6 +81,31 @@ namespace Clinipet.Services
             }
             return disponibResponse;
 
+        }
+        public List<SelectListItem> ObtenerDiasSelect()
+        {
+            VeterinarioRepository veterinarioRepository = new VeterinarioRepository();
+            List<DisponibDto> dias = veterinarioRepository.ObtenerDias();
+
+            return dias.Select(d => new SelectListItem // Convertir la lista raza en SelectList para pasar a la vista
+            {
+                Value = d.id_dia.ToString(),
+                Text = d.nom_dia,
+            }).ToList();
+        }
+        public List<SelectListItem> ObtenerHorasSelect()
+        {   
+            VeterinarioRepository veterinarioRepository = new VeterinarioRepository();
+            List<DisponibDto> horas = veterinarioRepository.ObtenerHoras();
+
+            return horas.Select(h => new SelectListItem // Convertir la lista raza en SelectList para pasar a la vista
+            {
+                Value = h.id_hora.ToString(),
+                Text = h.nom_hora,
+                
+            }).ToList();
+
+            
         }
     }
 }

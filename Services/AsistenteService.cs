@@ -21,7 +21,7 @@ namespace Clinipet.Services
                 nuevoAsist.id_estado = 1;     // Activo
                 nuevoAsist.id_espec = 10;     // No aplica
 
-                System.Diagnostics.Debug.WriteLine($"Nombre: {nuevoAsist.nom_usu}, Apellido: {nuevoAsist.apel_usu}, ID Tipo Doc: {nuevoAsist.id_tipo_ident}, Especialidad: {nuevoAsist.id_espec}");
+                //System.Diagnostics.Debug.WriteLine($"Nombre: {nuevoAsist.nom_usu}, Apellido: {nuevoAsist.apel_usu}, ID Tipo Doc: {nuevoAsist.id_tipo_ident}, Especialidad: {nuevoAsist.id_espec}");
 
                 // Validaciones
                 if (adminRepo.ExisteCorreo(nuevoAsist.correo_usu))

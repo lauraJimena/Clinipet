@@ -67,6 +67,7 @@ namespace Clinipet.Repositories
             Connection.Disconnect();
             return existe;
         }
+        
 
         public bool ExisteDocumento(string documento)
         {
@@ -225,6 +226,7 @@ namespace Clinipet.Repositories
             }
             return razas;
         }
+       
     }
 
 

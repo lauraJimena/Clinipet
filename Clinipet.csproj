@@ -156,6 +156,7 @@
     <Content Include="Imagenes\contacto.png" />
     <Content Include="Imagenes\facebook.png" />
     <Content Include="Imagenes\fondo_index.png" />
+    <Content Include="Imagenes\fondo_pub_citas.png" />
     <Content Include="Imagenes\Regis_Asistente.jpg" />
     <Content Include="Imagenes\RegistroVeterinario.jpg" />
     <Content Include="Imagenes\historial_cita.png" />

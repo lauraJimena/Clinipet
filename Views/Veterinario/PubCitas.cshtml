@@ -1,24 +1,69 @@
 ﻿@model Clinipet.Dtos.DisponibDto
 @{
-    ViewBag.Title = "PubCitas";
+    ViewBag.Title = "Publicar Citas";
 }
+<link rel="stylesheet" href="@Url.Content("~/Estilos/estilos.css")">
 
-<h2>Publicar Citas</h2>
+<h2 class="titulo">@ViewBag.Title</h2>
+<div class="contenedor">
+    <p class="texto">Selecciona para publicar tu disponibilidad:</p>
+    
 
+    <div class="cont">
+        <form method="post" action="/Veterinario/PublicarDisponibilidad">
+            <label for="id_dia">Fecha:</label><br />
 
-@using (Html.BeginForm("PublicarDisponibilidad", "Veterinario", FormMethod.Post))
-{
-    <div>
-        @Html.LabelFor(m => m.id_dia)
-        @Html.TextBoxFor(m => m.id_dia, new { type = "date" })
+            <select id="id_dia" name="id_dia">
+                <option value="">Seleccione un día</option>
+                @foreach (var dia in ViewBag.Dias)
+                {
+                    <option value="@dia.Value">@dia.Text</option>
+                }
+            </select><br />
+            <label for="id_hora">Hora:</label><br />
+            <select id="id_hora" name="id_hora">
+                <option value="">Seleccione una hora</option>
+                @foreach (var hora in ViewBag.Horas)
+                {
+                    <option value="@hora.Value">@hora.Text</option>
+
+                }
+            </select><br />
+            <div class="contBoton">
+                <button type="submit">Publicar</button>
+            </div>
+
+        </form>
     </div>
-
-    <div>
-        @Html.LabelFor(m => m.id_hora)
-        @Html.TextBoxFor(m => m.id_hora, new { type = "time" })
     </div>
+<style>
+    body {
+        background-image: url('/Imagenes/fondo_pub_citas.png');
+        background-size: cover; /* para cubrir toda la pantalla */
+        background-repeat: no-repeat;
+        background-attachment: fixed; /* para que no se mueva al hacer scroll */
+        background-position: center;
+    }
+    .texto {
+        text-align: center;
+        margin-bottom: 15px;
+    }
+    .titulo {
+        margin-top: 50px;
+        margin-bottom: 30px;
+    }
 
-    <button type="submit">Publicar</button>
-}
-
-}
+    .contenedor {
+        background-color: #c7cbca;
+        border-radius: 40px;       
+        justify-content: center;
+        padding: 35px;
+        width: 45%;
+        margin: 0 auto;
+    }
+    .cont {
+        
+        display:flex;
+        justify-content: center;
+    }
+</style>
