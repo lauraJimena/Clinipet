@@ -226,7 +226,36 @@ namespace Clinipet.Repositories
             }
             return razas;
         }
-       
+
+        public List<UserDto> ObtenerEspecialidad()
+        {
+            List<UserDto> especialidad = new List<UserDto>();
+            DBContextUtility Connection = new DBContextUtility();
+            Connection.Connect();
+
+            string sql = "SELECT e.id_espec, e.nom_espec " +
+                 "FROM [clinipet].[dbo].[especialidad] e ";
+
+
+            using (SqlCommand command = new SqlCommand(sql, Connection.CONN()))
+            {
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        especialidad.Add(new UserDto
+                        //UserDto espec = new UserDto
+                        {
+                            id_espec = reader.GetInt16(0),
+                            nom_espec = reader.GetString(1),
+                        });
+                    }
+                    Connection.Disconnect();
+                    return especialidad;
+                }
+            }
+        }
+
     }
 
 
