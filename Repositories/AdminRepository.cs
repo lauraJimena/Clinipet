@@ -7,7 +7,7 @@ namespace Clinipet.Repositories
 {
     public class AdminRepository
     {
-        public int RegistrarAsistente(UserDto asistente)
+    /*    public int RegistrarAsistente(UserDto asistente)
         {
             int resultado = 0;
             DBContextUtility db = new DBContextUtility();
@@ -37,7 +37,7 @@ namespace Clinipet.Repositories
             db.Disconnect();
             return resultado;
         }
-
+     */
         public bool ExisteCorreo(string correo)
         {
             bool existe = false;

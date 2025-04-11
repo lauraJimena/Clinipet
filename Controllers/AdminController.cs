@@ -12,7 +12,7 @@ namespace Clinipet.Controllers
     public class AdminController : Controller
     {
         // Vista principal admin
-        public ActionResult Index()
+        public ActionResult IndexAdmin()
         {
             return View();
         }
@@ -42,6 +42,14 @@ namespace Clinipet.Controllers
         public ActionResult RegistroVeterinario()
         {
             UserDto user = new UserDto();
+
+            // Obtener lista de especialidades
+            VeterinarioService VeteService = new VeterinarioService();
+            List<UserDto> especialidades = VeteService.ObtenerEspecialidad();
+
+            // Enviar la lista a la vista
+            ViewBag.Especialidad = VeteService.ObtenerEspecialidad();
+
             return View(user);
         }
         // Guardar datos del formulario
@@ -52,13 +60,11 @@ namespace Clinipet.Controllers
 
             if (result.Response == 1)
             {
-                TempData["Success"] = result.Mensaje;
-                return RedirectToAction("IndexAdmin");//
+                return Json(new { success = true, message = result.Mensaje });
             }
             else
             {
-                ViewBag.Error = result.Mensaje;
-                return View(nuevoVete);
+                return Json(new { success = false, message = result.Mensaje });
             }
         }
     }

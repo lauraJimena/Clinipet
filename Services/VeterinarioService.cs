@@ -14,49 +14,68 @@ namespace Clinipet.Services
         //Metodo Registro de veterinatio
         public UserDto RegistrarVeterinario(UserDto nuevoVete)
         {
-            GeneralRepository userRepository = new GeneralRepository();
+            GeneralRepository VeteRepo = new GeneralRepository();
             UserDto userResponse = new UserDto();
-            Console.WriteLine("Estoy en registro de veterinario");
 
-            //Validar datos
             try
             {
-                nuevoVete.id_rol = 4;
-                nuevoVete.id_espec = 1; //Para medicina general (prueba)
-                nuevoVete.id_nivel = 1;
-                nuevoVete.id_estado = 1;
+                Console.WriteLine("Estoy en registro de Veterinario");
 
-                if (userRepository.ExisteCorreo(nuevoVete.correo_usu))
+                // Seteo de datos por defecto
+                nuevoVete.id_rol = 4;        // Veterinario
+                nuevoVete.id_nivel = 1;      // Nivel básico
+                nuevoVete.id_estado = 1;     // Activo
+                //nuevoVete.id_espec = 10;     
+
+                //System.Diagnostics.Debug.WriteLine($"Nombre: {nuevoAsist.nom_usu}, Apellido: {nuevoAsist.apel_usu}, ID Tipo Doc: {nuevoAsist.id_tipo_ident}, Especialidad: {nuevoAsist.id_espec}");
+
+                // Validaciones
+                if (VeteRepo.ExisteCorreo(nuevoVete.correo_usu))
                 {
                     userResponse.Response = -1;
-                    userResponse.Mensaje = "El correo ingresado ya existe";
+                    userResponse.Mensaje = "El correo ya existe. Intente nuevamente.";
+                    //userResponse.Mensaje = "Asistente registrado con éxito";
                 }
                 else
                 {
-                    //Que no se repita el documento
-                    if (userRepository.RegistrarUsuario(nuevoVete) != 0)
+                    if (VeteRepo.ExisteDocumento(nuevoVete.num_ident))
                     {
-                        userResponse.Response = 1;
-                        userResponse.Mensaje = "Veterinario registrado con exito";
+                        userResponse.Response = -2;
+                        userResponse.Mensaje = "El numero de documento ya existe. Intente nuevamente.";
+                        //userResponse.Mensaje = "Asistente registrado con éxito";
                     }
                     else
                     {
-                        userResponse.Response = 0;
-                        userResponse.Mensaje = "Ocurrió un error al registrar veterinario";
+                        if (VeteRepo.RegistrarUsuario(nuevoVete) != 0)
+                        {
+                            userResponse.Response = 1;
+                            userResponse.Mensaje = "Creación exitosa";
+
+                        }
+                        else
+                        {
+                            userResponse.Response = 0;
+                            userResponse.Mensaje = "Algo pasó";
+                        }
                     }
+
                 }
-                return userResponse;
             }
             catch (Exception e)
             {
                 userResponse.Response = 0;
-                userResponse.Mensaje = e.InnerException?.ToString() ?? e.Message;
-                return userResponse;
+                userResponse.Mensaje = $"Error interno: {e.Message}";
             }
 
+            return userResponse;
         }
-
-
+        
+        public List<UserDto> ObtenerEspecialidad()
+        {
+            GeneralRepository generalRepository = new GeneralRepository();
+            //List<UserDto> especialidad = generalRepository.ObtenerEspecialidad();
+            return generalRepository.ObtenerEspecialidad();
+        }
         public DisponibDto PublicarDisponibilidad(DisponibDto dispon)
         {
             //GeneralRepository userRepository = new GeneralRepository();

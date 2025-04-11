@@ -1,0 +1,92 @@
+﻿
+@{
+    ViewBag.Title = "IndexAdmin";
+}
+<link rel="stylesheet" href="@Url.Content("~/Estilos/estilos.css")">
+
+<div class="contenedor">
+    <h2 class="tituloIndex">¡Hola Administrador! @Session["Nombre"]</h2>
+
+    <div class="opciones">
+        <div class="opcion">
+            <img src="~/Imagenes/RegistroVeterinario.jpg" alt="Registrar veterinario">
+            <a href="@Url.Action("RegistroVeterinario", "Admin")" class="links"><p>Registrar Veterinario</p></a>
+
+        </div>
+        <div class="opcion opcion2">
+            <img src="~/Imagenes/Regis_Asistente.jpg" alt="Registrar Asistente">
+            <a href="@Url.Action("RegistroAsistente", "Admin")" class="links"><p>Registrar Asistente</p></a>
+
+        </div>
+        <div class="opcion">
+            <img src="~/Imagenes/GenerarReport.jpeg" class="imgServ" alt="Generar reporte">
+            <a href="@Url.Action("nn", "Admin")" class="links"><p>Generar Reporte</p></a>
+
+        </div>
+        <div class="opcion opcion2">
+            <img src="~/Imagenes/Eliminar_Usu.jpeg" alt="Eliminar Usuario">
+            <a href="@Url.Action("nn", "Admin")" class="links"><p>Eliminar Usuario</p></a>
+
+        </div>
+    </div>
+</div>
+
+
+<style>
+    body {
+        background-color: #e0e0e0;
+    }
+
+    .tituloIndex {
+        margin-top: 55px;
+    }
+
+    .contenedor {
+        text-align: center;
+        padding: 0px;
+        overflow-x: auto;
+        max-width: 100%; /* Que ocupe todo el ancho */
+    }
+
+    .opciones {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 20px;
+        max-width: 100%; /* Aprovecha más el espacio de la pantalla */
+        margin-top: 20px;
+    }
+
+    .opcion {
+        width: 200px;
+        background-color: #78a890;
+        border-radius: 20px;
+        text-align: center;
+        padding: 15px;
+        box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .opcion2 {
+        background-color: #d9a86c;
+    }
+
+    .opcion img {
+        width: 100%;
+        border-radius: 25px;
+        margin-bottom: 20px;
+    }
+
+    .opcion .imgServ {
+        width: 84%;
+        height: 63%;
+    }
+
+    .opcion p {
+        background-color: white;
+        padding: 10px;
+        font-weight: 500;
+        border-radius: 10px;
+        margin-top: -10px;
+    }
+</style>
+

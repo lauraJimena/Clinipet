@@ -8,7 +8,7 @@ namespace Clinipet.Services
     {
         public UserDto RegistrarAsistente(UserDto nuevoAsist)
         {
-            AdminRepository adminRepo = new AdminRepository(); 
+            GeneralRepository AsistRepo = new GeneralRepository(); 
             UserDto userResponse = new UserDto();
 
             try
@@ -24,28 +24,35 @@ namespace Clinipet.Services
                 //System.Diagnostics.Debug.WriteLine($"Nombre: {nuevoAsist.nom_usu}, Apellido: {nuevoAsist.apel_usu}, ID Tipo Doc: {nuevoAsist.id_tipo_ident}, Especialidad: {nuevoAsist.id_espec}");
 
                 // Validaciones
-                if (adminRepo.ExisteCorreo(nuevoAsist.correo_usu))
+                if (AsistRepo.ExisteCorreo(nuevoAsist.correo_usu))
                 {
                     userResponse.Response = -1;
-                    userResponse.Mensaje = "El correo ingresado ya existe";
-                }
-                else if (adminRepo.ExisteDocumento(nuevoAsist.num_ident))
-                {
-                    userResponse.Response = -2;
-                    userResponse.Mensaje = "El número de documento ya está registrado";
+                    userResponse.Mensaje = "El correo ya existe. Intente nuevamente.";
+                    //userResponse.Mensaje = "Asistente registrado con éxito";
                 }
                 else
                 {
-                    if (adminRepo.RegistrarAsistente(nuevoAsist) != 0)
+                    if (AsistRepo.ExisteDocumento(nuevoAsist.num_ident))
                     {
-                        userResponse.Response = 1;
-                        userResponse.Mensaje = "Asistente registrado con éxito";
+                        userResponse.Response = -2;
+                        userResponse.Mensaje = "El numero de documento ya existe. Intente nuevamente.";
+                        //userResponse.Mensaje = "Asistente registrado con éxito";
                     }
                     else
                     {
-                        userResponse.Response = 0;
-                        userResponse.Mensaje = "Ocurrió un error al registrar asistente";
+                        if (AsistRepo.RegistrarUsuario(nuevoAsist) != 0)
+                        {
+                            userResponse.Response = 1;
+                            userResponse.Mensaje = "Creación exitosa";
+
+                        }
+                        else
+                        {
+                            userResponse.Response = 0;
+                            userResponse.Mensaje = "Algo pasó";
+                        }
                     }
+
                 }
             }
             catch (Exception e)

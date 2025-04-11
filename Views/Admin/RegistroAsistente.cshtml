@@ -80,7 +80,7 @@
             if (data.success) {
                 // Redirige si el registro fue exitoso
                // mostrarModal("Éxito", data.message);
-                window.location.href = "/Home/Index";
+                window.location.href = '@Url.Action("IndexAdmin", "Admin")';
             } else {
                 // Muestra el modal si hay error
                 mostrarModal("Error", data.message);

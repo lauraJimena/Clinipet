@@ -157,8 +157,11 @@
     <Content Include="Imagenes\facebook.png" />
     <Content Include="Imagenes\fondo_index.png" />
     <Content Include="Imagenes\fondo_pub_citas.png" />
-    <Content Include="Imagenes\Regis_Asistente.jpg" />
+    <Content Include="Imagenes\Eliminar_Usu.jpeg" />
+    <Content Include="Imagenes\RegisVete.jpeg" />
     <Content Include="Imagenes\RegistroVeterinario.jpg" />
+    <Content Include="Imagenes\GenerarReport.jpeg" />
+    <Content Include="Imagenes\Regis_Asistente.jpg" />
     <Content Include="Imagenes\historial_cita.png" />
     <Content Include="Imagenes\home.png" />
     <Content Include="Imagenes\img1_baner.png" />
@@ -209,6 +212,7 @@
     <Content Include="Views\Veterinario\PubCitas.cshtml" />
     <Content Include="Views\Admin\RegistroAsistente.cshtml" />
     <Content Include="Views\Admin\RegistroVeterinario.cshtml" />
+    <Content Include="Views\Admin\IndexAdmin.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
