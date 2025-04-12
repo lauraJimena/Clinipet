@@ -82,13 +82,26 @@ namespace Clinipet.Services
 
             VeterinarioRepository veterinarioRepository = new VeterinarioRepository();
             DisponibDto disponibResponse = new DisponibDto();
+            
             try
             {
 
+                
                 if (veterinarioRepository.PublicarDispon(dispon) != 0)
                 {
-                    disponibResponse.Response = 1;
-                    disponibResponse.Mensaje = "Cita publicada correctamente";
+                    
+                   
+                    ServicioDto servicio = new ServicioDto();
+                    int id_dispon = veterinarioRepository.PublicarDispon(dispon);
+                    servicio.id_dispon = id_dispon;
+                    //servicio.id_dispon = dispon.id_dispon; // Aquí pasas el id correcto
+                    if (veterinarioRepository.Servicio_Dispon(servicio) != 0){
+                        disponibResponse.Response = 1;
+                        disponibResponse.Mensaje = "Cita publicada correctamente";
+                        System.Diagnostics.Debug.WriteLine(servicio.id_servicio);
+                    }
+                     
+                    
 
                 }
             }
@@ -101,6 +114,7 @@ namespace Clinipet.Services
             return disponibResponse;
 
         }
+        
         public List<SelectListItem> ObtenerDiasSelect()
         {
             VeterinarioRepository veterinarioRepository = new VeterinarioRepository();

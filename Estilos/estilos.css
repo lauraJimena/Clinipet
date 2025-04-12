@@ -74,10 +74,73 @@ select {
 .imagenFondo {
     margin-top: 0;
     margin-left: 48px;
-    width: 67%;
+    width: 68%;
     border-radius: 10px;
     object-fit: cover;
 }
 .bodyForm {
     background-color: rgba(120, 168, 144, 0.92);
+}
+/*Para los index de usuarios*/
+.opciones {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    max-width: 100%; /* Aprovecha más el espacio de la pantalla */
+    overflow: hidden; /* evita que el agrandamiento cree scroll */
+    margin-top: 20px;
+    padding: 20px;
+}
+
+.opcion {
+    width: 200px;
+    background-color: #78a890;
+    border-radius: 20px;
+    text-align: center;
+    padding: 15px;
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease; /* Suaviza la animación */
+    cursor: pointer;
+   
+}
+.opcion2 {
+    background-color: #d9a86c;
+}
+
+.opcion:hover {
+    transform: scale(1.05); /* Agranda un poco al hacer hover */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5); /* Sombra para dar efecto de elevación */   
+}
+
+.opcion img {
+    width: 100%;
+    border-radius: 25px;
+    margin-bottom: 20px;
+}
+
+.opcion .imgServ {
+    width: 84%;
+    height: 63%;
+}
+
+.opcion p {
+    background-color: white;
+    padding: 10px;
+    font-weight: 500;
+    border-radius: 10px;
+    margin-top: -10px;
+}
+    .opcion p:hover {
+        transform: scale(1.05); /* Agranda un poco*/
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+        border-radius: 10px;
+       
+    }
+    .opcion p:active {
+        font-weight: 600;
+        background-color: #e6e6e6;
+    }
+.opcion .links{
+    text-decoration:none;
 }

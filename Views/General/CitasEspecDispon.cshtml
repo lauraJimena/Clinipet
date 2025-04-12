@@ -1,0 +1,31 @@
+﻿
+@{
+    ViewBag.Title = "CitasEspecDispon";
+}
+
+
+
+@model List<Clinipet.Dtos.DisponibDto>
+
+<h2>Citas disponibles</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Especialidad</th>
+            <th>Veterinario</th>            
+            <th>Día</th>
+            <th>Hora</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var cita in Model)
+        {
+        <tr>
+            <td>@cita.nom_serv</td>
+            <td>@cita.nom_usu</td>
+            <td>@cita.nom_dia</td>
+            <td>@cita.nom_hora</td>
+        </tr>
+        }
+    </tbody>
+</table>

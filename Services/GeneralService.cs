@@ -114,6 +114,14 @@ namespace Clinipet.Services
                 return responseMascDto;
             }
         }
+        public List<DisponibDto> ObtenerCitasDispon()
+        {
+            GeneralRepository generalRepository = new GeneralRepository();
+            List<DisponibDto> citasDispon = generalRepository.ObtenerCitasDisponibles();
+
+            return citasDispon;
+            
+        }
         public List<MascotaDto> ObtenerRazas()
 
         {

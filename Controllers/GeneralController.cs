@@ -1,4 +1,5 @@
 ﻿using Clinipet.Dtos;
+using Clinipet.Repositories;
 using Clinipet.Services;
 using System;
 using System.Collections.Generic;
@@ -57,6 +58,14 @@ namespace Clinipet.Controllers
 
             return View();
         }
+        public ActionResult CitasEspecDispon()
+        {
+            GeneralService generalService = new GeneralService();
+            List<DisponibDto> citas = generalService.ObtenerCitasDispon();
+
+            return View(citas);
+        }
+
         [HttpPost]
         public ActionResult Login(UserDto nuevoUsu)
         {
@@ -70,7 +79,8 @@ namespace Clinipet.Controllers
                 Session["Nombre"] = userResponse.nom_usu;
                 Session["Apellido"] = userResponse.apel_usu;
                 Session["Num_docu"] = userResponse.num_ident;
-                Session["Rol"] = userResponse.id_rol;                
+                Session["Rol"] = userResponse.id_rol;
+                //Session["Especialid"] = userResponse.id_espec;
                 System.Diagnostics.Debug.WriteLine(Session["Rol"]);
                 
 
@@ -80,7 +90,7 @@ namespace Clinipet.Controllers
                 }               
                 if (userResponse.id_rol == 2)//Asistente
                 {
-                    return RedirectToAction("About", "Home");
+                    return RedirectToAction("IndexCliente", "Cliente");
                 }
                 if (userResponse.id_rol == 3)//Cliente
                 {
@@ -153,10 +163,10 @@ namespace Clinipet.Controllers
             }
 
         }
-            [HttpPost]
-            public ActionResult RegistroMascota(MascotaDto nuevaMasc)
-            {
-                try
+        [HttpPost]
+        public ActionResult RegistroMascota(MascotaDto nuevaMasc)
+        {
+            try
                 {
                     System.Diagnostics.Debug.WriteLine(Session["Id"]);
                     nuevaMasc.id_usu = Convert.ToInt32(Session["Id"]); // Asigna el ID del usuario logueado
@@ -177,12 +187,12 @@ namespace Clinipet.Controllers
                 }
    
                 }
-                catch (Exception ex)
-                {
+            catch (Exception ex)
+            {
                     string mensaje = ex.Message;
                     return View(); // Muestra la vista en caso de que ocurra una excepción.
-                }
-
             }
+
+        }
     }
 }
