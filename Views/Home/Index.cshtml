@@ -26,7 +26,7 @@
 
     <div class="col-md-4">
 
-        <p class="texto">CliniPet te ofrece variedad de servicios para cuidar la salud de tus mascotas</p>
+        <p class="texto"><b>CliniPet</b> es una clínica veterinaria que te ofrece variedad de servicios para cuidar la salud de tus mascotas.</p>
 
         <p><a class="btn btn-default boton" href="https://go.microsoft.com/fwlink/?LinkId=301866">Ver más&raquo;</a><p />
 
@@ -57,8 +57,8 @@
         width: 300px;
     }
 
-        .col-md-4 p {
-            width: 350px;
+        .col-md-4 p  {
+            width: 380px;
             font-weight: 500;
             font-size: 1.2em;
             text-align: center;
@@ -72,9 +72,17 @@
         z-index: 1000; /* Un valor alto para colocarlo encima */
     }
 
-    .texto {
-        padding-top: 70px;
+    .col-md-4 .texto {
+        margin-top: 38px;
+        background-color: #9fb2a9;
+        border-radius: 20px;
+        box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.3);
+        padding-top: 0px;
+        padding:15px;
         margin-bottom: 30px;
+    }
+    .col-md-4 p a{
+        margin-top:-10px;
     }
 
     .perro {
@@ -106,7 +114,7 @@
 
     .carrusel {
         height: 40%;
-        padding-top: 40px;
+        padding-top: 50px;
         display: flex;
         transition: transform 0.5s ease-in-out;
     }
@@ -130,20 +138,20 @@
         background-color: rgba(0,0,0,0.2);
         border: 4px solid white;
         color: white;
-        
-        padding: 10px 16px;
+        padding: 8px 14px;
         cursor: pointer;
         z-index: 1;
         font-size: 24px;
         border-radius: 50%;
+        z-index: 10; /* Muy importante para que esté sobre la imagen */
     }
 
     .prev {
-        left: 10px;
+        left: 130px;
     }
 
     .next {
-        right: 10px;
+        right: 130px;
     }
 </style>
 <script>
