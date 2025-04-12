@@ -3,29 +3,47 @@
     ViewBag.Title = "CitasEspecDispon";
 }
 
-
-
 @model List<Clinipet.Dtos.DisponibDto>
-
+<link rel="stylesheet" href="@Url.Content("~/Estilos/estilos.css")">
 <h2>Citas disponibles</h2>
 <table>
     <thead>
         <tr>
             <th>Especialidad</th>
-            <th>Veterinario</th>            
+            <th>Veterinario</th>
             <th>Día</th>
             <th>Hora</th>
+            <th>Selecciona</th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var cita in Model)
+        @foreach (var dispon in Model)
         {
         <tr>
-            <td>@cita.nom_serv</td>
-            <td>@cita.nom_usu</td>
-            <td>@cita.nom_dia</td>
-            <td>@cita.nom_hora</td>
+            <td>@dispon.nom_serv</td>
+            <td>@dispon.nom_usu</td>
+            <td>@dispon.nom_dia</td>
+            <td>@dispon.nom_hora</td>
+            <td>
+                <form action="@Url.Action("AgendarCita", "General")" method="post">
+                    <input type="hidden" name="id_cita" value="@dispon.id_dispon" />
+                    <button type="submit" class="botonSec botonForm">Agendar &raquo;</button>
+                </form>
+            </td>
         </tr>
         }
     </tbody>
 </table>
+<style>
+    h2{
+        margin-top:40px;
+        margin-bottom:20px;
+    }
+    body {
+        background-image: url('/Imagenes/fondo_dispon.png');
+        background-size: cover; /* para cubrir toda la pantalla */
+        background-repeat: no-repeat;
+        background-attachment: fixed; /* para que no se mueva al hacer scroll */
+        background-position: center;
+    }
+</style>

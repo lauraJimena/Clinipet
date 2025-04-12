@@ -261,19 +261,19 @@ namespace Clinipet.Repositories
             DBContextUtility Connection = new DBContextUtility();
             Connection.Connect();
 
-            string sql = @"
-        SELECT 
-        s.nombre EspecialidadServicio,
-        u.nom_usu + ' ' + u.apel_usu Veterinario,
-        di.nombre AS Dia,
-        h.nom_hora AS Hora
-        FROM serv_dispon sd
-        JOIN disponibilidad d ON sd.id_dispon = d.id_dispon
-        JOIN usuario u ON d.id_usu = u.id_usu
-        JOIN servicio s ON sd.id_servicio = s.id_servicio
-        JOIN dia di ON d.id_dia=di.id_dia
-        JOIN hora h ON d.id_hora = h.id_hora
-        WHERE s.id_estado = 1";
+            string sql = "SELECT " +
+             "e.nom_espec AS EspecialidadServicio, " +
+             "u.nom_usu + ' ' + u.apel_usu AS Veterinario, " +
+             "di.nombre AS Dia, " +
+             "h.nom_hora AS Hora " +
+             "FROM serv_dispon sd " +
+             "JOIN disponibilidad d ON sd.id_dispon = d.id_dispon " +
+             "JOIN usuario u ON d.id_usu = u.id_usu " +
+             "JOIN servicio s ON sd.id_servicio = s.id_servicio " +
+             "JOIN especialidad e ON u.id_espec = e.id_espec " +
+             "JOIN dia di ON d.id_dia = di.id_dia " +
+             "JOIN hora h ON d.id_hora = h.id_hora " +
+             "WHERE s.id_estado = 1 AND u.id_rol = 4";
 
             using (SqlCommand cmd = new SqlCommand(sql, Connection.CONN()))
             {

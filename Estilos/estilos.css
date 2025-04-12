@@ -30,8 +30,7 @@ p{
     text-align: center;
 }
 button {
-    margin-top: 18px;
-    background-color: #d9a86c;
+    margin-top: 18px; 
     padding: 13px;
     box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.3);
     border: 1px solid black;
@@ -39,16 +38,18 @@ button {
     border-radius: 30px;
     margin-left: auto;
 }
+.botonForm {
+    background-color: #d9a86c;
+}
 .boton {
-    font-size: 0.8em;
     margin-top: 18px;
+    padding: 12px;
+    border-radius: 30px;
+    font-size: 0.8em;
+    font-weight: bold;
     background-color: #4f7768;
-    padding: 13px;
     box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.3);
     border: 0.5px solid #545454;
-    font-weight: bold;
-    border-radius: 30px;
-    margin-left: auto;
 }
 .boton:hover {
     background-color: bisque;
@@ -90,7 +91,7 @@ select {
     max-width: 100%; /* Aprovecha más el espacio de la pantalla */
     overflow: hidden; /* evita que el agrandamiento cree scroll */
     margin-top: 20px;
-    padding: 20px;
+    padding: 25px;
 }
 
 .opcion {
@@ -109,8 +110,8 @@ select {
 }
 
 .opcion:hover {
-    transform: scale(1.05); /* Agranda un poco al hacer hover */
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5); /* Sombra para dar efecto de elevación */   
+    transform: scale(1.09); /* Agranda un poco al hacer hover */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.55); /* Sombra para dar efecto de elevación */   
 }
 
 .opcion img {
@@ -132,7 +133,7 @@ select {
     margin-top: -10px;
 }
     .opcion p:hover {
-        transform: scale(1.05); /* Agranda un poco*/
+        transform: scale(1.06); /* Agranda un poco*/
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
         border-radius: 10px;
        
@@ -143,4 +144,38 @@ select {
     }
 .opcion .links{
     text-decoration:none;
+}
+table {
+    width: 90%;
+    margin: auto;
+    border-radius: 10px;
+    overflow: hidden;
+    border-collapse: separate;
+    border-spacing: 2px;
+}
+thead {
+    background-color: #78a890;
+    color: white;
+    text-shadow: -1.5px -1.5px 0 gray;
+    border-radius: 12px;
+    
+}
+th {
+    border: 0.3px solid #545454;
+}
+td {
+    background-color: #9fb2a9;
+    
+}
+th, td {
+    padding: 10px;
+    
+}
+.botonSec {
+    border-radius: 10px;
+    border: 0.3px solid #545454;
+    margin-top: 0px;
+    font-size: 0.85em;
+    padding: 4px;
+    font-weight: 500;
 }

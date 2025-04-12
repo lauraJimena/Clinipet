@@ -13,14 +13,14 @@ namespace Clinipet.Repositories
     {
         public int PublicarDispon(DisponibDto dispo)
         {
-            int comando = 0;
+            //int comando = 0;
             int id_disponGenerado = 0;
             DBContextUtility Connection = new DBContextUtility();
             Connection.Connect();
 
             string SQL = @"
                         INSERT INTO disponibilidad (id_dia, id_hora, id_usu) VALUES (@id_dia, @id_hora, @id_usu); 
-                        SELECT SCOPE_IDENTITY();"; // ← Esto devuelve el ID recién creado
+                        SELECT SCOPE_IDENTITY();"; // Devuelve el ID recién creado
 
             using (SqlCommand command = new SqlCommand(SQL, Connection.CONN()))
             {
@@ -28,7 +28,7 @@ namespace Clinipet.Repositories
                 command.Parameters.AddWithValue("@id_hora", dispo.id_hora);
                 command.Parameters.AddWithValue("@id_usu", dispo.id_usu);
 
-                var result = command.ExecuteScalar(); // obtiene el ID
+                var result = command.ExecuteScalar(); // Obtiene el id de la disponibilidad
                 if (result != null)
                 {
                     id_disponGenerado = Convert.ToInt32(result);
