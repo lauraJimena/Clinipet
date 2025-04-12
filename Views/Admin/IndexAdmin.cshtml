@@ -5,7 +5,7 @@
 <link rel="stylesheet" href="@Url.Content("~/Estilos/estilos.css")">
 
 <div class="contenedor">
-    <h2 class="tituloIndex">¡Hola Administrador! @Session["Nombre"]</h2>
+    <h2 class="tituloIndex">¡Hola, Admin @Session["Nombre"]! </h2>
 
     <div class="opciones">
         <div class="opcion">
@@ -34,7 +34,11 @@
 
 <style>
     body {
-        background-color: #e0e0e0;
+        background-image: url('/Imagenes/fondo_dispon.png');
+        background-size: cover; /* para cubrir toda la pantalla */
+        background-repeat: no-repeat;
+        background-attachment: fixed; /* para que no se mueva al hacer scroll */
+        background-position: center;
     }
 
     .tituloIndex {

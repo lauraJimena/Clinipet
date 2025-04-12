@@ -1,63 +1,164 @@
 ﻿@{
     ViewBag.Title = "Home Page";
-    
+
 }
 <link rel="stylesheet" href="@Url.Content("~/Estilos/estilos.css")">
 <div class="jumbotron">
-    <h1>ASP.NET</h1>
-    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-    <p><a href="https://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
+    <div class="carrusel-container">
+        <div class="carrusel">
+            <div class="carrusel-item">
+                <img src="~/Imagenes/banner_1.png" alt="Banner Veterinaria" class="banner-imagen">
+            </div>
+            <div class="carrusel-item">
+                <img src="~/Imagenes/banner_2.png" alt="Imagen 2"class="banner-imagen">
+            </div>
+            <div class="carrusel-item">
+                <img src="~/Imagenes/baner3.jpg" alt="Imagen 3" class="banner-imagen">
+            </div>
+        </div>
+        <button class="prev" onclick="cambiarSlide(-1)">&#10094;</button>
+        <button class="next" onclick="cambiarSlide(1)">&#10095;</button>
+    </div>
+
 </div>
 
 <div class="row">
-    
-    <div class="col-md-4">
-       
-        <p class="texto">CliniPet te ofrece variedad de servicios para cuidar la salud de tus mascotas</p>
-        
-        <p><a class="btn btn-default boton" href="https://go.microsoft.com/fwlink/?LinkId=301866">Ver más&raquo;</a><p/>
 
-</div>
     <div class="col-md-4">
-        <img class="perro"src="@Url.Content("~/Imagenes/perro_index.png")">
+
+        <p class="texto">CliniPet te ofrece variedad de servicios para cuidar la salud de tus mascotas</p>
+
+        <p><a class="btn btn-default boton" href="https://go.microsoft.com/fwlink/?LinkId=301866">Ver más&raquo;</a><p />
+
+    </div>
+    <div class="col-md-4">
+        <img class="perro" src="@Url.Content("~/Imagenes/perro_index.png")">
     </div>
 </div>
 <style>
-    .row {
+    body {
+        background-color: #e6e6e6;
+    }
 
+    html, body {
+        margin: 0;
+        padding: 0;
+    }
+
+    .row {
         background-image: url('/Imagenes/fondo_index.png');
-        width:100%;
-        margin-left:3px;
+        width: 100%;
+        margin-left: 3px;
         background-size: 60%;
         border-radius: 5px;
     }
+
     .col-md-4 {
-     
-        width:300px;
+        width: 300px;
     }
-    .col-md-4 p{
-        width:350px;
-       
-        font-weight:500;
-        font-size:1.2em;
-        text-align:center;
-        margin-top: 0px;
-        margin-left:250px;
-        margin-bottom:0px;
-    }
+
+        .col-md-4 p {
+            width: 350px;
+            font-weight: 500;
+            font-size: 1.2em;
+            text-align: center;
+            margin-top: 0px;
+            margin-left: 250px;
+            margin-bottom: 0px;
+        }
+
     .boton {
         position: relative; /* Permite que el `z-index` funcione */
         z-index: 1000; /* Un valor alto para colocarlo encima */
     }
-    .texto{
-        padding-top:70px;
-        margin-bottom:30px;
+
+    .texto {
+        padding-top: 70px;
+        margin-bottom: 30px;
     }
-    
-    .perro{
-        margin-left:260px;
-        margin-top:10px;
-        height:280px;
-        width:auto;
+
+    .perro {
+        margin-left: 260px;
+        margin-top: 10px;
+        height: 280px;
+        width: auto;
+    }
+
+    .jumbotron {
+        margin-bottom: 10px;
+        margin-left: 0;
+        padding: 0;
+       
+        width: 100%; /* 100% del ancho del viewport */
+        overflow: hidden;
+    }
+
+    .banner-imagen {
+        width: 100%;
+
+        margin-left: -60px;
+    }
+
+    .carrusel-container {
+        width: 100vw;
+        max-width: 100vw;
+    }
+
+    .carrusel {
+        height: 40%;
+        padding-top: 40px;
+        display: flex;
+        transition: transform 0.5s ease-in-out;
+    }
+
+    .carrusel-item {
+        min-width: 100vw;
+        box-sizing: border-box;
+    }
+
+        .carrusel-item img {
+            width: 100%;
+            height: auto;
+            object-fit: cover; /* muestra toda la imagen */
+        }
+
+
+    .prev, .next {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background-color: rgba(0,0,0,0.5);
+        color: white;
+        border: none;
+        padding: 10px 16px;
+        cursor: pointer;
+        z-index: 1;
+        font-size: 24px;
+        border-radius: 50%;
+    }
+
+    .prev {
+        left: 10px;
+    }
+
+    .next {
+        right: 10px;
     }
 </style>
+<script>
+    let slideIndex = 0;
+    const carrusel = document.querySelector(".carrusel");
+    const slides = document.querySelectorAll(".carrusel-item");
+    const totalSlides = slides.length;
+
+    function cambiarSlide(direccion) {
+        slideIndex = (slideIndex + direccion + totalSlides) % totalSlides;
+        carrusel.style.transform = `translateX(-${slideIndex * 100}vw)`;
+    }
+
+    // Auto slide cada 3 segundos
+    setInterval(() => {
+        cambiarSlide(1);
+    }, 3000);
+</script>
+
