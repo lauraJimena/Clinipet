@@ -13,7 +13,7 @@
                 <img src="~/Imagenes/banner_2.png" alt="Imagen 2"class="banner-imagen">
             </div>
             <div class="carrusel-item">
-                <img src="~/Imagenes/banner_3.png" alt="Imagen 3" class="banner-imagen">
+                <img src="~/Imagenes/baner3.jpg" alt="Imagen 3" class="banner-imagen">
             </div>
         </div>
         <button class="prev" onclick="cambiarSlide(-1)">&#10094;</button>
@@ -26,7 +26,7 @@
 
     <div class="col-md-4">
 
-        <p class="texto"><b>CliniPet</b> es una clínica veterinaria que te ofrece variedad de servicios para cuidar la salud de tus mascotas.</p>
+        <p class="texto">CliniPet te ofrece variedad de servicios para cuidar la salud de tus mascotas</p>
 
         <p><a class="btn btn-default boton" href="https://go.microsoft.com/fwlink/?LinkId=301866">Ver más&raquo;</a><p />
 
@@ -57,8 +57,8 @@
         width: 300px;
     }
 
-        .col-md-4 p  {
-            width: 380px;
+        .col-md-4 p {
+            width: 350px;
             font-weight: 500;
             font-size: 1.2em;
             text-align: center;
@@ -72,17 +72,9 @@
         z-index: 1000; /* Un valor alto para colocarlo encima */
     }
 
-    .col-md-4 .texto {
-        margin-top: 38px;
-        background-color: #9fb2a9;
-        border-radius: 20px;
-        box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.3);
-        padding-top: 0px;
-        padding:15px;
+    .texto {
+        padding-top: 70px;
         margin-bottom: 30px;
-    }
-    .col-md-4 p a{
-        margin-top:-10px;
     }
 
     .perro {
@@ -114,7 +106,7 @@
 
     .carrusel {
         height: 40%;
-        padding-top: 50px;
+        padding-top: 40px;
         display: flex;
         transition: transform 0.5s ease-in-out;
     }
@@ -135,23 +127,22 @@
         position: absolute;
         top: 50%;
         transform: translateY(-50%);
-        background-color: rgba(0,0,0,0.2);
-        border: 4px solid white;
+        background-color: rgba(0,0,0,0.5);
         color: white;
-        padding: 8px 14px;
+        border: none;
+        padding: 10px 16px;
         cursor: pointer;
         z-index: 1;
         font-size: 24px;
         border-radius: 50%;
-        z-index: 10; /* Muy importante para que esté sobre la imagen */
     }
 
     .prev {
-        left: 130px;
+        left: 10px;
     }
 
     .next {
-        right: 130px;
+        right: 10px;
     }
 </style>
 <script>
