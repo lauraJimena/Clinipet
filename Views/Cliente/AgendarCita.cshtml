@@ -2,7 +2,7 @@
 @{
     ViewBag.Title = "AgendarCita";
 }
-@model Clinipet.Dtos.DisponibDto
+@model Clinipet.Dtos.MascotaCitaDto
 <link rel="stylesheet" href="@Url.Content("~/Estilos/estilos.css")">
 <h2>Agendamiento de cita</h2>
 <div class="cajaTabla">
@@ -11,38 +11,41 @@
 
         <tr>
             <th>Fecha</th>
-            <td>@Model.nom_hora</td>
+            <td>@Model.Disponib.nom_dia</td>
         </tr>
         <tr>
             <th>Hora</th>
-            <td>@Model.nom_dia</td>
+            <td>@Model.Disponib.nom_hora</td>
         </tr>
         <tr>
             <th>Médico</th>
-            <td>@Model.nom_usu</td>
+            <td>@Model.Disponib.nom_usu</td>
         </tr>
         <tr>
             <th>Especialidad</th>
-            <td>@Model.nom_serv</td>
+            <td>@Model.Disponib.nom_serv</td>
         </tr>
         <tr>
-            <th>Paciente</th>
-            <td>@Session["Nombre"] @Session["Apellido"]</td>
+            <th>Mascota</th>
+            <td>@Model.Mascota.nom_masc</td>
         </tr>
-        
+        <tr>
+            <th>Dueño</th>
+            <td>@Model.Mascota.nom_usu</td>
+        </tr>
+
     </table>
     <div class="cajaBtn">
         <form action="@Url.Action("ConfirmarCita", "Cliente")" method="post" id="confirmForm">
 
-            <input type="hidden" name="id_dispon" value="@Model.id_dispon" />
-            <a class="boton" href="@Url.Action("CitasEspecDispon", "Cliente")">Volver</a>
+            <input type="hidden" name="id_dispon" value="@Model.Disponib.id_dispon" />
+            <a class="boton" href="@Url.Action("ListadoMascotas", "Cliente")">Volver</a>
             <button type="submit" class="boton" onclick="mostrarConfirmacion(event)">Confirmar</button>
 
         </form>
     </div>
 </div>
-
-    @Html.Partial("_ModalConfirm")
+ @Html.Partial("_ModalConfirm")
     <script>
         // Guardar el formulario en una variable global
         let formulario = document.getElementById("confirmForm");
@@ -102,7 +105,7 @@
         }
 
         .cajaBtn {
-            
+            font-size:1.15em;
             justify-items:center;
             padding-top:0;
             margin:auto;

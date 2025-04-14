@@ -17,6 +17,7 @@ namespace Clinipet.Dtos
         public string nom_espec { get; set; } = string.Empty;
         public string nom_serv { get; set; } = string.Empty;
         public string nom_masc { get; set; } = string.Empty;
+        
         public int Response { get; set; }
 
         public string Mensaje { get; set; } = string.Empty;

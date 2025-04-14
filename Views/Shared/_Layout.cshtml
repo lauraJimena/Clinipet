@@ -12,11 +12,11 @@
     <style>
         /* Estilos para que se carguen primero que los que vienen por defecto en ASP.NET*/
         .navbar {
-            padding-top: 6px;
+            padding-top: 8px;
             background-color: #9fb2a9;
             box-shadow: 0px 7px 15px rgba(0, 0, 0, 0.22);
             border-color: #9fb2a9;
-            height: 11%;
+            height: 11.8%;
         }
 
             .navbar .navbar-brand {
@@ -29,12 +29,10 @@
                 font-size: 1.55em;               
             }
 
-        .navbar-brand .nav2 {
-            padding-top: 19px;
-        }
+        
 
         .tit {
-            margin-top: 15px;
+            margin-top: 18px;
             text-shadow: -1.5px -1.5px 0 gray;
         }
 
@@ -44,6 +42,7 @@
         }
 
         .navbar-collapse .nav .links {
+            margin-top:3px;
             color: #2f2f2f;
             font-weight: 500;
             font-size: 1.1em;
@@ -137,7 +136,7 @@
                     <li>@Html.ActionLink("Inicio", "Index", "Home", new { area = "" }, new { @class = "links" })</li>
                     <li>@Html.ActionLink("Acerca de", "About", "Home", new { area = "" }, new { @class = "links" })</li>
                     <li>@Html.ActionLink("Contacto", "Contact", "Home", new { area = "" }, new { @class = "links" })</li>
-                    <li>@Html.ActionLink("Login", "Login", "General", new { area = "" }, new { @class = "links" })</li>
+                    <li>@Html.ActionLink("Iniciar Sesión", "Login", "General", new { area = "" }, new { @class = "links" })</li>
                     <li>@Html.ActionLink("Registro Cliente", "RegistroCliente", "General", new { area = "" }, new { @class = "links" })</li>
                 </ul>
             </div>

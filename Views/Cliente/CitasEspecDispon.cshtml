@@ -25,7 +25,8 @@
             <td>@dispon.nom_dia</td>
             <td>@dispon.nom_hora</td>
             <td>
-                <form action="@Url.Action("AgendarCita", "Cliente")" method="post">
+                <form action="@Url.Action("ListadoMascotas", "Cliente")" method="post">
+                    <input type="hidden" name="id_usu" value="@Session["Id"]" />
                     <input type="hidden" name="id_dispon" value="@dispon.id_dispon" />
                     <button type="submit" class="botonSec botonForm">Agendar &raquo;</button>
                 </form>

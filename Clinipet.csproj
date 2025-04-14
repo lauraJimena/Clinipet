@@ -126,6 +126,7 @@
     <Compile Include="Controllers\GeneralController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\VeterinarioController.cs" />
+    <Compile Include="Dtos\MascotaCitaDto.cs" />
     <Compile Include="Dtos\ServicioDto.cs" />
     <Compile Include="Dtos\DisponibDto.cs" />
     <Compile Include="Dtos\MascotaDto.cs" />
@@ -224,6 +225,7 @@
     <Content Include="Views\Cliente\CitasEspecDispon.cshtml" />
     <Content Include="Views\Cliente\AgendarCita.cshtml" />
     <Content Include="Views\Shared\_ModalConfirm.cshtml" />
+    <Content Include="Views\Cliente\ListadoMascotas.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

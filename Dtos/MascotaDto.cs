@@ -20,6 +20,8 @@ namespace Clinipet.Dtos
         public string nom_tipo { get; set; }
 
         public int id_usu { get; set; }
+        public string nom_usu{ get; set; } = string.Empty;
+
         public int Response { get; set; }
 
         public string Mensaje { get; set; } = string.Empty;

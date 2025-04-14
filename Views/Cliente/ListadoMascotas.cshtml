@@ -1,0 +1,82 @@
+﻿
+@{
+    ViewBag.Title = "ListadoMascotas";
+}
+@model Clinipet.Dtos.MascotaCitaDto
+<link rel="stylesheet" href="@Url.Content("~/Estilos/estilos.css")">
+<h2>Listado Mascotas</h2>
+<div class="cajaTabla">
+    <p class="texto">Selecciona una de tus mascotas para agendar su cita:</p>
+    <table class="tabla">
+        
+        <tbody>
+            @foreach (var mascota in Model.Mascotas)
+            {
+                <tr class="filaRedonda">
+
+                    <td><p>Nombre:</p>@mascota.nom_masc</td>
+                    <td><p>Edad:</p>@mascota.edad_masc</td>
+                    <td><p>Tipo:</p>@mascota.nom_tipo</td>
+                    <td><p>Raza:</p>@mascota.nom_raza</td>
+
+                    <td class="tdForm">
+                        <form action="@Url.Action("AgendarCita", "Cliente")" method="post">
+                            <input type="hidden" name="id_dispon" value="@Model.IdDispon" />
+                            <input type="hidden" name="id_usu" value="@Model.IdUsu" />
+                            <input type="hidden" name="id_mascota" value="@mascota.id_mascota" />
+                            <button type="submit" class="botonSec botonForm">Seleccionar &raquo;</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<style>
+    body {
+        background-image: url('/Imagenes/fondo_dispon.png');
+        background-size: cover; /* para cubrir toda la pantalla */
+        background-repeat: no-repeat;
+        background-attachment: fixed; /* para que no se mueva al hacer scroll */
+        background-position: center;
+        
+    }
+    h2 {
+        margin-top: 40px;
+        margin-bottom: 40px;
+    }
+    .texto {
+        font-size: 1.15em;
+        margin-left: 150px;
+    }
+    .cajaTabla{
+        padding:0;
+    }
+    .tabla {
+        font-size:1.08em;
+        border-collapse: separate;
+        border-spacing: 0 20px;/*Solo espacio abajo*/
+        width:75%;
+        
+    }
+    tr.filaRedonda td:first-child { /*selecciona el primer <td> de cada fila con clase filaRedonda*/
+        border-top-left-radius: 20px;
+        border-bottom-left-radius: 20px;
+    }
+
+    tr.filaRedonda td:last-child {
+        border-top-right-radius: 50%; /*selecciona el ultimo <td> de cada fila con clase filaRedonda*/
+        border-bottom-right-radius: 50%;
+    }
+    
+    td{
+        padding:30px;
+    }
+    .tdForm {
+        padding: 5px;
+    }
+
+    
+
+    
+</style>
