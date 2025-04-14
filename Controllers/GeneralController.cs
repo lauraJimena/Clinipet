@@ -58,13 +58,7 @@ namespace Clinipet.Controllers
 
             return View();
         }
-        public ActionResult CitasEspecDispon()
-        {
-            GeneralService generalService = new GeneralService();
-            List<DisponibDto> citas = generalService.ObtenerCitasDispon();
-
-            return View(citas);
-        }
+       
 
         [HttpPost]
         public ActionResult Login(UserDto nuevoUsu)

@@ -135,9 +135,11 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\AdminRepository.cs" />
+    <Compile Include="Repositories\ClienteRepository.cs" />
     <Compile Include="Repositories\GeneralRepository.cs" />
     <Compile Include="Repositories\VeterinarioRepository.cs" />
     <Compile Include="Services\AsistenteService.cs" />
+    <Compile Include="Services\ClienteService.cs" />
     <Compile Include="Services\GeneralService.cs" />
     <Compile Include="Services\VeterinarioService.cs" />
     <Compile Include="Utilities\DBContextUtility.cs" />
@@ -160,6 +162,7 @@
     <Content Include="Imagenes\cita_espec.png" />
     <Content Include="Imagenes\contacto.png" />
     <Content Include="Imagenes\facebook.png" />
+    <Content Include="Imagenes\fondo_agenda_espec.png" />
     <Content Include="Imagenes\fondo_dispon.png" />
     <Content Include="Imagenes\fondo_index.png" />
     <Content Include="Imagenes\fondo_pub_citas.png" />
@@ -214,12 +217,13 @@
     <Content Include="Views\Shared\_Modal.cshtml" />
     <Content Include="Views\General\RegistroMascota.cshtml" />
     <Content Include="Views\Cliente\IndexCliente.cshtml" />
-    <Content Include="Views\Cliente\CitasEspec.cshtml" />
     <Content Include="Views\Veterinario\PubCitas.cshtml" />
     <Content Include="Views\Admin\RegistroAsistente.cshtml" />
     <Content Include="Views\Admin\RegistroVeterinario.cshtml" />
     <Content Include="Views\Admin\IndexAdmin.cshtml" />
-    <Content Include="Views\General\CitasEspecDispon.cshtml" />
+    <Content Include="Views\Cliente\CitasEspecDispon.cshtml" />
+    <Content Include="Views\Cliente\AgendarCita.cshtml" />
+    <Content Include="Views\Shared\_ModalConfirm.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

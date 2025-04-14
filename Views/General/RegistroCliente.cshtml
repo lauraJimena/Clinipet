@@ -68,8 +68,7 @@
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                // Redirige si el registro fue exitoso
-               //mostrarModal("Éxito", data.message);
+                // Redirige si el registro fue exitoso               
                 window.location.href = "/Home/Index";
             } else {
                 // Muestra el modal si hay error
