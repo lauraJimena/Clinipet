@@ -1,0 +1,116 @@
+﻿
+@{
+    ViewBag.Title = "AgendarCita";
+}
+@model Clinipet.Dtos.DisponibDto
+<link rel="stylesheet" href="@Url.Content("~/Estilos/estilos.css")">
+<h2>Agendamiento de cita</h2>
+<div class="cajaTabla">
+    <p>Revisa la siguiente información y confirma tu cita:</p>
+    <table class="tabla">
+
+        <tr>
+            <th>Fecha</th>
+            <td>@Model.nom_hora</td>
+        </tr>
+        <tr>
+            <th>Hora</th>
+            <td>@Model.nom_dia</td>
+        </tr>
+        <tr>
+            <th>Médico</th>
+            <td>@Model.nom_usu</td>
+        </tr>
+        <tr>
+            <th>Especialidad</th>
+            <td>@Model.nom_serv</td>
+        </tr>
+        <tr>
+            <th>Paciente</th>
+            <td>@Session["Nombre"] @Session["Apellido"]</td>
+        </tr>
+        
+    </table>
+    <div class="cajaBtn">
+        <form action="@Url.Action("ConfirmarCita", "Cliente")" method="post" id="confirmForm">
+
+            <input type="hidden" name="id_dispon" value="@Model.id_dispon" />
+            <a class="boton" href="@Url.Action("CitasEspecDispon", "Cliente")">Volver</a>
+            <button type="submit" class="boton" onclick="mostrarConfirmacion(event)">Confirmar</button>
+
+        </form>
+    </div>
+</div>
+
+    @Html.Partial("_ModalConfirm")
+    <script>
+        // Guardar el formulario en una variable global
+        let formulario = document.getElementById("confirmForm");
+
+        function mostrarConfirmacion(event) {
+            event.preventDefault(); // Detiene el envío inmediato del formulario
+            mostrarModal("¿Estás seguro?", "Confirma que deseas agendar la cita.");
+
+            // Guarda el formulario globalmente
+            window.formulario = document.getElementById("confirmForm");
+        }
+
+    </script>
+
+    <style>
+        body {
+            background-image: url('/Imagenes/fondo_agenda_espec.png');
+            background-size: cover; /* para cubrir toda la pantalla */
+            background-repeat: no-repeat;
+            background-attachment: fixed; /* para que no se mueva al hacer scroll */
+            background-position: center;
+        }
+
+        h2 {
+            margin-top: 35px;
+            margin-bottom: 20px;
+        }
+        p {
+            text-align: center;
+        }
+
+        .cajaTabla {
+            margin: auto;
+            width: 53%;
+            padding: 30px;
+            border-radius: 20px;
+            background-color: rgba(199, 203, 202, 0.75);
+        }
+
+        .tabla {
+            border-spacing: 3.5px;
+            width: 88%;
+        }
+
+        th {
+            color: white;
+            text-shadow: -1.5px -1.5px 0 #545454;
+            background-color: #78a890;
+            border: 1px solid #545454;
+            width: 40%;
+            border-radius: 10px;
+        }
+
+        td {
+            border: 1px solid gray;
+            border-radius: 10px;
+        }
+
+        .cajaBtn {
+            
+            justify-items:center;
+            padding-top:0;
+            margin:auto;
+            padding:0;
+            width:53%;
+        }
+        .cajaBtn button {
+            background-color: #d9a86c;
+        }
+        
+    </style>

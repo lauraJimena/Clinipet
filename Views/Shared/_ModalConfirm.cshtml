@@ -1,33 +1,30 @@
-﻿
-<div id="customModal" class="modal-overlay">
+﻿<div id="customModal" class="modal-overlay">
     <div class="modal-content">
         <h3 id="modalTitle">Título</h3>
         <p id="modalMessage">Mensaje</p>
-        <button onclick="cerrarModal()">Cerrar</button>
+        <button onclick="cerrarModal()">Cancelar</button>
+        <button onclick="enviarFormulario()">Confirmar</button>
     </div>
 </div>
 
 <script>
     let funcionConfirmacion = null;
-
-    function mostrarModal(titulo, mensaje, funcion) {
-        document.getElementById("modalTitle").innerText = titulo;
-        document.getElementById("modalMessage").innerText = mensaje;
-        document.getElementById("customModal").style.display = "flex";
-        funcionConfirmacion = funcion;
-    }
-    function confirmarAccion() {
+    /*function confirmarAccion() {
         if (typeof funcionConfirmacion === "function") {
             funcionConfirmacion();
         }
         cerrarModal();
-    }
+    }*/
+    
     function mostrarModal(titulo, mensaje) {
         document.getElementById("modalTitle").innerText = titulo;
         document.getElementById("modalMessage").innerText = mensaje;
         document.getElementById("customModal").style.display = "flex";
     }
-
+    function enviarFormulario() {
+        cerrarModal(); // Cierra el modal primero (opcional)
+        window.formulario.submit(); // Envia el formulario
+    }
     function cerrarModal() {
         document.getElementById("customModal").style.display = "none";
     }
@@ -48,15 +45,13 @@
     }
 
     .modal-content {
-        
         background: white;
         padding: 20px;
         border-radius: 10px;
         box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
         text-align: center;
-        height:225px;
+        height: 200px;
         width: 500px;
-       
     }
 
         .modal-content button {
@@ -73,4 +68,5 @@
                 background: #e6e1c2;
             }
 </style>
+
 

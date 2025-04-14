@@ -265,7 +265,8 @@ namespace Clinipet.Repositories
              "e.nom_espec AS EspecialidadServicio, " +
              "u.nom_usu + ' ' + u.apel_usu AS Veterinario, " +
              "di.nombre AS Dia, " +
-             "h.nom_hora AS Hora " +
+             "h.nom_hora AS Hora, " +
+             "d.id_dispon AS idDispon " +
              "FROM serv_dispon sd " +
              "JOIN disponibilidad d ON sd.id_dispon = d.id_dispon " +
              "JOIN usuario u ON d.id_usu = u.id_usu " +
@@ -287,7 +288,8 @@ namespace Clinipet.Repositories
                             nom_serv = reader.GetString(0),
                             nom_usu = reader.GetString(1),
                             nom_dia = reader.GetString(2),
-                            nom_hora = reader.GetString(3)
+                            nom_hora = reader.GetString(3),
+                            id_dispon = reader.GetInt32(4)
                         };
                         lista.Add(dispon);
                     }
