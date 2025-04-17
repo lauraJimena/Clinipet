@@ -23,8 +23,9 @@
         </tr>
         <tr>
             <th>Especialidad</th>
-            <td>@Model.Disponib.nom_serv</td>
+            <td>@Model.Disponib.nom_espec</td>
         </tr>
+
         <tr>
             <th>Mascota</th>
             <td>@Model.Mascota.nom_masc</td>
@@ -36,10 +37,17 @@
 
     </table>
     <div class="cajaBtn">
-        <form action="@Url.Action("ConfirmarCita", "Cliente")" method="post" id="confirmForm">
 
+        <form method="post" action="@Url.Action("CitasEspecDispon", "Cliente")">
+            <input type="hidden" name="id_usu" value="@Model.IdUsu" />
+            <button class="boton boton2" type="submit">Volver</button>
+        </form>
+        <form action="@Url.Action("ConfirmarCita", "Cliente")" method="post" id="confirmForm">
+            <input type="hidden" name="id_mascota" value="@Model.Mascota.id_mascota" />
+            <input type="hidden" name="id_usu" value="@Model.IdUsu" />
             <input type="hidden" name="id_dispon" value="@Model.Disponib.id_dispon" />
-            <a class="boton" href="@Url.Action("ListadoMascotas", "Cliente")">Volver</a>
+            <input type="hidden" name="id_servicio" value="@Model.Disponib.id_servicio" />
+            <input type="hidden" name="nom_espec" value="@Model.Disponib.nom_espec" />
             <button type="submit" class="boton" onclick="mostrarConfirmacion(event)">Confirmar</button>
 
         </form>
@@ -76,7 +84,6 @@
         p {
             text-align: center;
         }
-
         .cajaTabla {
             margin: auto;
             width: 53%;
@@ -84,12 +91,10 @@
             border-radius: 20px;
             background-color: rgba(199, 203, 202, 0.75);
         }
-
         .tabla {
             border-spacing: 3.5px;
             width: 88%;
         }
-
         th {
             color: white;
             text-shadow: -1.5px -1.5px 0 #545454;
@@ -105,15 +110,16 @@
         }
 
         .cajaBtn {
-            font-size:1.15em;
-            justify-items:center;
-            padding-top:0;
-            margin:auto;
-            padding:0;
-            width:53%;
+            font-size: 1.15em;
+            display: flex;
+            gap: 1rem; /* Espacio entre botones */
+            justify-content: center; /* Centra los botones horizontalmente (opcional) */
+            margin-top: 1rem; /* Separación del contenido anterior */
         }
-        .cajaBtn button {
+        .boton{
             background-color: #d9a86c;
         }
-        
+        .boton2 {
+            background-color: #4f7768;
+        }
     </style>

@@ -1,6 +1,5 @@
 ﻿@import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;700;800;900&family=Quicksand:wght@300..700&display=swap');
 
-
 body {
     font-family: "Quicksand", sans-serif;
     font-size: 1.8em;
@@ -9,7 +8,7 @@ body {
 }
 h2 {
     font-weight: 900;
-    font-size: 2.05em;
+    font-size: 2.25em;
     color: #d9a86c;
     text-align: center;
     text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 3px 2.3px 0 black; /* Crea el borde negro */
@@ -60,12 +59,10 @@ button {
     border: 0.5px solid #545454;
 }
 
-.boton:hover {
-    background-color: bisque;
-}
- button:hover {
+    .boton:hover, button:hover {
         background-color: bisque;
-}
+    }
+
 input {
     margin-bottom:10px;
     width: 900px;

@@ -1,0 +1,106 @@
+﻿
+@{
+    ViewBag.Title = "MascotasRegistradas";
+}
+<link rel="stylesheet" href="@Url.Content("~/Estilos/estilos.css")">
+
+@model List<Clinipet.Dtos.MascotaDto>
+
+<h2>
+
+    Mascotas Registradas
+    <img src="~/Imagenes/huella.png" alt="Icono Mascotas" class="huella">
+</h2>
+
+<div class="contenedor">
+
+    @if (Model != null && Model.Any())
+    {
+        foreach (var mascota in Model)
+        {
+    <div class="tarjeta">
+        @if (@mascota.nom_tipo == "Perro")
+        {
+            <img class="logo_perro" src="~/Imagenes/icono_perro.png" alt="Perro" />
+        }
+        else if (@mascota.nom_tipo == "Gato")
+        {
+            <img class="logo_gato" src="~/Imagenes/icono_gato.png" alt="Gato" />
+        }
+        <p><strong>Nombre:</strong> @mascota.nom_masc</p>
+        <p><strong>Edad:</strong> @mascota.edad_masc</p>
+        <p><strong>Tipo:</strong> @mascota.nom_tipo</p>
+        <p><strong>Raza:</strong> @mascota.nom_raza</p>
+    </div>
+        }
+    }
+    else
+    {
+        <p>No tienes mascotas registradas aún.</p>
+    }
+
+
+</div>
+<div class="cajaBoton">
+    <form method="get" action="/Cliente/IndexCliente">
+        <button class="btnSalir boton">Salir</button>
+    </form>
+</div>
+
+<style>
+    body {
+        background-image: url('/Imagenes/fondo_masc.png');
+        background-size: cover; /* para cubrir toda la pantalla */
+        background-repeat: no-repeat;
+        background-attachment: fixed; /* para que no se mueva al hacer scroll */
+        background-position: center;
+    }
+    h2 {
+        margin-top: 50px;
+    }
+
+    .titulo {
+        text-align: center;
+        font-size: 28px;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+
+    .contenedor {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 20px;
+        padding: 20px;
+    }
+
+    .tarjeta {
+        text-align:center;
+        background-color: #9fb2a9;
+        border-radius: 30px;
+        padding: 15px 25px;
+        width: 380px;
+        box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
+        border: 5px white solid;
+    }
+
+
+    .btnSalir {
+        margin-top: 15px;
+        font-size: 1em;
+        padding: 10px 20px;
+        
+    }
+    .cajaBoton {
+        width:86%;
+        text-align: right;
+       
+    }
+    .logo_perro, .logo_gato {
+        width: 70px;
+    }
+    .huella{
+        width:55px;
+        height:55px;
+    }
+</style>

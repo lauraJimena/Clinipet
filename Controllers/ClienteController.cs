@@ -29,6 +29,14 @@ namespace Clinipet.Controllers
 
             return View();
         }
+        public ActionResult MascotasRegistradas()
+        {
+            int id_usu = Convert.ToInt32(Session["Id"]); // Asegúrate que se guarda el ID del cliente al iniciar sesión
+            ClienteService servicio = new ClienteService();
+            List<MascotaDto> mascotas = servicio.ListadoMascotas(id_usu);
+            return View(mascotas);
+        }
+
 
         [HttpPost]
         public ActionResult ListadoMascotas(int id_usu, int id_dispon)
@@ -46,6 +54,7 @@ namespace Clinipet.Controllers
 
             return View(modelo);
         }
+        [HttpPost]
         public ActionResult AgendarCita(int id_dispon, int id_mascota, int id_usu)
         {
 
@@ -68,12 +77,32 @@ namespace Clinipet.Controllers
             return View(modelo);
 
         }
-
+        
         [HttpPost]
-        public ActionResult ConfirmarCita()
+        public ActionResult ConfirmarCita(CitaEspecDto nuevaCita)
         {
+            try
+            {
+                ClienteService citaService = new ClienteService(); // instancia el UserService.
+                CitaEspecDto citaResponse = citaService.RegistrarCitaEspec(nuevaCita); // Llama al método de creación de usuario.
 
-            return RedirectToAction("IndexCliente", "Cliente");
+                if (citaResponse.Response == 1)
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+
+                else
+                {
+                    return RedirectToAction("About", "Home");
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+                string mensaje = ex.Message;
+                return View(); // Muestra la vista en caso de que ocurra una excepción.
+            }
         }
 
 

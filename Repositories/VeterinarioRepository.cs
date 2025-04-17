@@ -37,7 +37,7 @@ namespace Clinipet.Repositories
 
             return id_disponGenerado;
         }
-        public int Servicio_Dispon(ServicioDto servicio)
+        public int RegistrarServicio_Dispon(ServicioDto servicio)
         {
             int comando = 0;
             DBContextUtility Connection = new DBContextUtility();
