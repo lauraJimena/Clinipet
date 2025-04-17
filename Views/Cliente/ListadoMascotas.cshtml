@@ -12,29 +12,39 @@
         <tbody>
             @foreach (var mascota in Model.Mascotas)
             {
-                <tr class="filaRedonda">
+            <tr class="filaRedonda">                
+                <td class="icono_mascota">
+                    @if (@mascota.nom_tipo=="Perro")
+                    {
+                        <img class="logo_perro" src="~/Imagenes/logo_perro.png" alt="Perro" />
+                    }
+                    else if (@mascota.nom_tipo=="Gato")
+                    {
+                        <img class="logo_gato" src="~/Imagenes/logo_gato.png" alt="Gato" />
+                    }
+                </td>            
+                <td><p>Nombre:</p>@mascota.nom_masc</td>
+                <td><p>Edad:</p>@mascota.edad_masc</td>
+                <td><p>Tipo:</p>@mascota.nom_tipo</td>
+                <td><p>Raza:</p>@mascota.nom_raza</td>
 
-                    <td><p>Nombre:</p>@mascota.nom_masc</td>
-                    <td><p>Edad:</p>@mascota.edad_masc</td>
-                    <td><p>Tipo:</p>@mascota.nom_tipo</td>
-                    <td><p>Raza:</p>@mascota.nom_raza</td>
+                <td class="tdForm">
+                    <form action="@Url.Action("AgendarCita", "Cliente")" method="post">
+                        <input type="hidden" name="id_dispon" value="@Model.IdDispon" />
+                        <input type="hidden" name="id_usu" value="@Model.IdUsu" />
+                        <input type="hidden" name="id_mascota" value="@mascota.id_mascota" />
+                        <button type="submit" class="botonSec botonForm">Seleccionar &raquo;</button>
+                    </form>
 
-                    <td class="tdForm">
-                        <form action="@Url.Action("AgendarCita", "Cliente")" method="post">
-                            <input type="hidden" name="id_dispon" value="@Model.IdDispon" />
-                            <input type="hidden" name="id_usu" value="@Model.IdUsu" />
-                            <input type="hidden" name="id_mascota" value="@mascota.id_mascota" />
-                            <button type="submit" class="botonSec botonForm">Seleccionar &raquo;</button>
-                        </form>
-                    </td>
-                </tr>
+                </td>
+            </tr>
             }
         </tbody>
     </table>
 </div>
 <style>
     body {
-        background-image: url('/Imagenes/fondo_dispon.png');
+        background-image: url('/Imagenes/fondo_mascota.png');
         background-size: cover; /* para cubrir toda la pantalla */
         background-repeat: no-repeat;
         background-attachment: fixed; /* para que no se mueva al hacer scroll */
@@ -43,7 +53,7 @@
     }
     h2 {
         margin-top: 40px;
-        margin-bottom: 40px;
+        margin-bottom: 30px;
     }
     .texto {
         font-size: 1.15em;
@@ -53,11 +63,14 @@
         padding:0;
     }
     .tabla {
-        font-size:1.08em;
+        font-size: 1.08em;
         border-collapse: separate;
-        border-spacing: 0 20px;/*Solo espacio abajo*/
-        width:75%;
+        border-spacing: 0 20px; /*Solo espacio abajo*/
+        width: 75%;
         
+    }
+    .icono_mascota {
+        background-color: #d9a86c;
     }
     tr.filaRedonda td:first-child { /*selecciona el primer <td> de cada fila con clase filaRedonda*/
         border-top-left-radius: 20px;
@@ -68,15 +81,18 @@
         border-top-right-radius: 50%; /*selecciona el ultimo <td> de cada fila con clase filaRedonda*/
         border-bottom-right-radius: 50%;
     }
-    
     td{
-        padding:30px;
+        padding:20px;
+    }
+    td p{
+        font-weight:600;
     }
     .tdForm {
-        padding: 5px;
+        padding-left: 5px;
+        padding-right:3px;
     }
-
-    
-
+    .logo_perro, .logo_gato{
+        width:70px;
+    }
     
 </style>

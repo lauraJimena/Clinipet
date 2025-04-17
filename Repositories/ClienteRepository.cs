@@ -17,11 +17,12 @@ namespace Clinipet.Repositories
 
 
             string sql = "SELECT " +
-             "e.nom_espec AS EspecialidadServicio, " +
-             "u.nom_usu + ' ' + u.apel_usu AS Veterinario, " +
-             "di.nombre AS Dia, " +
-             "h.nom_hora AS Hora, " +
-             "d.id_dispon AS dispon " +
+             "s.id_servicio, " +
+             "e.nom_espec Especialidad, " +           
+             "u.nom_usu + ' ' + u.apel_usu Veterinario, " +
+             "di.nombre Dia, " +
+             "h.nom_hora Hora, " +
+             "d.id_dispon dispon " +
              "FROM serv_dispon sd " +
              "JOIN disponibilidad d ON sd.id_dispon = d.id_dispon " +
              "JOIN usuario u ON d.id_usu = u.id_usu " +           
@@ -43,11 +44,12 @@ namespace Clinipet.Repositories
                     {
                         return new DisponibDto
                         {
-                            nom_serv = reader.GetString(0),
-                            nom_usu = reader.GetString(1),//Veterinario
-                            nom_dia = reader.GetString(2),
-                            nom_hora = reader.GetString(3),
-                            id_dispon = reader.GetInt32(4),
+                            id_servicio=reader.GetInt32(0),
+                            nom_espec = reader.GetString(1),
+                            nom_usu = reader.GetString(2),//Veterinario
+                            nom_dia = reader.GetString(3),
+                            nom_hora = reader.GetString(4),
+                            id_dispon = reader.GetInt32(5),
                             
 
                         };
@@ -128,8 +130,6 @@ namespace Clinipet.Repositories
                             edad_masc= reader.GetInt16(3),
                             id_mascota = reader.GetInt32(4),
 
-
-
                         };
                         mascotas.Add(mascota);
                     }
@@ -137,6 +137,59 @@ namespace Clinipet.Repositories
                 }
             }
             return mascotas;
+        }       
+        public int RegistrarCitaEspecializada(CitaEspecDto cita)
+        {
+            int comando = 0;
+            DBContextUtility Connection = new DBContextUtility();
+            Connection.Connect();
+
+            string SQL = "INSERT INTO [clinipet].[dbo].[cita_espec] " +
+                         "(id_servicio, id_motivo, diagnost, id_mascota, id_dispon, id_estado, recomen) " +
+                         "VALUES (@id_servicio, @id_motivo, @diagnost, @id_mascota, @id_dispon, @id_estado, @recomen)";
+
+            using (SqlCommand command = new SqlCommand(SQL, Connection.CONN()))
+            {
+                command.Parameters.AddWithValue("@id_servicio", cita.id_servicio);
+                command.Parameters.AddWithValue("@id_motivo", cita.id_motivo);
+                command.Parameters.AddWithValue("@diagnost", cita.diagnost);
+                command.Parameters.AddWithValue("@id_mascota", cita.id_mascota);
+                command.Parameters.AddWithValue("@id_dispon", cita.id_dispon);
+                command.Parameters.AddWithValue("@id_estado", cita.id_estado);
+                command.Parameters.AddWithValue("@recomen", cita.recomen);
+
+                comando = command.ExecuteNonQuery();
+            }
+
+            Connection.Disconnect();
+            return comando;
         }
+        public int ObtenerIdServicioPorEspecialidad(string nombreEspecialidad)
+        {
+            int idServicio = 0;
+            //int comando = 0;
+            DBContextUtility Connection = new DBContextUtility();
+            Connection.Connect();
+
+            string sql = "SELECT id_servicio FROM servicio WHERE nombre = @nombre AND tipo_servicio = 1";
+
+            using (SqlCommand cmd = new SqlCommand(sql, Connection.CONN()))
+            {
+                cmd.Parameters.AddWithValue("@nombre", nombreEspecialidad);
+
+                var result = cmd.ExecuteScalar();
+                if (result != null)
+                {
+                    idServicio = Convert.ToInt32(result);
+                }
+            }
+
+            Connection.Disconnect();
+            return idServicio;
+        }
+        
+
+
+
     }
 }

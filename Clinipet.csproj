@@ -126,6 +126,7 @@
     <Compile Include="Controllers\GeneralController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\VeterinarioController.cs" />
+    <Compile Include="Dtos\CitaEspecDto.cs" />
     <Compile Include="Dtos\MascotaCitaDto.cs" />
     <Compile Include="Dtos\ServicioDto.cs" />
     <Compile Include="Dtos\DisponibDto.cs" />
@@ -166,8 +167,19 @@
     <Content Include="Imagenes\fondo_agenda_espec.png" />
     <Content Include="Imagenes\fondo_dispon.png" />
     <Content Include="Imagenes\fondo_index.png" />
+    <Content Include="Imagenes\fondo_index2.png" />
+    <Content Include="Imagenes\fondo_login.png" />
+    <Content Include="Imagenes\fondo_masc.png" />
+    <Content Include="Imagenes\fondo_mascota.png" />
     <Content Include="Imagenes\fondo_pub_citas.png" />
     <Content Include="Imagenes\Eliminar_Usu.jpeg" />
+    <Content Include="Imagenes\huella.png" />
+    <Content Include="Imagenes\icono_gato.png" />
+    <Content Include="Imagenes\icono_perro.png" />
+    <Content Include="Imagenes\logo_gato.png" />
+    <Content Include="Imagenes\logo_perro.png" />
+    <Content Include="Imagenes\mascotas_encab.png" />
+    <Content Include="Imagenes\mascotas_encab2.png" />
     <Content Include="Imagenes\RegisVete.jpeg" />
     <Content Include="Imagenes\RegistroVeterinario.jpg" />
     <Content Include="Imagenes\GenerarReport.jpeg" />
@@ -226,6 +238,7 @@
     <Content Include="Views\Cliente\AgendarCita.cshtml" />
     <Content Include="Views\Shared\_ModalConfirm.cshtml" />
     <Content Include="Views\Cliente\ListadoMascotas.cshtml" />
+    <Content Include="Views\Cliente\MascotasRegistradas.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

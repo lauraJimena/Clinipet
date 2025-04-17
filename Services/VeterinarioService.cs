@@ -85,23 +85,16 @@ namespace Clinipet.Services
             
             try
             {
-
-                
-                if (veterinarioRepository.PublicarDispon(dispon) != 0)
-                {
-                    
-                   
-                    ServicioDto servicio = new ServicioDto();
-                    int id_dispon = veterinarioRepository.PublicarDispon(dispon);
-                    servicio.id_dispon = id_dispon;
-                    //servicio.id_dispon = dispon.id_dispon; // Aquí pasas el id correcto
-                    if (veterinarioRepository.Servicio_Dispon(servicio) != 0){
+                int id_dispon = veterinarioRepository.PublicarDispon(dispon);
+                if (id_dispon != 0)
+                {                                     
+                    ServicioDto servicio = new ServicioDto();                    
+                    servicio.id_dispon = id_dispon;                   
+                    if (veterinarioRepository.RegistrarServicio_Dispon(servicio) != 0){
                         disponibResponse.Response = 1;
                         disponibResponse.Mensaje = "Cita publicada correctamente";
                         System.Diagnostics.Debug.WriteLine(servicio.id_servicio);
-                    }
-                     
-                    
+                    }                                      
 
                 }
             }

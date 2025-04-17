@@ -3,7 +3,7 @@
     ViewBag.Title = "Iniciar Sesión";
 }
 <link rel="stylesheet" href="@Url.Content("~/Estilos/estilos.css")">
-<body class="bodyForm">
+
     <div class="contenedor">
         <div class="cont">
             <h2 class="titulo">Iniciar Sesión</h2>
@@ -20,8 +20,15 @@
         </div>
         <img class="imagenFondo" src="~/Imagenes/login.jpg" alt="">
     </div>
-</body>
+
 <style>
+    body {
+        background-image: url('/Imagenes/fondo_login.png');
+        background-size: cover; /* para cubrir toda la pantalla */
+        background-repeat: no-repeat;
+        background-attachment: fixed; /* para que no se mueva al hacer scroll */
+        background-position: center;
+    }
     .titulo {
         margin-top: 0px;
         margin-bottom: 50px;
@@ -46,6 +53,7 @@
         margin-left: 150px;
         flex-direction: column; /* Elementos en columna */
     }
+    
     
    
     

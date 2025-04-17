@@ -6,6 +6,9 @@
 @model List<Clinipet.Dtos.DisponibDto>
 <link rel="stylesheet" href="@Url.Content("~/Estilos/estilos.css")">
 <h2>Citas disponibles</h2>
+<div class="cajaImg">
+    <img class="mascotas_encab" src="~/Imagenes/mascotas_encab2.png" alt="Perro" />
+</div>
 <table>
     <thead>
         <tr>
@@ -19,27 +22,29 @@
     <tbody>
         @foreach (var dispon in Model)
         {
-        <tr>
-            <td>@dispon.nom_serv</td>
-            <td>@dispon.nom_usu</td>
-            <td>@dispon.nom_dia</td>
-            <td>@dispon.nom_hora</td>
-            <td>
-                <form action="@Url.Action("ListadoMascotas", "Cliente")" method="post">
-                    <input type="hidden" name="id_usu" value="@Session["Id"]" />
-                    <input type="hidden" name="id_dispon" value="@dispon.id_dispon" />
-                    <button type="submit" class="botonSec botonForm">Agendar &raquo;</button>
-                </form>
-            </td>
-        </tr>
+            <tr>
+                <td>@dispon.nom_serv</td>
+                <td>@dispon.nom_usu</td>
+                <td>@dispon.nom_dia</td>
+                <td>@dispon.nom_hora</td>
+                <td>
+                    <form action="@Url.Action("ListadoMascotas", "Cliente")" method="post">
+                        <input type="hidden" name="id_usu" value="@Session["Id"]" />
+                        <input type="hidden" name="id_dispon" value="@dispon.id_dispon" />
+                        <button type="submit" class="botonSec botonForm">Agendar &raquo;</button>
+                    </form>
+                </td>
+            </tr>
         }
     </tbody>
 </table>
 <style>
-    h2{
-        margin-top:40px;
-        margin-bottom:20px;
+    h2 {
+        margin-top: 40px;
+        margin-bottom: 5px;
+        font-size:2.25em;
     }
+
     body {
         background-image: url('/Imagenes/fondo_dispon.png');
         background-size: cover; /* para cubrir toda la pantalla */
@@ -47,4 +52,12 @@
         background-attachment: fixed; /* para que no se mueva al hacer scroll */
         background-position: center;
     }
+    .mascotas_encab{
+       
+        width:35%;
+    }
+    .cajaImg {
+        text-align:center;
+    }
+
 </style>
