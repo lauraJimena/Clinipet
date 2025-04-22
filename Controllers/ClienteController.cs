@@ -31,10 +31,17 @@ namespace Clinipet.Controllers
         }
         public ActionResult MascotasRegistradas()
         {
-            int id_usu = Convert.ToInt32(Session["Id"]); // Asegúrate que se guarda el ID del cliente al iniciar sesión
+            int id_usu = Convert.ToInt32(Session["Id"]);
             ClienteService servicio = new ClienteService();
             List<MascotaDto> mascotas = servicio.ListadoMascotas(id_usu);
             return View(mascotas);
+        }
+        public ActionResult ServiciosGenerales()
+        {
+
+            ClienteService clienteService = new ClienteService();
+            List<ServicioDto> servicioGeneral = clienteService.ListadoServiciosGenerales(); 
+            return View(servicioGeneral);
         }
 
 

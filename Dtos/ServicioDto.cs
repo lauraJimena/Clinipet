@@ -8,7 +8,7 @@ namespace Clinipet.Dtos
     public class ServicioDto
     {
         public int id_servicio { get; set; }
-        public string nombre_esp{ get; set; }
+        public string nom_serv{ get; set; }
         public byte tipo_servicio { get; set; }
         public string descrip{ get; set; }
         public int id_estado { get; set; }
