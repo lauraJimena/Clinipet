@@ -69,5 +69,14 @@ namespace Clinipet.Services
 
             return mascotas;
         }
+        public List<ServicioDto> ListadoServiciosGenerales()
+
+        {
+
+            ClienteRepository clienteRepository = new ClienteRepository();
+            List<ServicioDto> serviciosGenerales = clienteRepository.ListadoServiciosGenerales();
+
+            return serviciosGenerales;
+        }
     }
 }
