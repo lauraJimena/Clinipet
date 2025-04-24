@@ -1,0 +1,54 @@
+﻿
+@{
+    ViewBag.Title = "EliminarUsuarios";
+}
+
+<link rel="stylesheet" href="@Url.Content("~/Estilos/estilos.css")">
+
+<div class="contenedor">
+    <h2 class="tituloIndex">¡Eliminar Usuarios! </h2>
+
+    <div class="opciones">
+        <div class="opcion">
+            <img src="~/Imagenes/RegistroVeterinario.jpg" alt="Eliminar veterinario">
+            <a href="@Url.Action("EliminarVeterinario", "Admin")" class="links"><p>Eliminar Veterinario</p></a>
+
+        </div>
+        <div class="opcion opcion2">
+            <img src="~/Imagenes/Regis_Asistente.jpg" alt="Eliminar Asistente">
+            <a href="@Url.Action("EliminarAsistente", "Admin")" class="links"><p>Eliminar Asistente</p></a>
+
+        </div>
+    </div>
+</div>
+
+
+<style>
+    body {
+        background-image: url('/Imagenes/fondo_dispon.png');
+        background-size: cover; /* para cubrir toda la pantalla */
+        background-repeat: no-repeat;
+        background-attachment: fixed; /* para que no se mueva al hacer scroll */
+        background-position: center;
+    }
+
+    .tituloIndex {
+        margin-top: 55px;
+    }
+
+    .contenedor {
+        text-align: center;
+        padding: 0px;
+        overflow-x: auto;
+        max-width: 100%; /* Que ocupe todo el ancho */
+    }
+
+
+    .opcion img {
+        width: 100%;
+        border-radius: 25px;
+        margin-bottom: 30px;
+    }
+</style>
+
+
