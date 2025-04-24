@@ -140,6 +140,7 @@
     <Compile Include="Repositories\ClienteRepository.cs" />
     <Compile Include="Repositories\GeneralRepository.cs" />
     <Compile Include="Repositories\VeterinarioRepository.cs" />
+    <Compile Include="Services\AdminService.cs" />
     <Compile Include="Services\AsistenteService.cs" />
     <Compile Include="Services\ClienteService.cs" />
     <Compile Include="Services\GeneralService.cs" />
@@ -239,6 +240,9 @@
     <Content Include="Views\Shared\_ModalConfirm.cshtml" />
     <Content Include="Views\Cliente\ListadoMascotas.cshtml" />
     <Content Include="Views\Cliente\MascotasRegistradas.cshtml" />
+    <Content Include="Views\Admin\EliminarVeterinario.cshtml" />
+    <Content Include="Views\Admin\EliminarAsistente.cshtml" />
+    <Content Include="Views\Admin\EliminarUsuarios.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
