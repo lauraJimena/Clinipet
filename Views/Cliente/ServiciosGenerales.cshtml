@@ -9,13 +9,14 @@
 
 
 
-<form method="post" action="@Url.Action("SeleccionarServicio", "Cliente")">
+<form method="post" action="@Url.Action("CitasGenDispon", "Cliente")">
     <div class="contenedor-cards">
         @foreach (var servicioGeneral in Model)
         {
+            var idUnico = "servicio_" + servicioGeneral.id_servicio;
             <div class="card-servicio">
-                <input class="seleccion" type="radio" id="id_servicio" name="id_servicio" value="@servicioGeneral.id_servicio" />
-                <label for="nom_serv">@servicioGeneral.nom_serv</label>
+                <input class="seleccion" type="radio" id="@idUnico" name="id_servicio" value="@servicioGeneral.id_servicio"/>
+                <label for="@idUnico">@servicioGeneral.nom_serv</label>
             </div>
         }
     </div>
@@ -43,7 +44,8 @@
         gap: 8px;
         margin: auto;
         max-width: 510px;
-        background-color: #d9a86c;
+        background-image: url('/Imagenes/fondo_caja_serv.png');
+        background-size: cover; /* para cubrir toda la pantalla */             
         padding: 30px;
         border-radius: 20px;
         border: 5px solid white;
@@ -76,9 +78,9 @@
         flex: 1;       
     }
     input[type="radio"] {
+        cursor: pointer;
         transform: scale(1.5); /* Aumenta el tamaño.*/
         margin-right: 10px;
-        
     }
 
     .cajaBoton{
@@ -86,7 +88,7 @@
         text-align:center;
     }
     .boton{
-        font-size:1.1em;
+        font-size:1.05em;
     }
     
 
@@ -99,8 +101,7 @@
     .seleccion {
         margin-bottom: 0;
         width: 50px;
-            
-        
+              
     }
 </style>
 

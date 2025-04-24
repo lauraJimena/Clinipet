@@ -1,0 +1,107 @@
+﻿
+@{
+    ViewBag.Title = "ElegirMascota";
+}
+
+@model Clinipet.Dtos.MascotaCitaDto
+<link rel="stylesheet" href="@Url.Content("~/Estilos/estilos.css")">
+
+<h2>Seleccionar mascota</h2>
+
+<form method="post" action="@Url.Action("ConfirmarCita", "Cliente")" id="confirmForm" >
+    <input type="hidden" name="id_dispon" value="@Model.IdDispon" />
+    <input type="hidden" name="id_usu" value="@Model.IdUsu" />
+
+    <div class="contenedorMascotasGrid">
+        @foreach (var mascota in Model.Mascotas)
+        {
+        <div class="mascotaItem">
+            <input type="radio" name="id_mascota" id="mascota_@mascota.id_mascota" value="@mascota.id_mascota" hidden />
+            <label for="mascota_@mascota.id_mascota" class="cajaMascota">
+                <strong>@mascota.nom_masc</strong><br />
+                Edad: @mascota.edad_masc años<br />
+                Tipo: @mascota.nom_tipo<br />
+                Raza: @mascota.nom_raza
+            </label>
+        </div>
+        }
+    </div>
+
+    <div class="cajaBoton">
+        <button type="submit" class="boton" onclick="mostrarConfirmacion(event)">Confirmar</button>
+    </div>
+</form>
+@Html.Partial("_ModalConfirm")
+<script>
+    // Guardar el formulario en una variable global
+    let formulario = document.getElementById("confirmForm");
+
+    function mostrarConfirmacion(event) {
+        event.preventDefault(); // Detiene el envío inmediato del formulario
+        mostrarModal("¿Estás seguro?", "Confirma que deseas agendar la cita.");
+
+        // Guarda el formulario globalmente
+        window.formulario = document.getElementById("confirmForm");
+    }
+
+</script>
+<style>
+    body {
+        background-image: url('/Imagenes/fondo_elegir_masc.png');
+        background-size: cover; /* para cubrir toda la pantalla */
+        background-repeat: no-repeat;
+        background-attachment: fixed; /* para que no se mueva al hacer scroll */
+        background-position: center;
+    }
+    h2 {
+        margin-top: 50px;
+        margin-bottom: 20px;
+    }
+
+    .contenedorMascotasGrid {       
+        margin-left: 13%;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px 5px; /* 12px vertical, 8px horizontal */
+        padding: 10px 0;
+    }
+
+    .mascotaItem {
+        width: 70%;
+       
+    }
+    .mascotaItem strong{
+        font-size:1.2em;
+        font-weight:800;
+    }
+
+    .cajaMascota {
+        display: block;
+        width: 100%;
+        padding: 8px;
+        background-color: #c7cbca;
+        border-radius: 50px;
+        text-align: center;
+        font-size: 18px;
+        cursor: pointer;
+        box-shadow: -1px -1px 8px #545454;
+        transition: all 0.3s ease;
+    }
+
+    input[type="radio"]:checked + .cajaMascota{
+        background-color: #4f7768;
+        color: white;
+        
+    }
+    .cajaBoton{
+       
+        font-size:1.2em;
+        text-align:center;
+    }
+    .boton {
+        background-color: #d9a86c;
+    }
+    
+</style>
+
+

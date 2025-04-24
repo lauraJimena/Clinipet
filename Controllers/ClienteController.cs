@@ -22,6 +22,7 @@ namespace Clinipet.Controllers
 
             return View(citas);
         }
+       
         public ActionResult ListadoMascotas()
         {
 
@@ -43,8 +44,14 @@ namespace Clinipet.Controllers
             List<ServicioDto> servicioGeneral = clienteService.ListadoServiciosGenerales(); 
             return View(servicioGeneral);
         }
+        [HttpPost]
+        public ActionResult CitasGenDispon(int id_servicio)
+        {
+            ClienteService clienteService = new ClienteService();
+            List<DisponibDto> citasGen = clienteService.ObtenerCitasGenDispon(id_servicio);
 
-
+            return View(citasGen);
+        }
         [HttpPost]
         public ActionResult ListadoMascotas(int id_usu, int id_dispon)
         {
@@ -111,6 +118,24 @@ namespace Clinipet.Controllers
                 return View(); // Muestra la vista en caso de que ocurra una excepción.
             }
         }
+        [HttpPost]
+        public ActionResult ElegirMascota(int id_usu, int id_dispon)
+        {
+
+            ClienteService clienteService = new ClienteService();
+            List<MascotaDto> mascotas = clienteService.ListadoMascotas(id_usu);
+
+            var modelo = new MascotaCitaDto //variable modelo de tipo MascotaCitaDto
+            {
+                Mascotas = mascotas, //Se asigna la lista para mostrar en la vista
+                IdDispon = id_dispon,
+                IdUsu = id_usu
+            };
+
+            return View(modelo);
+        }
+
+
 
 
 
