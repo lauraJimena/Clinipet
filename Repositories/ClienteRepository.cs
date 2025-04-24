@@ -188,6 +188,82 @@ namespace Clinipet.Repositories
             return idServicio;
         }
         
+        public List<ServicioDto> ListadoServiciosGenerales()
+
+        {
+            List<ServicioDto> citasGenerales = new List<ServicioDto>();
+            DBContextUtility Connection = new DBContextUtility();
+            Connection.Connect();
+
+            string sql = "SELECT " +
+             "id_servicio, " +
+             "nombre " +            
+             "FROM servicio " +            
+             "WHERE tipo_servicio = 0";
+
+            using (SqlCommand cmd = new SqlCommand(sql, Connection.CONN()))
+            {
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        ServicioDto dispon = new ServicioDto
+                        {
+
+                            id_servicio = reader.GetInt32(0),
+                            nom_serv = reader.GetString(1),
+                            
+                        };
+                        citasGenerales.Add(dispon);
+                    }
+                }
+            }
+
+            return citasGenerales;
+
+        }
+        public List<DisponibDto> ObtenerCitasGenDispon(int id_servicio)
+        {
+            List<DisponibDto> citasGenerales = new List<DisponibDto>();
+            DBContextUtility Connection = new DBContextUtility();
+            Connection.Connect();
+
+            string sql = "SELECT " +
+             "u.id_usu idUsuario, " +
+             "s.nombre nombreServicio, " +
+             "di.nombre Dia, " +
+             "h.nom_hora Hora, " +
+             "d.id_dispon idDispon " +
+             "FROM serv_dispon sd " +
+             "JOIN disponibilidad d ON sd.id_dispon = d.id_dispon " +
+             "JOIN usuario u ON d.id_usu = u.id_usu " +
+             "JOIN servicio s ON sd.id_servicio = s.id_servicio " +
+             "JOIN dia di ON d.id_dia = di.id_dia " +
+             "JOIN hora h ON d.id_hora = h.id_hora " +
+             "WHERE s.id_estado = 1 AND u.id_rol = 2 AND sd.id_servicio = @id_servicio";//En donde sea el asistente quien público la dispon
+
+            using (SqlCommand command = new SqlCommand(sql, Connection.CONN()))
+            {
+                command.Parameters.AddWithValue("@id_servicio", id_servicio);
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        DisponibDto dispon = new DisponibDto
+                        {
+                            id_usu = reader.GetInt32(0),
+                            nom_serv = reader.GetString(1),                          
+                            nom_dia = reader.GetString(2),
+                            nom_hora = reader.GetString(3),
+                            id_dispon = reader.GetInt32(4)
+                        };
+                        citasGenerales.Add(dispon);
+                    }
+                }
+            }
+
+            return citasGenerales;
+        }
 
 
 

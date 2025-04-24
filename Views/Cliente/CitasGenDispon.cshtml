@@ -1,0 +1,114 @@
+﻿
+@{
+    ViewBag.Title = "CitasGenDispon";
+}
+
+@model List<Clinipet.Dtos.DisponibDto>
+<link rel="stylesheet" href="@Url.Content("~/Estilos/estilos.css")">
+
+@if (Model.Any())
+{
+    <h2>Disponibilidad para @Model.First().nom_serv</h2>
+}
+else
+{
+    <h2>No hay disponibilidades para este servicio</h2>
+}
+
+<form method="post" action="@Url.Action("ElegirMascota", "Cliente")">
+    <div class="contenedorDias">
+        @foreach (var grupo in Model.GroupBy(d => d.nom_dia))//Agrupar por nom_dia
+        {
+            <div class="cajaDia">
+                <strong>@grupo.Key.ToUpper()</strong>
+                <div class="cajaHoras">
+                    @foreach (var item in grupo)
+                    {
+                        <input type="hidden" name="id_usu" value="@Session["Id"]" />
+                        <input type="radio" name="id_dispon" id="dispon_@item.id_dispon" value="@item.id_dispon" hidden />
+                        <label for="dispon_@item.id_dispon" class="botonHora">@item.nom_hora</label>
+                    }
+
+                </div>
+            </div>
+        }
+    </div>
+    <div class="cajaBoton">
+        <button type="submit" class="boton">Confirmar</button>
+    </div>
+</form>
+<style>
+    body {
+        background-image: url('/Imagenes/fondo_generales.png');
+        background-size: cover; /* para cubrir toda la pantalla */
+        background-repeat: no-repeat;
+        background-attachment: fixed; /* para que no se mueva al hacer scroll */
+        background-position: center;
+
+    }
+    h2 {
+        margin-top: 55px;
+        margin-bottom: 20px;
+        font-size: 2.2em;
+    }
+    p{
+        margin-bottom:5px;
+        font-size:1.16em;
+            
+    }
+
+    .contenedorDias {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        padding-top: 25px;
+        margin-left:-11%;
+    }
+
+    .cajaDia {
+        box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
+        width: 480px;
+        margin: auto;
+        background-color: #d9a86c;
+        border-radius: 50px;
+        padding: 15px;     
+        text-align: center;
+        border: 3px solid white;
+    }
+        .cajaDia strong {
+            font-size: 1.1em;
+            text-shadow: 3px 3px 8px rgba(0, 0, 0, 0.3);
+        }
+
+    .cajaHoras {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+    .botonHora {
+        background-color: #5c9a8b;
+        color: white;
+        padding: 8px 18px;
+        border: 1px solid gray;
+        box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
+        border-radius: 20px;
+        cursor: pointer;
+        transition: background 0.3s;
+    }
+
+    input[type="radio"]:checked + .botonHora {
+        background-color: #387066; /* color cuando está seleccionado */
+    }
+    .botonHora:hover {
+        background-color: #9fb2a9;
+    }
+    .cajaBoton {
+        font-size: 1.15em;
+        text-align: center;
+        margin-top: 0px;
+        margin-left: -11%;
+    }
+</style>

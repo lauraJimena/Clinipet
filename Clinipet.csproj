@@ -128,6 +128,7 @@
     <Compile Include="Controllers\VeterinarioController.cs" />
     <Compile Include="Dtos\CitaEspecDto.cs" />
     <Compile Include="Dtos\MascotaCitaDto.cs" />
+    <Compile Include="Dtos\CitaGeneralDto.cs" />
     <Compile Include="Dtos\ServicioDto.cs" />
     <Compile Include="Dtos\DisponibDto.cs" />
     <Compile Include="Dtos\MascotaDto.cs" />
@@ -166,11 +167,16 @@
     <Content Include="Imagenes\contacto.png" />
     <Content Include="Imagenes\facebook.png" />
     <Content Include="Imagenes\fondo_agenda_espec.png" />
+    <Content Include="Imagenes\fondo_caja_serv.png" />
     <Content Include="Imagenes\fondo_dispon.png" />
+    <Content Include="Imagenes\fondo_dispon_gen.png" />
+    <Content Include="Imagenes\fondo_elegir_masc.png" />
+    <Content Include="Imagenes\fondo_generales.png" />
     <Content Include="Imagenes\fondo_index.png" />
     <Content Include="Imagenes\fondo_index2.png" />
     <Content Include="Imagenes\fondo_login.png" />
-    <Content Include="Imagenes\fondo_masc.png" />
+    <Content Include="Imagenes\fondo_servicios.png" />
+    <Content Include="Imagenes\fondo_masc_regis.png" />
     <Content Include="Imagenes\fondo_mascota.png" />
     <Content Include="Imagenes\fondo_pub_citas.png" />
     <Content Include="Imagenes\Eliminar_Usu.jpeg" />
@@ -243,6 +249,9 @@
     <Content Include="Views\Admin\EliminarVeterinario.cshtml" />
     <Content Include="Views\Admin\EliminarAsistente.cshtml" />
     <Content Include="Views\Admin\EliminarUsuarios.cshtml" />
+    <Content Include="Views\Cliente\ServiciosGenerales.cshtml" />
+    <Content Include="Views\Cliente\CitasGenDispon.cshtml" />
+    <Content Include="Views\Cliente\ElegirMascota.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

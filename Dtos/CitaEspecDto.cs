@@ -7,6 +7,7 @@ namespace Clinipet.Dtos
 {
     public class CitaEspecDto
     {
+        public int id_cita_esp { get; set; }
         public int id_servicio { get; set; }
         public int id_motivo { get; set; }
         public string diagnost { get; set; } = "Pendiente";

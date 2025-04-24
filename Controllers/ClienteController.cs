@@ -22,6 +22,7 @@ namespace Clinipet.Controllers
 
             return View(citas);
         }
+       
         public ActionResult ListadoMascotas()
         {
 
@@ -31,13 +32,26 @@ namespace Clinipet.Controllers
         }
         public ActionResult MascotasRegistradas()
         {
-            int id_usu = Convert.ToInt32(Session["Id"]); // Asegúrate que se guarda el ID del cliente al iniciar sesión
+            int id_usu = Convert.ToInt32(Session["Id"]);
             ClienteService servicio = new ClienteService();
             List<MascotaDto> mascotas = servicio.ListadoMascotas(id_usu);
             return View(mascotas);
         }
+        public ActionResult ServiciosGenerales()
+        {
 
+            ClienteService clienteService = new ClienteService();
+            List<ServicioDto> servicioGeneral = clienteService.ListadoServiciosGenerales(); 
+            return View(servicioGeneral);
+        }
+        [HttpPost]
+        public ActionResult CitasGenDispon(int id_servicio)
+        {
+            ClienteService clienteService = new ClienteService();
+            List<DisponibDto> citasGen = clienteService.ObtenerCitasGenDispon(id_servicio);
 
+            return View(citasGen);
+        }
         [HttpPost]
         public ActionResult ListadoMascotas(int id_usu, int id_dispon)
         {
@@ -104,6 +118,24 @@ namespace Clinipet.Controllers
                 return View(); // Muestra la vista en caso de que ocurra una excepción.
             }
         }
+        [HttpPost]
+        public ActionResult ElegirMascota(int id_usu, int id_dispon)
+        {
+
+            ClienteService clienteService = new ClienteService();
+            List<MascotaDto> mascotas = clienteService.ListadoMascotas(id_usu);
+
+            var modelo = new MascotaCitaDto //variable modelo de tipo MascotaCitaDto
+            {
+                Mascotas = mascotas, //Se asigna la lista para mostrar en la vista
+                IdDispon = id_dispon,
+                IdUsu = id_usu
+            };
+
+            return View(modelo);
+        }
+
+
 
 
 

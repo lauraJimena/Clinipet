@@ -255,7 +255,7 @@ namespace Clinipet.Repositories
                 }
             }
         }
-        public List<DisponibDto> ObtenerCitasDisponibles()
+        public List<DisponibDto> ObtenerCitasEspecDispon()
         {
             List<DisponibDto> lista = new List<DisponibDto>();
             DBContextUtility Connection = new DBContextUtility();
@@ -274,7 +274,7 @@ namespace Clinipet.Repositories
              "JOIN especialidad e ON u.id_espec = e.id_espec " +
              "JOIN dia di ON d.id_dia = di.id_dia " +
              "JOIN hora h ON d.id_hora = h.id_hora " +
-             "WHERE s.id_estado = 1 AND u.id_rol = 4";
+             "WHERE s.id_estado = 1 AND u.id_rol = 4";//En donde sea el veterinario quien público la dispon
 
             using (SqlCommand cmd = new SqlCommand(sql, Connection.CONN()))
             {
@@ -298,6 +298,7 @@ namespace Clinipet.Repositories
 
             return lista;
         }
+        
 
 
     }
