@@ -78,5 +78,13 @@ namespace Clinipet.Services
 
             return serviciosGenerales;
         }
+        public List<DisponibDto> ObtenerCitasGenDispon(int id_servicio)
+        {
+            ClienteRepository clienteRepository = new ClienteRepository();
+            List<DisponibDto> citasGenDispon = clienteRepository.ObtenerCitasGenDispon(id_servicio);
+
+            return citasGenDispon;
+
+        }
     }
 }

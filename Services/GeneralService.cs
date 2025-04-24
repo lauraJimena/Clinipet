@@ -117,7 +117,7 @@ namespace Clinipet.Services
         public List<DisponibDto> ObtenerCitasDispon()
         {
             GeneralRepository generalRepository = new GeneralRepository();
-            List<DisponibDto> citasDispon = generalRepository.ObtenerCitasDisponibles();
+            List<DisponibDto> citasDispon = generalRepository.ObtenerCitasEspecDispon();
 
             return citasDispon;
             
