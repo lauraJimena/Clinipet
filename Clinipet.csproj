@@ -164,7 +164,11 @@
     <Content Include="Imagenes\banner_2.png" />
     <Content Include="Imagenes\banner_3.png" />
     <Content Include="Imagenes\cita_espec.png" />
+    <Content Include="Imagenes\consultar_agenda.png" />
+    <Content Include="Imagenes\consult_hist.png" />
     <Content Include="Imagenes\contacto.png" />
+    <Content Include="Imagenes\descrip_consult.png" />
+    <Content Include="Imagenes\encab_citas_gen.png" />
     <Content Include="Imagenes\facebook.png" />
     <Content Include="Imagenes\fondo_agenda_espec.png" />
     <Content Include="Imagenes\fondo_caja_serv.png" />
@@ -185,8 +189,8 @@
     <Content Include="Imagenes\icono_perro.png" />
     <Content Include="Imagenes\logo_gato.png" />
     <Content Include="Imagenes\logo_perro.png" />
-    <Content Include="Imagenes\mascotas_encab.png" />
     <Content Include="Imagenes\mascotas_encab2.png" />
+    <Content Include="Imagenes\pub_dispon.png" />
     <Content Include="Imagenes\RegisVete.jpeg" />
     <Content Include="Imagenes\RegistroVeterinario.jpg" />
     <Content Include="Imagenes\GenerarReport.jpeg" />
@@ -252,6 +256,8 @@
     <Content Include="Views\Cliente\ServiciosGenerales.cshtml" />
     <Content Include="Views\Cliente\CitasGenDispon.cshtml" />
     <Content Include="Views\Cliente\ElegirMascota.cshtml" />
+    <Content Include="Views\Cliente\HistorialCitasGenerales.cshtml" />
+    <Content Include="Views\Veterinario\IndexVeterinario.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

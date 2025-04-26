@@ -16,6 +16,12 @@ namespace Clinipet.Controllers
         {
             return View();
         }
+        public ActionResult CerrarSesionYVolver()
+        {
+            Session.Clear(); // Elimina todas las variables de sesión
+            return RedirectToAction("Index", "Home"); // Redirige al inicio
+        }
+
         //Login igual para todos los roles
         public ActionResult Login()
         {
@@ -29,77 +35,60 @@ namespace Clinipet.Controllers
         }
         public ActionResult RegistroMascota()
         {
-            GeneralService generalService = new GeneralService();
-            
-            /*List<MascotaDto> razas;     
-            razas = generalService.obtenerRazas();
-
-
-            //Convertir la lista raza en SelectList para pasar a la vista
-            ViewBag.Razas = razas.Select(r => new SelectListItem
-              {
-                  Value = r.id_raza.ToString(),
-                  Text = r.nom_raza,
-                 Group = new SelectListGroup { Name = r.nom_tipo } // Group para almacenar el tipo
-             }).ToList();*/
-
-            //List<MascotaDto> tipos;
-            //tipos = generalService.obtenerTipos();
-
-            // Convertir la lista tipo en SelectList para pasar a la vista
-            /*ViewBag.Tipos = tipos.Select(t => new SelectListItem
+            if (Session["UsuLoguedo"] != null)
             {
-                Value = t.id_tipo.ToString(),
-                Text = t.nom_tipo
-            }).ToList();*/
+                GeneralService generalService = new GeneralService();
+                ViewBag.Razas = generalService.ObtenerRazasSelect();
+                ViewBag.Tipos = generalService.ObtenerTiposSelect();
 
-            ViewBag.Razas = generalService.ObtenerRazasSelect();
-            ViewBag.Tipos = generalService.ObtenerTiposSelect();
+                return View();
+            }
+            else
+            {
 
-            return View();
+                return RedirectToAction("Login", "General");
+            }           
+
         }
-       
 
+        //POST: General
         [HttpPost]
         public ActionResult Login(UserDto nuevoUsu)
         {
             GeneralService userService = new GeneralService();
             UserDto userResponse = userService.Login(nuevoUsu);
             System.Diagnostics.Debug.WriteLine("Llegué al método Login");
-            if (userResponse.Response == 1)
-            {
-                // Almacena los datos en variables de sesión
-                Session["Id"] = userResponse.id_usu;
-                Session["Nombre"] = userResponse.nom_usu;
-                Session["Apellido"] = userResponse.apel_usu;
-                Session["Num_docu"] = userResponse.num_ident;
-                Session["Rol"] = userResponse.id_rol;
-                //Session["Especialid"] = userResponse.id_espec;
-                System.Diagnostics.Debug.WriteLine(Session["Rol"]);
-                
-
-                if (userResponse.id_rol == 1)//Administrador
+            
+                if(userResponse.id_usu != 0)
                 {
-                    return RedirectToAction("IndexCliente", "Cliente");
-                }               
-                if (userResponse.id_rol == 2)//Asistente
-                {
-                    return RedirectToAction("IndexCliente", "Cliente");
-                }
-                if (userResponse.id_rol == 3)//Cliente
-                {
-                    return RedirectToAction("IndexCliente", "Cliente");
-                }
-                if (userResponse.id_rol == 4)//Veterinario
-                {
-                    return RedirectToAction("Contact", "Home");
-                }
-
-
-                {
-                    return RedirectToAction("RegistroCliente");
-                }
-
+                    if (userResponse.Response == 1)
+                    {
+                        // Almacena los datos en variables de sesión
+                        Session["UsuLoguedo"] = userResponse;
+                        Session["Id"] = userResponse.id_usu;
+                        Session["Nombre"] = userResponse.nom_usu;
+                        Session["Apellido"] = userResponse.apel_usu;
+                        Session["Num_docu"] = userResponse.num_ident;
+                        Session["Rol"] = userResponse.id_rol;
+                    
+                        //Redirigir a vistas correspondientes   
+                        if (userResponse.id_rol == 1)//Administrador
+                        {
+                            return RedirectToAction("IndexAdmin", "Admin");
+                        }
+                        if (userResponse.id_rol == 2)//Asistente
+                        {
+                            return RedirectToAction("IndexAsistente", "Asistente");
+                        }
+                        if (userResponse.id_rol == 3)//Cliente
+                        {
+                            return RedirectToAction("IndexCliente", "Cliente");
+                        }
+                        if (userResponse.id_rol == 4)//Veterinario
+                        {
+                            return RedirectToAction ("IndexVeterinario", "Veterinario");
+                        }
+                    }                                                 
             }
             else
             {
@@ -125,7 +114,6 @@ namespace Clinipet.Controllers
                     return Json(new { success = true, message = userResponse.Mensaje }); // Si la creación fue exitosa.
 
                 }
-
                 else
                 {
                     if (userResponse.Response == -1)
@@ -143,9 +131,7 @@ namespace Clinipet.Controllers
                         else
                         {
                             return RedirectToAction("About", "Home"); // Si el registro falla
-                        }
-                        
-                       
+                        }                                            
                     }
 
                 }
@@ -161,26 +147,32 @@ namespace Clinipet.Controllers
         public ActionResult RegistroMascota(MascotaDto nuevaMasc)
         {
             try
+            {
+                if (Session["UsuLoguedo"] != null)
                 {
-                    System.Diagnostics.Debug.WriteLine(Session["Id"]);
-                    nuevaMasc.id_usu = Convert.ToInt32(Session["Id"]); // Asigna el ID del usuario logueado
-                    GeneralService mascService = new GeneralService(); // instancia el UserService.
-                    MascotaDto mascResponse = mascService.RegistrarMascota(nuevaMasc); // Llama al método de creación de usuario.
+                     System.Diagnostics.Debug.WriteLine(Session["Id"]);
+                     nuevaMasc.id_usu = Convert.ToInt32(Session["Id"]); // Asigna el ID del usuario logueado
+                     GeneralService mascService = new GeneralService(); // instancia el UserService.
+                     MascotaDto mascResponse = mascService.RegistrarMascota(nuevaMasc); // Llama al método de creación de usuario.
                
-                if (mascResponse.Response == 1)
+                    if (mascResponse.Response == 1)
                     {
                         //return Json(new { success = true, message = "Registro exitoso" });
-                    return RedirectToAction("Index", "Home");
-                    //return RedirectToAction("Index", "Home");// Redirige a la vista principal si la creación fue exitosa.
-                }
+                        return RedirectToAction("Index", "Home");                     
+                    }
                  
+                    else
+                    {
+                        return RedirectToAction("About", "Home");
+                           
+                    }
+                }
                 else
                 {
-                    return RedirectToAction("About", "Home");
-                           
+                    return RedirectToAction("Login", "General");
                 }
-   
-                }
+            }
+            
             catch (Exception ex)
             {
                     string mensaje = ex.Message;

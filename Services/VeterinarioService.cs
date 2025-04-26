@@ -77,8 +77,7 @@ namespace Clinipet.Services
             return generalRepository.ObtenerEspecialidad();
         }
         public DisponibDto PublicarDisponibilidad(DisponibDto dispon)
-        {
-            //GeneralRepository userRepository = new GeneralRepository();
+        {           
 
             VeterinarioRepository veterinarioRepository = new VeterinarioRepository();
             DisponibDto disponibResponse = new DisponibDto();

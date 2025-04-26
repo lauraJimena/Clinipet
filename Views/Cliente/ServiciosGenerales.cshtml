@@ -14,10 +14,10 @@
         @foreach (var servicioGeneral in Model)
         {
             var idUnico = "servicio_" + servicioGeneral.id_servicio;
-            <div class="card-servicio">
-                <input class="seleccion" type="radio" id="@idUnico" name="id_servicio" value="@servicioGeneral.id_servicio"/>
-                <label for="@idUnico">@servicioGeneral.nom_serv</label>
-            </div>
+        <div class="card-servicio">
+            <input class="seleccion" type="radio" id="@idUnico" name="id_servicio" value="@servicioGeneral.id_servicio" required/>
+            <label for="@idUnico">@servicioGeneral.nom_serv</label>          
+        </div>
         }
     </div>
     <div class="cajaBoton">

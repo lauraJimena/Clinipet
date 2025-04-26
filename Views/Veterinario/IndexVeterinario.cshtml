@@ -1,0 +1,58 @@
+﻿
+@{
+    ViewBag.Title = "IndexVeterinario";
+}
+
+
+<link rel="stylesheet" href="@Url.Content("~/Estilos/estilos.css")">
+
+
+<div class="contenedor">
+    <h2 class="tituloIndex">¡Hola! @Session["Nombre"]</h2>
+
+    <div class="opciones">
+        <div class="opcion">
+            <img src="~/Imagenes/pub_dispon.png" alt="Publicar Cita">
+            <a href="@Url.Action("PubCitas", "Veterinario")" class="links"><p>Publicar Disponibilidad</p></a>
+
+        </div>
+        <div class="opcion opcion2">
+            <img src="~/Imagenes/descrip_consult.png" alt="Descripción Consulta">
+            <a href="@Url.Action("IndexVeterinario", "Veterinario")" class="links"><p>Descripción de Consulta</p></a>
+
+        </div>
+        <div class="opcion">
+            <img src="~/Imagenes/consult_hist.png" class="imgServ" alt="Cita servicios generales">
+            <a href="@Url.Action("IndexVeterinario", "Veterinario")" class="links"><p>Consultar Historial</p></a>
+
+        </div>
+        <div class="opcion opcion2">
+            <img src="~/Imagenes/consultar_agenda.png" alt="Historial Citas">
+            <a href="@Url.Action("IndexVeterinario", "Veterinario")" class="links"><p>Consultar Agenda</p></a>
+
+        </div>
+
+    </div>
+</div>
+
+<style>
+    body {
+        background-image: url('/Imagenes/fondo_dispon.png');
+        background-size: cover; /* para cubrir toda la pantalla */
+        background-repeat: no-repeat;
+        background-attachment: fixed; /* para que no se mueva al hacer scroll */
+        background-position: center;
+    }
+
+    .tituloIndex {
+        margin-top: 55px;
+    }
+
+    .contenedor {
+        text-align: center;
+        padding: 0px;
+        overflow-x: auto;
+        max-width: 100%; /* Que ocupe todo el ancho */
+    }
+</style>
+

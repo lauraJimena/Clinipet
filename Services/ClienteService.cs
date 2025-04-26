@@ -60,6 +60,39 @@ namespace Clinipet.Services
             }
 
         }
+        public CitaGeneralDto AgendarCitaGeneral(CitaGeneralDto citaModel)
+
+        {
+            CitaGeneralDto responseCitaGenDto = new CitaGeneralDto();
+            ClienteRepository clienteRepository = new ClienteRepository();
+            Console.WriteLine("Estoy en el servicio");
+            try
+            {
+
+                citaModel.id_servicio = citaModel.id_servicio;
+                citaModel.id_estado = 3;
+                if (clienteRepository.RegistrarCitaGeneral(citaModel) != 0)
+                {
+                    responseCitaGenDto.Response = 1;
+                    responseCitaGenDto.Mensaje = "Creación exitosa";
+
+                }
+                else
+                {
+                    responseCitaGenDto.Response = 0;
+                    responseCitaGenDto.Mensaje = "Algo pasó";
+                }
+
+                return responseCitaGenDto;
+            }
+            catch (Exception e)
+            {
+                responseCitaGenDto.Response = 0;
+                responseCitaGenDto.Mensaje = e.InnerException?.ToString();
+                return responseCitaGenDto;
+            }
+
+        }
         public List<MascotaDto> ListadoMascotas(int id_usu)
 
         {
@@ -84,6 +117,14 @@ namespace Clinipet.Services
             List<DisponibDto> citasGenDispon = clienteRepository.ObtenerCitasGenDispon(id_servicio);
 
             return citasGenDispon;
+
+        }
+        public List<CitaGeneralDto> HistorialCitasGenerales(int id_usu)
+        {
+            ClienteRepository clienteRepository = new ClienteRepository();
+            List<CitaGeneralDto> citasGenerales = clienteRepository.HistorialCitasGenerales(id_usu);
+
+            return citasGenerales;
 
         }
     }

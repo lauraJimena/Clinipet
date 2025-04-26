@@ -26,5 +26,9 @@ namespace Clinipet.Controllers
 
             return View();
         }
+        public ActionResult Error()
+        {
+            return View(); // Muestra Views/Home/Error.cshtml
+        }
     }
 }

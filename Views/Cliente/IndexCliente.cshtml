@@ -4,6 +4,7 @@
 }
 <link rel="stylesheet" href="@Url.Content("~/Estilos/estilos.css")">
 
+
 <div class="contenedor">
     <h2 class="tituloIndex">¡Hola! @Session["Nombre"]</h2>
 
@@ -25,7 +26,7 @@
         </div>
         <div class="opcion opcion2">
             <img src="~/Imagenes/historial_cita.png" alt="Historial Citas">
-            <a href="@Url.Action("RegistroMascota", "General")" class="links"><p>Historial Citas</p></a>
+            <a href="@Url.Action("HistorialCitasGenerales", "Cliente")" class="links"><p>Historial Citas</p></a>
             
         </div>
         <div class="opcion">

@@ -30,7 +30,7 @@ namespace Clinipet.Services
         {
             System.Diagnostics.Debug.WriteLine("Estoy en ObtenerAsistPorId");
             AdminRepository adminRepository = new AdminRepository();
-            return adminRepository.ObtenerVeterinarios();
+            return adminRepository.ObtenerAsistentes();
         }
 
         // Método para eliminar un asistente

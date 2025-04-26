@@ -1,0 +1,75 @@
+﻿
+@{
+    ViewBag.Title = "HistorialCitasGenerales";
+}
+
+
+@model List<Clinipet.Dtos.CitaGeneralDto>
+<link rel="stylesheet" href="@Url.Content("~/Estilos/estilos.css")">
+<h2>Historial Citas Generales</h2>
+<div class="cajaImg">
+    <img class="mascotasEncab" src="~/Imagenes/encab_citas_gen.png" alt="Encabezado" />
+</div>
+
+<table>
+    <thead>
+        <tr>
+            <th>Servicio</th>
+            <th>Día</th>
+            <th>Hora</th>
+            <th>Mascota</th>
+            <th>Estado</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var citaGen in Model)
+        {
+        <tr>
+            <td>@citaGen.nom_serv</td>
+            <td>@citaGen.nom_dia</td>
+            <td>@citaGen.nom_hora</td>
+            <td>@citaGen.nom_masc</td>
+            <td>@citaGen.nom_estado</td>          
+        </tr>
+        }
+    </tbody>
+</table>
+<div class="cajaBoton">
+    <form method="get" action="/Cliente/IndexCliente">
+        <button class="btnSalir boton">Volver</button>
+    </form>
+</div>
+<style>
+    h2 {
+        margin-top: 40px;
+        margin-bottom: 10px;
+        font-size: 2.25em;
+    }
+
+    body {
+        background-image: url('/Imagenes/fondo_dispon.png');
+        background-size: cover; /* para cubrir toda la pantalla */
+        background-repeat: no-repeat;
+        background-attachment: fixed; /* para que no se mueva al hacer scroll */
+        background-position: center;
+    }
+
+    .mascotasEncab {
+        width: 35%;
+    }
+
+    .cajaBoton {
+        width: 95%;
+        text-align: right;
+    }
+
+    .boton {
+        padding: 10px 20px;
+        font-size: 1.02em;
+        text-shadow: 1px 1px 3px white;
+    }
+
+    .cajaImg {
+        text-align: center;
+    }
+</style>

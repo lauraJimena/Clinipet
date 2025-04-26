@@ -1,14 +1,70 @@
-﻿<!DOCTYPE html>
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <meta name="viewport" content="width=device-width" />
-    <title>Error</title>
-</head>
-<body>
-    <hgroup>
-        <h1>Error.</h1>
-        <h2>Error al procesar la solicitud.</h2>
-    </hgroup>
-</body>
-</html>
+﻿@{
+    ViewBag.Title = "Error";
+    Layout = "~/Views/Shared/_Layout.cshtml"; // Asegúrate de usar tu layout si tienes uno
+}
+<link rel="stylesheet" href="@Url.Content("~/Estilos/estilos.css")">
+<div class="error-container">
+    <div class="error-content">
+        <h1>¡Uy! Algo salió mal 🐶</h1>
+        <p>@ViewBag.MensajeError</p>
+        <p>Ocurrió un problema al procesar tu solicitud.</p>
+        <p>Por favor, intenta nuevamente o contáctanos si el problema persiste.</p>
+
+        <a href="@Url.Action("CerrarSesionYVolver", "General")" class="boton">Volver al inicio</a>
+    </div>
+</div>
+<style>
+    body {
+        background-image: url('/Imagenes/fondo_dispon.png');
+        background-size: cover; /* para cubrir toda la pantalla */
+        background-repeat: no-repeat;
+        background-attachment: fixed; /* para que no se mueva al hacer scroll */
+        background-position: center;
+    }
+    .error-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 450px;
+        
+        text-align: center;
+    }
+
+    .error-content{
+        background-color: #fff;        
+        padding: 40px;
+        border-radius: 20px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        max-width: 750px;
+        width: 90%;
+    }
+
+        .error-content h1 {
+            color: #4f7768; /* Verde veterinario */
+            font-size: 2.65rem;
+            font-weight:900;
+            margin-bottom: 20px;
+            text-shadow: -1.5px -1.5px 20px #bfb9b9;
+        }
+
+        .error-content p {
+            font-size: 1.75rem;
+            color: #444;
+            margin: 10px 0;
+        }
+
+    .boton {
+        display: inline-block;
+        margin-top: 20px;
+        padding: 12px 18px;
+        background-color: #d9a86c;
+        text-decoration: none;
+        font-size: 1.85rem;
+    }
+
+        .btn-volver:hover {
+            background-color: #45a049;
+        }
+
+</style>
+
