@@ -139,9 +139,9 @@ namespace Clinipet.Repositories
         {
             List<UserDto> listaAsistentes = new List<UserDto>();
 
-            string sql = "SELECT u.id_usu, u.nom_usu, u.apel_usu, u.num_ident " +
-                     "FROM usuario u " +
-                     "WHERE u.id_rol = 2 AND u.id_estado = 1";
+            string sql = "SELECT id_usu, nom_usu, apel_usu, num_ident " +
+                     "FROM usuario " +
+                     "WHERE id_rol = 2 AND id_estado = 1";
 
             DBContextUtility Connection = new DBContextUtility();
             Connection.Connect();

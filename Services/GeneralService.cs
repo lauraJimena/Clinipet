@@ -165,38 +165,7 @@ namespace Clinipet.Services
                 Text = t.nom_tipo
             }).ToList();
         }
-        /*public UserDto PublicarDispon(DisponibDto disponModel)
-        {
-
-            DisponibDto responseDisponDto = new DisponibDto();
-            VeterinarioRepository disponRepository = new VeterinarioRepository();
-            Console.WriteLine("Estoy en el servicio");
-
-
-            try
-            {
-                //disponModel.id_estado = 1;
-                disponModel.id_usu = ObtenerIdUsuarioLogueado(); // Suponiendo que tomas el ID del veterinario desde sesión o claims
-
-                int resultado =disponRepository.PublicarDispon(disponModel);
-
-                if (resultado > 0)
-                {
-                    responseUserDto.Response = 1;
-                    responseUserDto.Mensaje = "Creación exitosa";
-
-                }
-
-                
-                return responseUserDto;
-            }
-            catch (Exception e)
-            {
-                responseUserDto.Response = 0;
-                responseUserDto.Mensaje = e.InnerException?.ToString();
-                return responseUserDto;
-            }
-        }*/
+        
 
     }
 }

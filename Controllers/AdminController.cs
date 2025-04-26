@@ -11,97 +11,238 @@ namespace Clinipet.Controllers
 {
     public class AdminController : Controller
     {
+        //GET: Administrador
+
         // Vista principal admin
         public ActionResult IndexAdmin()
         {
-            return View();
+            try
+            {
+                if (Session["UsuLoguedo"] != null)
+                {
+                    return View();
+                }
+                else
+                {
+                    return RedirectToAction("Login", "General");
+                }
+            }
+            catch (Exception ex)
+            {
+                return View("Error");
+            }
         }
         // Registro de asistentes
         public ActionResult RegistroAsistente()
         {
-            UserDto user = new UserDto();
-            return View(user);
-        }
-        // Guardar datos del formulario
-        [HttpPost]
-        public ActionResult RegistAsist(UserDto nuevoAsist)
-        {
-            AsistenteService servicio = new AsistenteService();
-            UserDto result = servicio.RegistrarAsistente(nuevoAsist);
-
-            if (result.Response == 1)
+            try
             {
-                return Json(new { success = true, message = result.Mensaje });
+                if (Session["UsuLoguedo"] != null)
+                {
+                    UserDto user = new UserDto();
+                    return View(user);
+                }
+                else
+                {
+                    return RedirectToAction("Login", "General");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                return Json(new { success = false, message = result.Mensaje });
+                return View("Error");
             }
-        }
-        //Registrar Veterinario
-        public ActionResult RegistroVeterinario()
-        {
-            UserDto user = new UserDto();
-
-            // Obtener lista de especialidades
-            VeterinarioService VeteService = new VeterinarioService();
-            List<UserDto> especialidades = VeteService.ObtenerEspecialidad();
-
-            // Enviar la lista a la vista
-            ViewBag.Especialidad = VeteService.ObtenerEspecialidad();
-
-            return View(user);
         }
 
         //Eliminar Usuarios
         public ActionResult EliminarUsuarios()
         {
-            UserDto user = new UserDto();
-            return View(user);
+            try
+            {
+                if (Session["UsuLoguedo"] != null)
+                {
+                    UserDto user = new UserDto();
+                    return View(user);
+                }
+                else
+                {
+                    return RedirectToAction("Login", "General");
+                }
+            }
+            catch (Exception ex)
+            {
+                return View("Error");
+            }
         }
 
         // Guardar datos del formulario
         public ActionResult RegistVet(UserDto nuevoVete)
         {
-            VeterinarioService servicio = new VeterinarioService();
-            UserDto result = servicio.RegistrarVeterinario(nuevoVete);
+            try
+            {
+                if (Session["UsuLoguedo"] != null)
+                {
+                    VeterinarioService servicio = new VeterinarioService();
+                    UserDto result = servicio.RegistrarVeterinario(nuevoVete);
 
-            if (result.Response == 1)
-            {
-                return Json(new { success = true, message = result.Mensaje });
+                    if (result.Response == 1)
+                    {
+                        return Json(new { success = true, message = result.Mensaje });
+                    }
+                    else
+                    {
+                        return Json(new { success = false, message = result.Mensaje });
+                    }
+                }
+                else
+                {
+                    return RedirectToAction("Login", "General");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                return Json(new { success = false, message = result.Mensaje });
+                return View("Error");
             }
         }
 
         //Mostrar lista de veterinarios
         public ActionResult EliminarVeterinario()
         {
-            AdminService adminService = new AdminService();
-            List<UserDto> veterinario = adminService.ObtenerVeterinarios();
+            try
+            {
+                if (Session["UsuLoguedo"] != null)
+                {
+                    AdminService adminService = new AdminService();
+                    List<UserDto> veterinario = adminService.ObtenerVeterinarios();
 
-            return View("EliminarVeterinario", veterinario);
+                    return View("EliminarVeterinario", veterinario);
+                }
+                else
+                {
+                    return RedirectToAction("Login", "General");
+                }
+            }
+            catch (Exception ex)
+            {
+                return View("Error");
+            }
         }
 
         //Buscar Veterinario
         public ActionResult BuscarVeterinario(string num_ident)
         {
-            AdminService adminService = new AdminService();
-            var todosLosVeterinarios = adminService.ObtenerVeterinarios();
-
-            if (string.IsNullOrEmpty(num_ident))
+            try
             {
-                return View("EliminarVeterinario", todosLosVeterinarios);
+                if (Session["UsuLoguedo"] != null) 
+                {
+                    AdminService adminService = new AdminService();
+                    var todosLosVeterinarios = adminService.ObtenerVeterinarios();
+
+                    if (string.IsNullOrEmpty(num_ident))
+                    {
+                        return View("EliminarVeterinario", todosLosVeterinarios);
+                    }
+
+                    var filtrados = todosLosVeterinarios
+                                    .Where(v => v.num_ident.Contains(num_ident))
+                                    .ToList();
+
+                    return View("EliminarVeterinario", filtrados);
+                }
+                else
+                {
+                    return RedirectToAction("Login", "General");
+                }
             }
-
-            var filtrados = todosLosVeterinarios
-                            .Where(v => v.num_ident.Contains(num_ident))
-                            .ToList();
-
-            return View("EliminarVeterinario", filtrados);
+            catch (Exception ex)
+            {
+                return View("Error");
+            }
         }
+        
+        //Registrar Veterinario
+        public ActionResult RegistroVeterinario()
+        {
+            try
+            {
+                if (Session["UsuLoguedo"] != null)
+                {
+                    UserDto user = new UserDto();
+
+                    // Obtener lista de especialidades
+                    VeterinarioService VeteService = new VeterinarioService();
+                    List<UserDto> especialidades = VeteService.ObtenerEspecialidad();
+
+                    // Enviar la lista a la vista
+                    ViewBag.Especialidad = VeteService.ObtenerEspecialidad();
+
+                    return View(user);
+                }
+                else
+                {
+                    return RedirectToAction("Login", "General");
+                }
+            }
+            catch (Exception ex)
+            {
+                return View("Error");
+            }
+        }
+        //Mostrar lista de asistentes
+        public ActionResult EliminarAsistente()
+        {
+            try
+            {
+                if (Session["UsuLoguedo"] != null)
+                {
+                    AdminService adminService = new AdminService();
+                    List<UserDto> asistente = adminService.ObtenerAsistentes();
+
+                    return View(asistente);
+                }
+                else
+                {
+                    return RedirectToAction("Login", "General");
+                }
+            }
+            catch (Exception ex)
+            {
+                return View("Error");
+            }
+        }
+        //Buscar Asistente
+        public ActionResult BuscarAsistente(string num_ident)
+        {
+            try
+            {
+                if (Session["UsuLoguedo"] != null)
+                {
+                    AdminService adminService = new AdminService();
+                    var todosLosAsistentes = adminService.ObtenerAsistentes();
+
+                    if (string.IsNullOrEmpty(num_ident))
+                    {
+                        return View("EliminarAsistente", todosLosAsistentes);
+                    }
+
+                    var filtrados = todosLosAsistentes
+                                    .Where(v => v.num_ident.Contains(num_ident))
+                                    .ToList();
+
+                    return View("EliminarAsistente", filtrados);
+                }
+                else
+                {
+                    return RedirectToAction("Login", "General");
+                }
+            }
+            catch (Exception ex)
+            {
+                return View("Error");
+            }
+        }
+
+
+        //POST: Administrador
 
         //Eliminar Veterinario
         [HttpPost]
@@ -122,16 +263,30 @@ namespace Clinipet.Controllers
             // Recarga la lista después de eliminar
             return RedirectToAction("EliminarVeterinario");
         }
-
-        //Mostrar lista de asistentes
-        public ActionResult EliminarAsistente()
+        // Guardar datos del formulario
+        [HttpPost]
+        public ActionResult RegistAsist(UserDto nuevoAsist)
         {
-            AdminService adminService = new AdminService();
-            List<UserDto> asistente = adminService.ObtenerAsistentes();
+            try
+            {
+                AsistenteService servicio = new AsistenteService();
+                UserDto result = servicio.RegistrarAsistente(nuevoAsist);
 
-            return View("EliminarAsistente", asistente);
+                if (result.Response == 1)
+                {
+                    return Json(new { success = true, message = result.Mensaje });
+                }
+                else
+                {
+                    return Json(new { success = false, message = result.Mensaje });
+                }
+            }
+            catch (Exception ex)
+            {
+                return View("Error");
+            }
         }
-
+        
         //Eliminar Asistente
         [HttpPost]
         public ActionResult EliminAsis(int id_usu)
@@ -152,22 +307,6 @@ namespace Clinipet.Controllers
             return RedirectToAction("EliminarAsistente");
         }
 
-        //Buscar Asistente
-        public ActionResult BuscarAsistente(string num_ident)
-        {
-            AdminService adminService = new AdminService();
-            var todosLosAsistentes = adminService.ObtenerAsistentes();
-
-            if (string.IsNullOrEmpty(num_ident))
-            {
-                return View("EliminarAsistente", todosLosAsistentes);
-            }
-
-            var filtrados = todosLosAsistentes
-                            .Where(v => v.num_ident.Contains(num_ident))
-                            .ToList();
-
-            return View("EliminarAsistente", filtrados);
-        }
+       
     }
 }
