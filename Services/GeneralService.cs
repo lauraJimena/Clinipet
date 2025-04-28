@@ -24,6 +24,7 @@ namespace Clinipet.Services
                 userModel.id_espec = 1;
                 userModel.id_nivel = 1;
                 userModel.id_estado = 1;
+                userModel.cambio_contras = false; // No necesita cambiar contraseña
 
 
                 if (userRepository.ExisteCorreo(userModel.correo_usu))
@@ -165,7 +166,20 @@ namespace Clinipet.Services
                 Text = t.nom_tipo
             }).ToList();
         }
-        
+
+
+        public bool CambiarContraseña(string numIdent, string contrasenaActual, string nuevaContrasena)
+        {
+            GeneralRepository contrasRepository = new GeneralRepository();
+            try
+            {
+                return contrasRepository.CambiarContraseña(numIdent, contrasenaActual, nuevaContrasena);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al cambiar la contraseña: " + ex.Message);
+            }
+        }
 
     }
 }

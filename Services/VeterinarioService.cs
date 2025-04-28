@@ -25,9 +25,8 @@ namespace Clinipet.Services
                 nuevoVete.id_rol = 4;        // Veterinario
                 nuevoVete.id_nivel = 1;      // Nivel básico
                 nuevoVete.id_estado = 1;     // Activo
+                nuevoVete.cambio_contras = true; // Requiere cambiar contraseña al iniciar
                 //nuevoVete.id_espec = 10;     
-
-                //System.Diagnostics.Debug.WriteLine($"Nombre: {nuevoAsist.nom_usu}, Apellido: {nuevoAsist.apel_usu}, ID Tipo Doc: {nuevoAsist.id_tipo_ident}, Especialidad: {nuevoAsist.id_espec}");
 
                 // Validaciones
                 if (VeteRepo.ExisteCorreo(nuevoVete.correo_usu))
@@ -42,20 +41,19 @@ namespace Clinipet.Services
                     {
                         userResponse.Response = -2;
                         userResponse.Mensaje = "El numero de documento ya existe. Intente nuevamente.";
-                        //userResponse.Mensaje = "Asistente registrado con éxito";
                     }
                     else
                     {
                         if (VeteRepo.RegistrarUsuario(nuevoVete) != 0)
                         {
                             userResponse.Response = 1;
-                            userResponse.Mensaje = "Creación exitosa";
+                            userResponse.Mensaje = "Veterinario registrado exitosamente.";
 
                         }
                         else
                         {
                             userResponse.Response = 0;
-                            userResponse.Mensaje = "Algo pasó";
+                            userResponse.Mensaje = "Algo salió mal durante el registro.";
                         }
                     }
 

@@ -19,8 +19,8 @@ namespace Clinipet.Repositories
             Connection.Connect();
 
             string SQL = "INSERT INTO [clinipet].[dbo].[usuario] " +
-             "(nom_usu, apel_usu, num_ident, correo_usu, tel_usu, contras_usu, id_rol, id_estado, id_nivel, id_tipo_ident, id_espec) " +
-             "VALUES (@nom_usu, @apel_usu, @num_ident, @correo_usu, @tel_usu, @contras_usu, @id_rol, @id_estado, @id_nivel, @id_tipo_ident, @id_espec)";
+             "(nom_usu, apel_usu, num_ident, correo_usu, tel_usu, contras_usu, id_rol, id_estado, id_nivel, id_tipo_ident, id_espec, cambio_contras) " +
+             "VALUES (@nom_usu, @apel_usu, @num_ident, @correo_usu, @tel_usu, @contras_usu, @id_rol, @id_estado, @id_nivel, @id_tipo_ident, @id_espec, @cambio_contras)";
 
             
 
@@ -37,6 +37,7 @@ namespace Clinipet.Repositories
                 command.Parameters.AddWithValue("@id_nivel", usu.id_nivel);
                 command.Parameters.AddWithValue("@id_tipo_ident", usu.id_tipo_ident);
                 command.Parameters.AddWithValue("@id_espec", usu.id_espec);
+                command.Parameters.AddWithValue("@cambio_contras", usu.cambio_contras);
 
                 comando = command.ExecuteNonQuery();
                 
@@ -94,8 +95,8 @@ namespace Clinipet.Repositories
         {
             UserDto userResult = new UserDto();
 
-            string SQL = "SELECT id_usu, nom_usu, apel_usu, num_ident, correo_usu, tel_usu, contras_usu, id_rol, id_estado, id_nivel, id_tipo_ident, id_espec" +
-                         " FROM usuario " +
+            string SQL = "SELECT id_usu, nom_usu, apel_usu, num_ident, correo_usu, tel_usu, contras_usu, id_rol, id_estado, id_nivel, id_tipo_ident, id_espec, cambio_contras " +
+                         "FROM usuario " +
                          "WHERE num_ident = @num_ident AND contras_usu = @contras_usu;";
 
             DBContextUtility Connection = new DBContextUtility();
@@ -123,8 +124,7 @@ namespace Clinipet.Repositories
                         userResult.id_nivel = reader.GetInt16(reader.GetOrdinal("id_nivel"));
                         userResult.id_tipo_ident = reader.GetInt16(reader.GetOrdinal("id_tipo_ident"));
                         userResult.id_espec = reader.GetInt16(reader.GetOrdinal("id_espec"));
-                       
-                       
+                        userResult.cambio_contras = reader.GetBoolean(reader.GetOrdinal("cambio_contras"));
 
                         userResult.Response = 1;  // Login exitoso
                     }
@@ -298,7 +298,42 @@ namespace Clinipet.Repositories
 
             return lista;
         }
-        
+
+        //Cambiar contraseña
+        public bool CambiarContraseña(string numIdent, string contrasenaActual, string nuevaContrasena)
+        {
+            bool cambioExitoso = false;
+            DBContextUtility Connection = new DBContextUtility();
+            Connection.Connect();
+
+            // Primero, verificamos si la contraseña actual es correcta
+            string SQL = "SELECT contras_usu FROM usuario WHERE num_ident = @num_ident";
+            using (SqlCommand command = new SqlCommand(SQL, Connection.CONN()))
+            {
+                command.Parameters.AddWithValue("@num_ident", numIdent);
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.Read() && reader.GetString(0) == contrasenaActual)
+                    {
+                        // Si la contraseña es correcta, la actualizamos
+                        string updateSQL = "UPDATE usuario SET contras_usu = @contras_nueva, cambio_contras = 0 WHERE num_ident = @num_ident";
+                        using (SqlCommand updateCommand = new SqlCommand(updateSQL, Connection.CONN()))
+                        {
+                            updateCommand.Parameters.AddWithValue("@contras_nueva", nuevaContrasena);
+                            updateCommand.Parameters.AddWithValue("@num_ident", numIdent);
+                            int rowsAffected = updateCommand.ExecuteNonQuery();
+                            if (rowsAffected > 0)
+                            {
+                                cambioExitoso = true;
+                            }
+                        }
+                    }
+                }
+            }
+
+            Connection.Disconnect();
+            return cambioExitoso;
+        }
 
 
     }
