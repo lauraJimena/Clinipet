@@ -55,11 +55,14 @@ namespace Clinipet.Controllers
         [HttpPost]
         public ActionResult Login(UserDto nuevoUsu)
         {
-            GeneralService userService = new GeneralService();
-            UserDto userResponse = userService.Login(nuevoUsu);
-            System.Diagnostics.Debug.WriteLine("Llegué al método Login");
-            
-                if(userResponse.id_usu != 0)
+            try
+            {
+                System.Diagnostics.Debug.WriteLine("Datos recibidos - num_ident: " + nuevoUsu.num_ident + " contras_usu: " + nuevoUsu.contras_usu);
+                GeneralService userService = new GeneralService();
+                UserDto userResponse = userService.Login(nuevoUsu);
+                System.Diagnostics.Debug.WriteLine("Llegué al método Login");
+
+                if (userResponse != null && userResponse.id_usu != 0)
                 {
                     if (userResponse.Response == 1)
                     {
@@ -70,33 +73,42 @@ namespace Clinipet.Controllers
                         Session["Apellido"] = userResponse.apel_usu;
                         Session["Num_docu"] = userResponse.num_ident;
                         Session["Rol"] = userResponse.id_rol;
-                    
-                        //Redirigir a vistas correspondientes   
-                        if (userResponse.id_rol == 1)//Administrador
-                        {
-                            return RedirectToAction("IndexAdmin", "Admin");
-                        }
-                        if (userResponse.id_rol == 2)//Asistente
-                        {
-                            return RedirectToAction("IndexAsistente", "Asistente");
-                        }
-                        if (userResponse.id_rol == 3)//Cliente
-                        {
-                            return RedirectToAction("IndexCliente", "Cliente");
-                        }
-                        if (userResponse.id_rol == 4)//Veterinario
-                        {
-                            return RedirectToAction ("IndexVeterinario", "Veterinario");
-                        }
-                    }                                                 
-            }
-            else
-            {
-                // Muestra el mensaje de error si las credenciales son incorrectas
-                ModelState.AddModelError("", userResponse.Mensaje);
-            }
 
-            return View();
+                        // Si necesita cambiar la contraseña, redirige a la vista de cambio de contraseña
+                        if (userResponse.cambio_contras == true)
+                        {
+                            return Json(new { success = true, changePassword = true, message = "Debes actualizar tu contraseña." });
+                        }
+                        else
+                        {
+                            // Si no necesita cambiar la contraseña, redirige al índice de cada usuario
+                            if (userResponse.id_rol == 1) //Administrador
+                            {
+                                return Json(new { success = true, redirectUrl = Url.Action("IndexAdmin", "Admin"), message = "Inicio de sesión exitoso" });
+                            }
+                            if (userResponse.id_rol == 2) //Asistente
+                            {
+                                return Json(new { success = true, redirectUrl = Url.Action("IndexAsistente", "Asistente"), message = "Inicio de sesión exitoso" });
+                            }
+                            if (userResponse.id_rol == 3) //Cliente
+                            {
+                                return Json(new { success = true, redirectUrl = Url.Action("IndexCliente", "Cliente"), message = "Inicio de sesión exitoso" });
+                            }
+                            if (userResponse.id_rol == 4) //Veterinario
+                            {
+                                return Json(new { success = true, redirectUrl = Url.Action("IndexVeterinario", "Veterinario"), message = "Inicio de sesión exitoso" });
+                            }
+                        }
+                    }
+                }
+                // Si las credenciales son incorrectas, redirige de nuevo al login con un mensaje de error
+                return Json(new { success = false, message = "Credenciales incorrectas." });
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("Error en Login: " + ex.ToString());
+                return Json(new { success = false, message = "Ocurrió un error en el servidor. Intenta de nuevo." });
+            }
         }
 
 
@@ -180,5 +192,61 @@ namespace Clinipet.Controllers
             }
 
         }
+
+        [HttpGet]
+        public ActionResult CambiarContraseña()
+        {
+            // Validar que esté iniciada la sesión
+            if (Session["Num_docu"] == null || Session["Rol"] == null)
+            {
+                // Si no hay sesión, redirigir a Login
+                return RedirectToAction("Login", "General");
+            }
+
+            return View();
+        }
+
+
+        [HttpPost]
+        public ActionResult CambiarContraseña(UserDto user)
+        {
+            try
+            {
+                // Instanciamos el servicio.
+                GeneralService contrasService = new GeneralService();
+
+                // Llamamos al método CambiarContraseña, pasando la contraseña actual y la nueva contraseña.
+                bool cambioExitoso = contrasService.CambiarContraseña(user.num_ident, user.contras_usu, user.contras_nueva);
+
+                if (cambioExitoso)
+                {
+                    if (user.id_rol == 2) // Asistente
+                    {
+                        ViewBag.MensajeExito = "Contraseña actualizada correctamente.";
+                        return RedirectToAction("IndexAsistente", "Asistente");
+                    }
+                    else if (user.id_rol == 4) // Veterinario
+                    {
+                        ViewBag.MensajeExito = "Contraseña actualizada correctamente.";
+                        return RedirectToAction("IndexVeterinario", "Veterinario");
+                    }
+
+                    return RedirectToAction("Login", "General");
+                }
+                else
+                {
+                    // Si el cambio de contraseña falló, mostramos un error.
+                    ViewBag.Error = "Hubo un error al cambiar la contraseña.";
+                    return View();
+                }
+            }
+            catch (Exception ex)
+            {
+                // Si hay una excepción, la capturamos y mostramos un mensaje de error.
+                ViewBag.Error = "Error: " + ex.Message;
+                return View();
+            }
+        }
     }
+
 }

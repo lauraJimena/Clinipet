@@ -3,6 +3,12 @@
     ViewBag.Title = "IndexVeterinario";
 }
 
+@if (ViewBag.MensajeExito != null)
+{
+    <div class="alert alert-success">
+        @ViewBag.MensajeExito
+    </div>
+}
 
 <link rel="stylesheet" href="@Url.Content("~/Estilos/estilos.css")">
 

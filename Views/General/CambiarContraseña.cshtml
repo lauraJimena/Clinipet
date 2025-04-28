@@ -1,0 +1,98 @@
+﻿@{
+    ViewBag.Title = "Cambio Constraseña";
+}
+
+<link rel="stylesheet" href="@Url.Content("~/Estilos/estilos.css")">
+
+<div class="contenedor">
+    <div class="cont">
+        <h2 class="titulo">Cambiar Contraseña</h2>
+        <form method="post" action="@Url.Action("CambiarContraseña", "General")">
+            <input type="hidden" id="num_ident" name="num_ident" value="@Session["Num_docu"]" />
+            <input type="hidden" id="id_rol" name="id_rol" value="@Session["Rol"]" />
+
+            <div>
+                <label for="ContraseñaActual">Contraseña Actual:</label><br />
+                <input type="password" id="contras_usu" name="contras_usu" required /><br />
+            </div>
+            <div>
+                <label for="NuevaContraseña">Nueva Contraseña:</label><br />
+                <input type="password" id="contras_nueva" name="contras_nueva" required /><br />
+            </div>
+            <div>
+                <label for="ConfirmarContraseña">Confirmar Nueva Contraseña:</label><br />
+                <input type="password" id="ConfirmarContraseña" name="ConfirmarContraseña" required /><br />
+            </div>
+            <div class="contBoton">
+                <button type="submit" class="botonForm">Cambiar Contraseña</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+    body {
+        background-image: url('/Imagenes/fondo_cambio_contras.jpg');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-position: center;
+        margin: 0;
+        height: 100vh; /* Asegura que el cuerpo cubra toda la altura de la ventana */
+        display: flex;
+        justify-content: center;
+        align-items: center; /* Centra todo el contenido de la página */
+    }
+
+    .titulo {
+        text-align: center;
+        margin-top: 200px;
+        margin-bottom: 50px;
+        font-size: 2.1em;
+    }
+
+    label {
+        font-size: 1.1em;
+        font-weight: 700;
+    }
+
+    .contenedor {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh; /* Ahora el contenido está siempre centrado */
+        padding: 20px;
+        margin-top: 90px;
+    }
+
+    .cont {
+        padding: 40px;
+        border-radius: 10px;
+        /*  background-color: rgba(90, 126, 111, 0.9);*/
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        width: 500px;
+        text-align: center;
+    }
+
+    .campo {
+        margin-bottom: 20px; /* Espaciado entre los campos */
+    }
+
+    .contBoton {
+        margin-top: 20px;
+    }
+
+    .botonForm {
+        padding: 10px 20px;
+        background-color: #d9a86c;
+        color: black;
+        border: none;
+        border-radius: 20px;
+        cursor: pointer;
+        font-size: 1.1em;
+    }
+
+        .botonForm:hover {
+            background-color: #d9a86c;
+        }
+</style>

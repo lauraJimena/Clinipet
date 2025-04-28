@@ -45,6 +45,10 @@ namespace Clinipet.Dtos
         [Display(Name = "Nom especialidad")]
         public String nom_espec { get; set; } = string.Empty;
 
+        public bool cambio_contras { get; set; }
+
+        public string contras_nueva { get; set; } 
+
         public int Response{ get; set; }
 
         public string Mensaje { get; set; }= string.Empty;

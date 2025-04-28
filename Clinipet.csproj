@@ -172,9 +172,11 @@
     <Content Include="Imagenes\facebook.png" />
     <Content Include="Imagenes\fondo_agenda_espec.png" />
     <Content Include="Imagenes\fondo_caja_serv.png" />
+    <Content Include="Imagenes\fondo_cambio_contras.jpg" />
     <Content Include="Imagenes\fondo_dispon.png" />
     <Content Include="Imagenes\fondo_dispon_gen.png" />
     <Content Include="Imagenes\fondo_elegir_masc.png" />
+    <Content Include="Imagenes\fondo_elimin_usu.jpg" />
     <Content Include="Imagenes\fondo_generales.png" />
     <Content Include="Imagenes\fondo_index.png" />
     <Content Include="Imagenes\fondo_index2.png" />
@@ -258,6 +260,7 @@
     <Content Include="Views\Cliente\ElegirMascota.cshtml" />
     <Content Include="Views\Cliente\HistorialCitasGenerales.cshtml" />
     <Content Include="Views\Veterinario\IndexVeterinario.cshtml" />
+    <Content Include="Views\General\CambiarContraseña.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
