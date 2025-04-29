@@ -1,0 +1,147 @@
+﻿
+@{
+    ViewBag.Title = "BuscarMascota";
+}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<link rel="stylesheet" href="@Url.Content("~/Estilos/estilos.css")">
+<div class="modal-buscar">
+    <div class="modal-contenido">
+        <h2>Buscar Cliente</h2>
+        <form action="@Url.Action("BuscarCliente", "Veterinario")" method="post">
+            <label for="documento"><strong>Numero de documento del cliente</strong></label>
+            <div class="campo-busqueda">
+                <span class="icono">&#128269;</span>
+                <input type="text" id="documento" name="num_ident" required pattern="\d*" title="Solo se permiten números" placeholder="Ingresa número" />
+            </div>
+            <button type="submit" class="botonForm">Buscar</button>
+        </form>
+    </div>
+</div>
+<!-- Este script SIEMPRE se ejecuta -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const input = document.getElementById('documento');
+        if (input) {
+            input.addEventListener('input', function () {
+                this.value = this.value.replace(/\D/g, '');
+            });
+        }
+    });
+</script>
+<!-- Este script solo si hay error -->
+@if (TempData["Error"] != null)
+{
+    <script>
+
+        Swal.fire({
+            icon: 'error',
+            title: 'Documento no encontrado',
+            text: '@TempData["Error"]',
+            confirmButtonText: 'Aceptar',
+            customClass: {
+                popup: 'swal2-popup',
+                title: 'swal2-title',
+                content: 'swal2-content',
+                icon: 'swal2-icon',
+                confirmButton: 'boton'
+            }
+        });
+
+    </script>
+}
+
+<style>
+    .swal2-popup {
+        font-size: 1em; /* Tamaño de la fuente */
+        padding: 30px; /* Padding similar al de la vista de registro */
+        border-radius: 20px; /* Bordes redondeados */
+        background-color: white !important; /* Color de fondo similar al del mensaje de error */
+    }
+
+    .swal2-title {
+        font-weight: bold; /* Negrita para el título */
+        color: #d9a86c;
+    }
+
+    .swal2-content {
+        margin-top: 10px; /* Espaciado entre el título y el contenido */
+    }
+
+    .swal2-icon {
+        margin-bottom: 0px;
+        margin-top: 5px;
+    }
+
+    .swal2-text {
+        margin-bottom: 0;
+    }
+
+    .boton {
+        font-size: 1em;
+        margin-top: 0;
+        color: #2f2f2f;
+        text-shadow: none;
+        background-color: #d9a86c;
+        box-shadow: none !important;
+    }
+
+    body {
+        background-image: url('/Imagenes/fondo_buscar_masc.png');
+        background-size: cover; /* para cubrir toda la pantalla */
+        background-repeat: no-repeat;
+        background-attachment: fixed; /* para que no se mueva al hacer scroll */
+        background-position: center;
+    }
+
+    .modal-buscar {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 130px;
+        margin-bottom: 80px;
+    }
+
+    .modal-contenido {
+        background-color: #7ba88f;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        position: relative;
+        width: 400px;
+        text-align: center;
+    }
+
+        .modal-contenido h2 {
+            margin-bottom: 20px;
+        }
+
+        .modal-contenido label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+    .campo-busqueda {
+        position: relative;
+        margin-bottom: 20px;
+    }
+
+        .campo-busqueda input {
+            width: 100%;
+            padding: 8px 8px 8px 30px;
+            border-radius: 15px;
+            border: 1px solid #333;
+            outline: none;
+        }
+
+    .icono {
+        position: absolute;
+        left: 40px;
+        top: 40%;
+        transform: translateY(-50%);
+        font-size: 16px;
+    }
+
+    .botonForm {
+        margin-top: 0px;
+    }
+</style>

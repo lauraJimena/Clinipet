@@ -39,7 +39,7 @@ namespace Clinipet.Controllers
                 return View("Error");
             }
     }
-    [HttpPost]
+        [HttpPost]
         public ActionResult PublicarDisponibilidad(DisponibDto disponib)
         {
             try
@@ -49,9 +49,9 @@ namespace Clinipet.Controllers
                     disponib.id_usu = Convert.ToInt32(Session["Id"]); // Asigna el ID del usuario logueado
                 
                     VeterinarioService veterinarioService = new VeterinarioService(); 
-                    DisponibDto disponibResponse = veterinarioService.PublicarDisponibilidad(disponib); // Llama al método de publicación de disponibilidad.            
+                    DisponibDto disponibRespuesta = veterinarioService.PublicarDisponibilidad(disponib); // Llama al método de publicación de disponibilidad.            
 
-                    if (disponibResponse.Response == 1)
+                    if (disponibRespuesta.Response == 1)
                     {
                         //disponibilidad publicada
                         return RedirectToAction("IndexVeterinario");
@@ -75,13 +75,111 @@ namespace Clinipet.Controllers
             }
 
         }
-        [HttpPost]
-        public ActionResult Testeo()
+        public ActionResult BuscarCliente()
         {
-            
-            Console.WriteLine("POR FAVORRRRRR");
-            return Content("¡Entró al POST!");
+            try
+            {
+                if (Session["UsuLoguedo"] != null)
+                {
+
+
+                    return View();
+                }
+                else
+                {
+                    return RedirectToAction("Login", "General");
+                }
+            }
+            catch (Exception ex)
+            {
+                string mensaje = ex.Message;
+                return View("Error");
+            }
         }
+        [HttpPost]
+        public ActionResult BuscarCliente(string num_ident)
+        {
+            try
+            {
+                if (Session["UsuLoguedo"] != null)
+                {
+                    VeterinarioService veterinarioService = new VeterinarioService();
+                    UserDto usu = veterinarioService.ObtenerUsuarioPorNumIdent(num_ident);
+                    if (usu==null)
+                    {
+                        TempData["Error"] = "El numero de documento ingresado no esta registrado.";
+                        return RedirectToAction("BuscarCliente");
+                    }
+                    else
+                    {
+                        List<MascotaDto> mascotas = veterinarioService.ListadoMascotas(num_ident);
+                        return View("ElegirMascDescrip", mascotas);
+                    }
+                                    
+                }
+                else
+                {
+                    return RedirectToAction("Login", "General");
+                }
+            }
+            catch (Exception ex)
+            {
+                string mensaje = ex.Message;
+                return View("Error");
+            }
+        }
+        
+        public ActionResult ElegirMascDescrip()
+        {
+            try
+            {
+                if (Session["UsuLoguedo"] != null)
+                {
+                   
+
+                    return View();
+                    
+                }
+                else
+                {
+                    return RedirectToAction("Login", "General");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                string mensaje = ex.Message;
+                return View(); // Muestra la vista en caso de que ocurra una excepción.
+            }
+
+        }
+        [HttpPost]
+        public ActionResult DescripConsulta(int id_mascota)
+        {
+            try
+            {
+                if (Session["UsuLoguedo"] != null)
+                {
+                    VeterinarioService veterinarioService = new VeterinarioService();
+                    ViewBag.Motivo = veterinarioService.ObtenerMotivoSelect(); //Envia lista de dias a la vista               
+                    //disponibilidad publicada
+                    return View();
+                    
+                }
+                else
+                {
+                    return RedirectToAction("Login", "General");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                string mensaje = ex.Message;
+                return View(); // Muestra la vista en caso de que ocurra una excepción.
+            }
+
+        }
+
     }
     
 

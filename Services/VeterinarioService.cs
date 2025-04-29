@@ -130,5 +130,36 @@ namespace Clinipet.Services
 
             
         }
+        public List<SelectListItem> ObtenerMotivoSelect()
+        {
+            VeterinarioRepository veterinarioRepository = new VeterinarioRepository();
+            List<CitaEspecDto> motivo= veterinarioRepository.ObtenerMotivo();
+
+            return motivo.Select(m => new SelectListItem // Convertir la lista raza en SelectList para pasar a la vista
+            {
+                Value = m.id_motivo.ToString(),
+                Text = m.nom_motivo,
+
+            }).ToList();
+
+
+        }
+        public List<MascotaDto> ListadoMascotas(string num_ident)
+
+        {
+            VeterinarioRepository veterinarioRepository = new VeterinarioRepository();
+            List<MascotaDto> mascotas = veterinarioRepository.ListadoMascotas(num_ident);
+
+            return mascotas;
+        }
+        public UserDto ObtenerUsuarioPorNumIdent(string num_ident)
+        {
+            VeterinarioRepository veterinarioRepository = new VeterinarioRepository();
+            UserDto usu = veterinarioRepository.ObtenerUsuarioPorNumIdent(num_ident);
+            return usu;
+        }
+        
+
+        
     }
 }
