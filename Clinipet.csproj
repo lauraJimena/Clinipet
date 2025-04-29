@@ -171,6 +171,7 @@
     <Content Include="Imagenes\encab_citas_gen.png" />
     <Content Include="Imagenes\facebook.png" />
     <Content Include="Imagenes\fondo_agenda_espec.png" />
+    <Content Include="Imagenes\fondo_buscar_masc.png" />
     <Content Include="Imagenes\fondo_caja_serv.png" />
     <Content Include="Imagenes\fondo_cambio_contras.jpg" />
     <Content Include="Imagenes\fondo_dispon.png" />
@@ -181,6 +182,7 @@
     <Content Include="Imagenes\fondo_index.png" />
     <Content Include="Imagenes\fondo_index2.png" />
     <Content Include="Imagenes\fondo_login.png" />
+    <Content Include="Imagenes\fondo_mascotas.png" />
     <Content Include="Imagenes\fondo_servicios.png" />
     <Content Include="Imagenes\fondo_masc_regis.png" />
     <Content Include="Imagenes\fondo_mascota.png" />
@@ -211,6 +213,7 @@
     <Content Include="Imagenes\registro.jpg" />
     <Content Include="Imagenes\registro_masc_fondo.jpg" />
     <Content Include="Imagenes\cita_serv_general.png" />
+    <Content Include="Imagenes\veterinario_perro.jpg" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
@@ -261,6 +264,9 @@
     <Content Include="Views\Cliente\HistorialCitasGenerales.cshtml" />
     <Content Include="Views\Veterinario\IndexVeterinario.cshtml" />
     <Content Include="Views\General\CambiarContraseña.cshtml" />
+    <Content Include="Views\Veterinario\BuscarCliente.cshtml" />
+    <Content Include="Views\Veterinario\ElegirMascDescrip.cshtml" />
+    <Content Include="Views\Veterinario\DescripConsulta.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

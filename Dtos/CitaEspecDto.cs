@@ -10,6 +10,7 @@ namespace Clinipet.Dtos
         public int id_cita_esp { get; set; }
         public int id_servicio { get; set; }
         public int id_motivo { get; set; }
+        public string nom_motivo { get; set; }
         public string diagnost { get; set; } = "Pendiente";
         public int id_mascota { get; set; }
         public int id_dispon { get; set; }

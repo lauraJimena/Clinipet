@@ -51,10 +51,10 @@ namespace Clinipet.Controllers
         {
             if (Session["UsuLoguedo"] != null)
             {
-            int id_usu = Convert.ToInt32(Session["Id"]);
-            ClienteService servicio = new ClienteService();
-            List<MascotaDto> mascotas = servicio.ListadoMascotas(id_usu);
-            return View(mascotas);
+                int id_usu = Convert.ToInt32(Session["Id"]);
+                ClienteService servicio = new ClienteService();
+                List<MascotaDto> mascotas = servicio.ListadoMascotas(id_usu);
+                return View(mascotas);
             }
             else
             {

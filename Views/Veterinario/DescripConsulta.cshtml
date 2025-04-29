@@ -1,0 +1,95 @@
+﻿
+@{
+    ViewBag.Title = "DescripConsulta";
+}
+
+<link rel="stylesheet" href="@Url.Content("~/Estilos/estilos.css")">
+<h2>Descripción de Consulta</h2>
+<div class="contenedor">
+    <div class="cajaDescrip">
+        <div class="cajaForm">
+            <form action="@Url.Action("BuscarCliente", "Veterinario")" method="post">
+                <label for="motivo"><strong>Motivo de la consulta:</strong></label><br />
+                <select  class="" id="motivo" name="motivo" required>
+                    <option value="" disabled selected hidden>Seleccione un motivo</option>
+                    @foreach (var motivo in ViewBag.Motivo)
+                    {
+                        <option value="@motivo.Value">@motivo.Text</option>
+                    }
+                </select><br />
+
+                <label for="descripcion"><strong>Descripción: </strong></label><br />
+                <textarea class="campo" id="descripcion" name="descripcion" cols="80" rows="4" placeholder="Escribe una descripción aquí..." required></textarea><br />
+                <label for="recomendaciones"><strong>Recomendaciones: </strong></label><br />
+                <textarea id="recomendaciones" name="recomendaciones" rows="4" cols="70" placeholder="Escribe recomendaciones aquí..." required></textarea><br />
+                <div class="cajaBtn">
+                    <button type="submit" class="botonForm">Guardar</button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+    <img class="imagenFondo" src="~/Imagenes/veterinario_perro.jpg" alt="">
+</div>
+
+<style>
+
+    body {
+        background-color: #d3d1cc
+    }
+
+    h2 {
+        margin-top: 50px;
+        margin-bottom: 20px;
+    }
+    .contenedor {
+        width: 100%;
+        display: flex;
+        align-items: center; /* Centra verticalmente */      
+        padding: 0px;
+    }
+    
+
+    /* Estilo para la imagen a la derecha */
+    .imagenFondo {
+        width: 100%;
+        max-width: 500px;
+        height: 600px;
+        padding: 0;
+        margin-left: 0;
+        margin-right: 5%;
+        border-radius: 0px 20px 20px 0;
+    }
+    .cajaDescrip {
+        margin-left: 5%;
+        display: flex;
+        background-color: #9fb2a9;
+        border-radius: 20px 0px 0px 20px;
+        padding: 35px;
+        width: 100%;
+        justify-content: center;
+        height: 600px;
+    }
+
+    .cajaForm {
+        text-align: left;
+        margin: auto;
+    }
+    textarea {
+        
+        border-radius: 15px;
+        padding: 10px;
+        border: 1px black solid;
+    }
+    
+    label{
+        margin-top:15px;
+    }
+    .cajaBtn {
+       
+        text-align: center;
+    }
+
+    
+
+</style>

@@ -77,6 +77,46 @@ namespace Clinipet.Repositories
 
             return comando;
         }
+        public List<MascotaDto> ListadoMascotas(string num_ident)
+
+        {
+            List<MascotaDto> mascotas = new List<MascotaDto>();
+
+
+            string sql = "SELECT r.nom_raza, t.nom_tipo, m.nom_masc, m.edad_masc, m.id_mascota, u.nom_usu " +
+                 "FROM [clinipet].[dbo].[raza_masc] r " +
+                 "JOIN [clinipet].[dbo].[tipo_masc] t ON r.id_tipo = t.id_tipo " +
+                 "JOIN [clinipet].[dbo].[mascota] m ON m.id_raza = r.id_raza " +
+                 "JOIN [clinipet].[dbo].[usuario] u ON m.id_usu = u.id_usu " +
+                  "WHERE u.num_ident = @num_ident";
+
+            DBContextUtility Connection = new DBContextUtility();
+            Connection.Connect();
+
+            using (SqlCommand command = new SqlCommand(sql, Connection.CONN()))
+            {
+                command.Parameters.AddWithValue("@num_ident", num_ident);
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        MascotaDto mascota = new MascotaDto
+                        {
+                            nom_raza = reader.GetString(0),
+                            nom_tipo = reader.GetString(1),
+                            nom_masc = reader.GetString(2),
+                            edad_masc = reader.GetInt16(3),
+                            id_mascota = reader.GetInt32(4),
+                            nom_usu = reader.GetString(5)
+
+                        };
+                        mascotas.Add(mascota);
+                    }
+
+                }
+            }
+            return mascotas;
+        }
 
         public List<DisponibDto> ObtenerDias()
         {
@@ -124,7 +164,61 @@ namespace Clinipet.Repositories
             }
             return listaHoras;
         }
-       
+        public List<CitaEspecDto> ObtenerMotivo()
+        {
+            List<CitaEspecDto> listaMotivos = new List<CitaEspecDto>();
+            string sql = "SELECT id_motivo, nombre FROM motivo";
+            DBContextUtility Connection = new DBContextUtility();
+            Connection.Connect();
+            using (SqlCommand command = new SqlCommand(sql, Connection.CONN()))
+            {
+
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        listaMotivos.Add(new CitaEspecDto
+                        {
+                            id_motivo = reader.GetInt32(0),
+                            nom_motivo = reader.GetString(1),
+                        });
+                    }
+                }
+            }
+            return listaMotivos;
+        }
+        public UserDto ObtenerUsuarioPorNumIdent(string num_ident)
+        {
+            
+            
+            DBContextUtility Connection = new DBContextUtility();
+            Connection.Connect();
+
+            string sql = "SELECT id_usu, nom_usu FROM usuario WHERE num_ident = @num_ident";
+
+            using (SqlCommand command = new SqlCommand(sql, Connection.CONN()))
+            {
+                command.Parameters.AddWithValue("@num_ident", num_ident);
+                       
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            return new UserDto
+                            {
+                                id_usu= reader.GetInt32(0),
+                                nom_usu = reader.GetString(1),
+                                
+
+                            };
+                        }
+                    }
+            }   
+         return null; 
+        }
+        
+
+
 
     }
 }
