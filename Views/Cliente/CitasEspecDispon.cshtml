@@ -22,19 +22,19 @@
     <tbody>
         @foreach (var dispon in Model)
         {
-            <tr>
-                <td>@dispon.nom_serv</td>
-                <td>@dispon.nom_usu</td>
-                <td>@dispon.nom_dia</td>
-                <td>@dispon.nom_hora</td>
-                <td>
-                    <form action="@Url.Action("ListadoMascotas", "Cliente")" method="post">
-                        <input type="hidden" name="id_usu" value="@Session["Id"]" />
-                        <input type="hidden" name="id_dispon" value="@dispon.id_dispon" />
-                        <button type="submit" class="botonSec botonForm">Agendar &raquo;</button>
-                    </form>
-                </td>
-            </tr>
+        <tr>
+            <td>@dispon.nom_serv</td>
+            <td>@dispon.nom_usu</td>           
+            <td>@dispon.nom_dia</td>
+            <td>@dispon.nom_hora</td>
+            <td>
+                <form action="@Url.Action("ListadoMascotas", "Cliente")" method="post">
+                    <input type="hidden" name="id_usu" value="@Session["Id"]" />
+                    <input type="hidden" name="id_dispon" value="@dispon.id_dispon" />
+                    <button type="submit" class="botonSec botonForm">Agendar &raquo;</button>
+                </form>
+            </td>
+        </tr>
         }
     </tbody>
 </table>
@@ -71,5 +71,8 @@
     .cajaImg {
         text-align:center;
     }
+    
+
+    
 
 </style>

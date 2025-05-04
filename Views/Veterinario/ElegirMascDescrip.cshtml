@@ -15,7 +15,7 @@
                 <th>Raza</th>
                 <th>Tipo</th>
                 <th>Edad</th>
-                <th class="añadir">Añadir Descripción</th>
+                <th class="añadir">Elegir Mascota</th>
             </tr>
         </thead>
         <tbody>
@@ -27,72 +27,63 @@
                     <td>@mascota.nom_tipo</td>
                     <td>@mascota.edad_masc</td>
                     <td>
-                        <form action="@Url.Action("DescripConsulta", "Veterinario")" method="post">
+                        <form action="@Url.Action("ElegirCitaEspec", "Veterinario")" method="post">
                             <input type="hidden" name="id_usu" value="@Session["Id"]" />
                             <input type="hidden" name="id_mascota" value="@mascota.id_mascota" />
-                            <button type="submit" class="botonSec botonForm">Añadir &raquo;</button>
+                            <button type="submit" class="botonSec botonForm">Elegir &raquo;</button>
                         </form>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
+    <div class="cajaBoton">
+        <button type="button" class="botonForm botonVol" onclick="window.history.back();">Volver</button>
+
+    </div>
 }
 else
 {
-<div class="cajaMensaje">
-    <p class="mensaje">No hay mascotas registradas para este usuario.</p>
-    <div class="cajaBoton">
-        <form method="get" action="/Veterinario/BuscarCliente">
-            <button class="botonForm">Volver</button>
-        </form>
+    <div class="cajaMensaje">
+        <p class="mensaje">No hay mascotas registradas para este usuario.</p>
+        <div class="cajaBoton">
+            <form method="get" action="/Veterinario/BuscarCliente">
+                <button class="botonForm">Volver</button>
+            </form>
+        </div>
     </div>
-</div>
-   }
+}
 
-    <style>
-        body {
-            background-image: url('/Imagenes/fondo_mascotas.png');
-            background-size: cover; /* para cubrir toda la pantalla */
-            background-repeat: no-repeat;
-            background-attachment: fixed; /* para que no se mueva al hacer scroll */
-            background-position: center;
-        }
+<style>
+    body {
+        background-image: url('/Imagenes/fondo_mascotas.png');
+        background-size: cover; /* para cubrir toda la pantalla */
+        background-repeat: no-repeat;
+        background-attachment: fixed; /* para que no se mueva al hacer scroll */
+        background-position: center;
+    }
 
-        h2 {
-            margin-top: 45px;
-        }
+    h2 {
+        margin-top: 45px;
+    }
 
-        table {
-            width: 70%;
-        }
+    table {
+        width: 70%;
+    }
 
-        .añadir {
-            width: 200px;
-        }
+    .añadir {
+        width: 200px;
+    }
 
-        .mensaje {
-            font-size: 1.3em;
-            font-weight: 400;
-            text-align: center;
-            margin-top: 50px;
-            text-shadow: 2px 2px 10px gray;
-        }
 
-        .cajaMensaje {
-            margin: auto;
-            width: 55%;
-            padding-top: 20px;
-            padding-bottom: 50px;
-            margin-top: 40px;
-            background-color: white;
-            border-radius: 20px;
-        }
-        .cajaBoton{
-            text-align:center;
-        }
-        .botonForm {
-           
-            border: 1px solid #2f2f2f;
-        }
-    </style>
+    .cajaBoton {
+        text-align: center;
+    }
+
+    .botonForm {
+        border: 1px solid #2f2f2f;
+    }
+    .botonVol {
+        background-color: #4f7768;
+    }
+</style>

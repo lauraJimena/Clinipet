@@ -1,0 +1,37 @@
+﻿@{
+    Layout = null;
+    Response.Cache.SetCacheability(HttpCacheability.NoCache);
+    Response.Cache.SetExpires(DateTime.UtcNow.AddSeconds(-1));
+    Response.Cache.SetNoStore();
+}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Sesión Cerrada</title>
+</head>
+<body>
+    <h2>Sesión cerrada correctamente.</h2>
+    <p>Tu sesión ha finalizado. <a href="@Url.Action("Login", "General")">Inicia sesión nuevamente</a>.</p>
+</body>
+</html>
+<script>
+    window.onload = function () {
+        // Bloquear la navegación "atrás" de forma más estricta
+        setTimeout(function () {
+            window.location.replace("@Url.Action("Login", "General")"); // Redirige automáticamente
+        }, 500);
+
+        // Reemplaza el estado para eliminar la página anterior del historial
+        history.pushState(null, null, location.href);
+        window.onpopstate = function () {
+            history.pushState(null, null, location.href);
+        };
+    };
+</script>
+
+
+
+
+

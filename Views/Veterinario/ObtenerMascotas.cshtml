@@ -1,0 +1,44 @@
+﻿
+@{
+    ViewBag.Title = "ObtenerMascotas";
+}
+@model List<Clinipet.Dtos.MascotaDto>
+<link rel="stylesheet" href="@Url.Content("~/Estilos/estilos.css")">
+<h2>Elige una Mascota</h2>
+
+<table>
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Raza</th>
+            <th>Tipo</th>
+
+            <th class="añadir">Ver Historial</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var mascota in Model)
+        {
+            <tr>
+                <td>@mascota.nom_masc</td>
+                <td>@mascota.nom_raza</td>
+                <td>@mascota.nom_tipo</td>
+
+                <td>
+                    <form action="@Url.Action("HistorialMascota", "Veterinario")" method="post">
+                        <input type="hidden" name="id_usu" value="@Session["Id"]" />
+                        <input type="hidden" name="id_mascota" value="@mascota.id_mascota" />
+                        <button type="submit" class="botonSec botonForm">Elegir &raquo;</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<div class="cajaBoton">
+    <button type="button" class="botonForm botonVol" onclick="window.history.back();">Volver</button>
+
+</div>
+
+
+

@@ -1,0 +1,142 @@
+﻿
+@{
+    ViewBag.Title = "HistorialMascota";
+}
+
+@model List<Clinipet.Dtos.CitaEspecDto>
+
+<link rel="stylesheet" href="@Url.Content("~/Estilos/estilos.css")">
+
+<!-- Mensaje superpuesto cuando no se encuentra el documento -->
+@if (ViewBag.DocumentoNoEncontrado != null && ViewBag.DocumentoNoEncontrado == true)
+{
+    <div id="mensajeSuperpuesto" class="mensaje-superpuesto">
+        <p>Documento no encontrado.</p>
+        <button type="button" class="botonForm" onclick="cerrarMensaje()">Cerrar</button>
+    </div>
+}
+
+<h2>Historial Mascotas</h2>
+
+<!-- Campo de filtrado que siempre permanece visible -->
+<form method="get" action="@Url.Action("HistorialMascota", "Veterinario")" class="formBuscar">
+    <label for="numDocumento">Filtrar por número de documento:</label>
+    <input type="text" id="documento" name="num_ident" required />
+    <button type="submit" class="botonForm botonBuscar">Buscar</button>
+</form>
+
+<!-- Si hay datos, muestra la tabla -->
+@if (Model != null && Model.Any())
+{
+    <table>
+        <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Hora</th>
+                <th>Mascota</th>
+                <th>Cliente</th>
+                <th>Identidad</th>
+                <th>Motivo</th>
+                <th>Diagnóstico</th>
+                <th>Recomendaciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var citaEspec in Model)
+            {
+                <tr>
+                    <td>@citaEspec.fecha_cita.ToString("yyyy-MM-dd")</td>
+                    <td>@citaEspec.nom_hora</td>
+                    <td>@citaEspec.nom_masc</td>
+                    <td>@citaEspec.nom_usu</td>
+                    <td>@citaEspec.num_ident</td>
+                    <td>@citaEspec.nom_motivo</td>
+                    <td>@citaEspec.diagnost</td>
+                    <td>@citaEspec.recomen</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div class="cajaBoton">
+        <button type="button" class="botonForm botonVol" onclick="window.location.href='@Url.Action("IndexVeterinario", "Veterinario")'">Volver</button>
+    </div>
+}
+else if (ViewBag.DocumentoNoEncontrado == null)
+{
+    <div class="cajaMensaje">
+        <p class="mensaje">No hay historial registrado.</p>
+        <div class="cajaBoton">
+            <button type="button" class="botonForm botonVol" onclick="window.history.back();">Volver</button>
+        </div>
+    </div>
+}
+
+<!-- Restringir la entrada de caracteres, permitiendo solo numeros -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const input = document.getElementById('documento');
+        if (input) {
+            input.addEventListener('input', function () {
+                this.value = this.value.replace(/\D/g, '');
+            });
+        }
+    });
+</script>
+
+<style>
+    body {
+        background-image: url('/Imagenes/fondo_mascotas.png');
+        background-size: cover; /* para cubrir toda la pantalla */
+        background-repeat: no-repeat;
+        background-attachment: fixed; /* para que no se mueva al hacer scroll */
+        background-position: center;
+    }
+
+    h2 {
+        margin-top: 50px;
+    }
+    /* Mensaje de documento no encontrado superpuesto */
+    .mensaje-superpuesto {
+        position: fixed;
+        top: 27%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: #9fb2a9;
+        color: white;
+        padding: 20px;
+        border-radius: 8px;
+        text-align: center;
+        font-size: 18px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+        z-index: 1000;
+    }
+
+    .formBuscar {
+        margin-left: 20%;
+        border: none;
+    }
+
+    .botonForm {
+        border: 0.3px solid #545454;
+    }
+
+    .mensaje-superpuesto button:hover {
+        background-color: #ddd;
+    }
+
+    .botonBuscar {
+        margin-bottom: 20px;
+        padding: 6px 15px;
+    }
+
+    .cajaBoton {
+        width: 100%;
+        text-align: center;
+    }
+</style>
+
+<script>
+    function cerrarMensaje() {
+        document.getElementById("mensajeSuperpuesto").style.display = "none";
+    }
+</script>

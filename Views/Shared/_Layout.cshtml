@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿
+<!DOCTYPE html>
 
 
 <html>
@@ -10,6 +11,16 @@
     <title>@ViewBag.Title - CliniPet</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+
+    <script type="text/javascript">
+    // Detecta si la página se cargó desde el caché (por ejemplo, al volver con el botón "Atrás")
+    window.addEventListener("pageshow", function (event) {
+        if (event.persisted || (window.performance && window.performance.navigation.type === 2)) { //event.persisted es true cuando la página fue recuperada desde el caché del navegador
+            // Forzar recarga completa desde el servidor
+            window.location.reload(); //Recarga la página desde el servidor, no desde la caché.
+        }
+    });
+    </script>
     <style>
         /* Estilos para que se carguen primero que los que vienen por defecto en ASP.NET*/
         .navbar {
@@ -138,9 +149,17 @@
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Inicio", "Index", "Home", new { area = "" }, new { @class = "links" })</li>
                     <li>@Html.ActionLink("Acerca de", "About", "Home", new { area = "" }, new { @class = "links" })</li>
-                    <li>@Html.ActionLink("Contacto", "Contact", "Home", new { area = "" }, new { @class = "links" })</li>
-                    <li>@Html.ActionLink("Iniciar Sesión", "Login", "General", new { area = "" }, new { @class = "links" })</li>
+                    <li>@Html.ActionLink("Servicios", "Servicios", "Home", new { area = "" }, new { @class = "links" })</li>
                     <li>@Html.ActionLink("Registro Cliente", "RegistroCliente", "General", new { area = "" }, new { @class = "links" })</li>
+                    @if (Session["UsuLoguedo"] != null)
+                    {
+                        <li>@Html.ActionLink("Cerrar Sesión", "CerrarSesion", "General", new { area = "" }, new { @class = "links" })</li>
+                    }
+                    else
+                    {
+                        <li>@Html.ActionLink("Iniciar Sesión", "Login", "General", new { area = "" }, new { @class = "links" })</li>
+                    }
+
                 </ul>
             </div>
         </div>

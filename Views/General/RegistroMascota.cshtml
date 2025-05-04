@@ -9,13 +9,14 @@
         <div class="cont">
             <div class="cajaTitulo"><h2 class="titulo">Registro de Mascota</h2></div>
 
-            <form id="registroForm" method="post" asp-action="RegistroMascota" asp-controller="General">
+            <form id="guardarForm" method="post" asp-action="RegistroMascota" asp-controller="General" data-url="@Url.Action("RegistroMascota", "General")">
                 <label for="nom_masc">Nombre:</label><br />
                 <input type="text" id="nom_masc" asp-for="nom_masc" name="nom_masc" required /><br />
                 @Html.ValidationMessageFor(model => model.nom_masc, "", new { @class = "text-danger" })
 
                 <label for="edad_masc">Edad:</label><br />
-                <input type="text" id="edad_masc" asp-for="edad_masc" name="edad_masc" required /><br />
+                <input type="text" id="edad_masc" asp-for="edad_masc" name="edad_masc" required pattern="\d*" title="Solo se permiten números" placeholder="Ingresa número" /><br />
+
                 @Html.ValidationMessageFor(model => model.edad_masc, "", new { @class = "text-danger" })
 
                 <label for="id_tipo">Tipo de mascota: </label><br />
@@ -42,6 +43,8 @@
                 <input type="hidden" id="id_usu" name="id_usu" value="@Session["UserID"]" />
 
                 <div class="contBoton">
+
+                    <button type="button" class="botonForm botonVol" onclick="window.location.href='@Url.Action("IndexVeterinario", "Veterinario")'">Volver</button>
                     <button type="submit" class="botonForm">Registrar</button>
                 </div>
             </form>
@@ -50,29 +53,42 @@
     </div>
 
 </body>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="@Url.Content("~/Scripts/popup.js")"></script>
+<!-- Este script SIEMPRE se ejecuta -->
 <script>
-   
-        document.getElementById('id_tipo').addEventListener('change', function () {
+    document.addEventListener('DOMContentLoaded', function () {
+        const input = document.getElementById('edad_masc');
+        if (input) {
+            input.addEventListener('input', function () {
+                this.value = this.value.replace(/\D/g, '');
+            });
+        }
+    });
+</script>
+<script>
+
+    document.getElementById('id_tipo').addEventListener('change', function () {
         var tipoSeleccionado = this.options[this.selectedIndex].text;
         var razaSelect = document.getElementById('id_raza');
         var opciones = razaSelect.options;
 
         for (var i = 0; i < opciones.length; i++) {
             var opcion = opciones[i];
-        var tipo = opcion.getAttribute('data-tipo');
+            var tipo = opcion.getAttribute('data-tipo');
 
-        if (!tipo || tipo === tipoSeleccionado) {
-            opcion.style.display = '';
+            if (!tipo || tipo === tipoSeleccionado) {
+                opcion.style.display = '';
             } else {
-            opcion.style.display = 'none';
+                opcion.style.display = 'none';
             }
         }
 
         razaSelect.selectedIndex = 0; // Reiniciar selección
     });
 
-
 </script>
+
 <style>
     .bodyForm {
         background-color: #c7cbca;

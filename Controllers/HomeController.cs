@@ -20,7 +20,7 @@ namespace Clinipet.Controllers
             return View();
         }
 
-        public ActionResult Contact()
+        public ActionResult Servicios()
         {
             ViewBag.Message = "Your contact page.";
 

@@ -8,9 +8,11 @@ using System.Web.Mvc;
 
 namespace Clinipet.Controllers
 {
-    public class ClienteController : Controller
+    
+    public class ClienteController : BaseController
     {
         // GET: Cliente
+        
         public ActionResult IndexCliente()
         {
             try
@@ -189,6 +191,48 @@ namespace Clinipet.Controllers
                 return View("Error");
             }
         }
+        public ActionResult ElegirHistorialCitas()
+        {
+            try
+            {
+                if (Session["UsuLoguedo"] != null)
+                {
+                    
+                    return View();
+                }
+                else
+                {
+                    return RedirectToAction("Login", "General");
+                }
+            }
+            catch (Exception ex)
+            {
+                string mensaje = ex.Message;
+                return View("Error");
+            }
+        }
+        public ActionResult HistorialCitasEspec()
+        {
+            try
+            {
+                if (Session["UsuLoguedo"] != null)
+                {
+                    int id_usu = (int)Session["Id"];
+                    ClienteService clienteService = new ClienteService();
+                    List<CitaEspecDto> citasGen = clienteService.HistorialCitasEspec(id_usu);
+                    return View(citasGen);
+                }
+                else
+                {
+                    return RedirectToAction("Login", "General");
+                }
+            }
+            catch (Exception ex)
+            {
+                string mensaje = ex.Message;
+                return View("Error");
+            }
+        }
 
         [HttpPost]
         public ActionResult ListadoMascotas(int id_usu, int id_dispon)
@@ -267,12 +311,12 @@ namespace Clinipet.Controllers
                 
                     if (citaResponse.Response == 1)
                     {
-                        //poner aca modal de cita confirmada
-                        return RedirectToAction("IndexCliente");
+                    return Json(new { success = true, redirectUrl = Url.Action("IndexCliente") });
+                    
                     }
                     else
                     {
-                        return View("Error");
+                    return Json(new { success = false, message = "No se pudo guardar correctamente" });
                     }
                                      
             }
@@ -294,14 +338,14 @@ namespace Clinipet.Controllers
 
                 if (citaGenResponse.Response == 1)
                 {
-                    //poner aca modal de cita confirmada
-                    return RedirectToAction("IndexCliente");
+                    return Json(new { success = true, redirectUrl = Url.Action("IndexCliente") });
+                    
                 }
 
                 else
                 {
-                    return View("Error");
-
+                    
+                    return Json(new { success = false, message = "No se pudo confirmar la cita." });
                 }
 
             }

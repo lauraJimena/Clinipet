@@ -19,7 +19,7 @@ namespace Clinipet.Repositories
             Connection.Connect();
 
             string SQL = @"
-                        INSERT INTO disponibilidad (id_dia, id_hora, id_usu) VALUES (@id_dia, @id_hora, @id_usu); 
+                        INSERT INTO disponibilidad (id_dia, id_hora, id_usu, id_estado) VALUES (@id_dia, @id_hora, @id_usu, @id_estado); 
                         SELECT SCOPE_IDENTITY();"; // Devuelve el ID recién creado
 
             using (SqlCommand command = new SqlCommand(SQL, Connection.CONN()))
@@ -27,6 +27,7 @@ namespace Clinipet.Repositories
                 command.Parameters.AddWithValue("@id_dia", dispo.id_dia);
                 command.Parameters.AddWithValue("@id_hora", dispo.id_hora);
                 command.Parameters.AddWithValue("@id_usu", dispo.id_usu);
+                command.Parameters.AddWithValue("@id_estado", dispo.id_estado);
 
                 var result = command.ExecuteScalar(); // Obtiene el id de la disponibilidad
                 if (result != null)
@@ -77,6 +78,212 @@ namespace Clinipet.Repositories
 
             return comando;
         }
+        public int ActualizarDescripConsulta(CitaEspecDto citaEspec)
+        {
+
+            int comando = 0;
+            DBContextUtility Connection = new DBContextUtility();
+            Connection.Connect();
+
+            string SQL = "UPDATE cita_espec SET id_motivo = @id_motivo, " +
+                "diagnost = @diagnost, recomen = @recomen, id_estado = @id_estado " +
+                "WHERE id_cita_esp = @id_cita_esp";
+
+            using (SqlCommand cm = new SqlCommand(SQL, Connection.CONN()))
+            {
+
+                cm.Parameters.AddWithValue("@id_motivo", citaEspec.id_motivo);
+                cm.Parameters.AddWithValue("@diagnost", citaEspec.diagnost);
+                cm.Parameters.AddWithValue("@recomen", citaEspec.recomen);
+                cm.Parameters.AddWithValue("@id_estado", citaEspec.id_estado);
+                cm.Parameters.AddWithValue("@id_cita_esp", citaEspec.id_cita_esp);
+
+
+                comando = cm.ExecuteNonQuery();
+            }
+
+            return comando;
+
+        }
+        //Obtener las citas especializadas (que esten agendadas o en curso ) de la mascota seleccionada
+        public List<CitaEspecDto> ObtenerCitasEspecAgend(int id_usu, int id_mascota)
+        {
+            List<CitaEspecDto> lista = new List<CitaEspecDto>();
+            DBContextUtility Connection = new DBContextUtility();
+            Connection.Connect();
+
+            string sql = "SELECT " +
+             "ce.id_cita_esp, " +
+             "s.nombre AS Servicio, " +
+             "u.nom_usu + ' ' + u.apel_usu AS Veterinario, " +
+             "di.nombre AS Dia, " +
+             "h.nom_hora AS Hora, " +
+             "d.id_dispon AS idDispon " +
+             "FROM cita_espec ce " +
+             "JOIN disponibilidad d ON ce.id_dispon = d.id_dispon " +
+             "JOIN mascota m ON ce.id_mascota = m.id_mascota " +
+             "JOIN usuario u ON d.id_usu = u.id_usu " +
+             "JOIN servicio s ON ce.id_servicio = s.id_servicio " +
+             "JOIN dia di ON d.id_dia = di.id_dia " +
+             "JOIN hora h ON d.id_hora = h.id_hora " +
+             "WHERE (ce.id_estado = 3 OR ce.id_estado = 4) AND d.id_usu = @id_usu AND ce.id_mascota = @id_mascota";
+
+            using (SqlCommand cmd = new SqlCommand(sql, Connection.CONN()))
+            {
+                cmd.Parameters.AddWithValue("@id_usu", id_usu);
+                cmd.Parameters.AddWithValue("@id_mascota", id_mascota);
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        CitaEspecDto dispon = new CitaEspecDto
+                        {
+                            id_cita_esp = reader.GetInt32(0),           
+                            nom_serv = reader.GetString(1),
+                            nom_usu = reader.GetString(2),
+                            nom_dia = reader.GetString(3),
+                            nom_hora = reader.GetString(4),
+                            id_dispon = reader.GetInt32(5)
+                        };
+                        lista.Add(dispon);
+                    }
+                }
+            }
+
+            return lista;
+        }
+        //Historial de todas las citas que tiene el veterinario (agendadas, en curso y completadas)
+        public List<CitaEspecDto> ObtenerHistorialCitas(int id_usu)
+        {
+            List<CitaEspecDto> lista = new List<CitaEspecDto>();
+            DBContextUtility Connection = new DBContextUtility();
+            Connection.Connect();
+
+            string sql = "SELECT di.nombre, h.nom_hora, m.nom_masc, CONCAT(u.nom_usu,' ', u.apel_usu), mo.nombre, ce.fecha_cita, e.nom_estado " +
+                  "FROM cita_espec ce " +
+                  "JOIN disponibilidad d ON ce.id_dispon=d.id_dispon " +
+                  "JOIN dia di ON d.id_dia=di.id_dia " +
+                  "JOIN hora h ON d.id_hora=h.id_hora " +
+                  "JOIN mascota m ON ce.id_mascota= m.id_mascota " +
+                  "JOIN usuario u ON m.id_usu = u.id_usu " +
+                  "JOIN motivo mo ON ce.id_motivo = mo.id_motivo " +
+                  "JOIN estado e ON ce.id_estado = e.id_estado " +
+                  "WHERE d.id_usu=@id_usu ";
+
+            using (SqlCommand cmd = new SqlCommand(sql, Connection.CONN()))
+            {
+                cmd.Parameters.AddWithValue("@id_usu", id_usu);
+                
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        CitaEspecDto dispon = new CitaEspecDto
+                        {
+                                                     
+                            nom_dia = reader.GetString(0),
+                            nom_hora = reader.GetString(1),
+                            nom_masc = reader.GetString(2),
+                            nom_usu = reader.GetString(3),
+                            nom_motivo = reader.GetString(4),
+                            fecha_cita = reader.GetDateTime(5),
+                            nom_estado = reader.GetString(6),
+                        };
+                        lista.Add(dispon);
+                    }
+                }
+            }
+
+            return lista;
+        }
+        //Obtener el historial médico de una mascota con su ID (citas ya completadas para saber su descrip)
+        public List<CitaEspecDto> ObtenerHistorialMascota(int id_usu)
+        {
+            List<CitaEspecDto> lista = new List<CitaEspecDto>();
+            DBContextUtility Connection = new DBContextUtility();
+            Connection.Connect();
+
+            string sql = "SELECT ce.id_cita_esp, s.nombre, " +
+               "u.nom_usu + ' ' + u.apel_usu, u.num_ident, mo.nombre, " +
+               "ce.diagnost, ce.recomen, m.nom_masc, h.nom_hora, ce.fecha_cita, d.id_dispon " +
+               "FROM cita_espec ce " +
+               "JOIN disponibilidad d ON ce.id_dispon = d.id_dispon " +
+               "JOIN mascota m ON ce.id_mascota = m.id_mascota " +
+               "JOIN usuario u ON m.id_usu = u.id_usu " +
+               "JOIN servicio s ON ce.id_servicio = s.id_servicio " +
+               "JOIN motivo mo ON ce.id_motivo = mo.id_motivo " +
+               "JOIN hora h ON d.id_hora = h.id_hora " +
+               "WHERE ce.id_estado = 5  " + //Citas completadas
+               "AND d.id_usu = @id_usu ";
+
+            using (SqlCommand cmd = new SqlCommand(sql, Connection.CONN()))
+            {
+                cmd.Parameters.AddWithValue("@id_usu", id_usu);
+                //cmd.Parameters.AddWithValue("@id_mascota", id_mascota);
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        CitaEspecDto dispon = new CitaEspecDto
+                        {
+
+                            id_cita_esp = reader.GetInt32(0),
+                            nom_serv = reader.GetString(1),
+                            nom_usu = reader.GetString(2),
+                            num_ident= reader.GetString(3),
+                            nom_motivo = reader.GetString(4),
+                            diagnost = reader.GetString(5),
+                            recomen = reader.GetString(6),
+                            nom_masc = reader.GetString(7),
+                            nom_hora = reader.GetString(8),
+                            fecha_cita = reader.GetDateTime(9),
+                            id_dispon = reader.GetInt32(10),
+                        };
+                        lista.Add(dispon);
+                    }
+                }
+            }
+
+            return lista;
+        }
+        public List<DisponibDto> ObtenerDisponib(int id_usu)
+        {
+            List<DisponibDto> lista = new List<DisponibDto>();
+            DBContextUtility Connection = new DBContextUtility();
+            Connection.Connect();
+
+            string sql = "SELECT di.nombre, h.nom_hora, CONCAT(u.nom_usu, ' ', u.apel_usu) " +
+               "FROM disponibilidad d " +
+               "JOIN dia di ON d.id_dia = di.id_dia " +
+               "JOIN hora h ON d.id_hora = h.id_hora " +
+               "JOIN usuario u ON d.id_usu = u.id_usu " +
+               "WHERE d.id_estado = 1 AND d.id_usu = @id_usu";
+
+            using (SqlCommand cmd = new SqlCommand(sql, Connection.CONN()))
+            {
+                cmd.Parameters.AddWithValue("@id_usu", id_usu);
+
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        DisponibDto dispon = new DisponibDto
+                        {
+
+                            nom_dia = reader.GetString(0),
+                            nom_hora = reader.GetString(1),                           
+                            nom_usu = reader.GetString(2)
+                            
+                        };
+                        lista.Add(dispon);
+                    }
+                }
+            }
+
+            return lista;
+        }
+
+
         public List<MascotaDto> ListadoMascotas(string num_ident)
 
         {
@@ -216,7 +423,52 @@ namespace Clinipet.Repositories
             }   
          return null; 
         }
-        
+        //Obtener mascotas que han tenido citas con el veterinario
+        public List<MascotaDto> ObtenerMascotas(int id_usu)
+
+        {
+            List<MascotaDto> mascotas = new List<MascotaDto>();
+
+
+            string sql = "SELECT u.nom_usu + ' ' + u.apel_usu, m.nom_masc, " +
+               "t.nom_tipo, r.nom_raza, ce.id_mascota " +
+               "FROM cita_espec ce " +
+               "JOIN disponibilidad d ON ce.id_dispon = d.id_dispon " +
+               "JOIN mascota m ON ce.id_mascota = m.id_mascota " +
+               "JOIN tipo_masc t ON m.id_tipo = t.id_tipo " +
+               "JOIN raza_masc r ON m.id_raza = r.id_raza " +
+               "JOIN usuario u ON m.id_usu = u.id_usu " +
+               "WHERE d.id_usu = @id_usu" ;
+            DBContextUtility Connection = new DBContextUtility();
+            Connection.Connect();
+
+            using (SqlCommand command = new SqlCommand(sql, Connection.CONN()))
+            {
+                command.Parameters.AddWithValue("@id_usu", id_usu);
+                
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        MascotaDto mascota = new MascotaDto
+                        {
+                            
+                            nom_usu = reader.GetString(0),                           
+                            nom_masc = reader.GetString(1),
+                            nom_tipo = reader.GetString(2),
+                            nom_raza = reader.GetString(3),
+                            id_mascota = reader.GetInt32(4),
+                            
+
+                        };
+                        mascotas.Add(mascota);
+                    }
+
+                }
+            }
+            return mascotas;
+        }
+
 
 
 

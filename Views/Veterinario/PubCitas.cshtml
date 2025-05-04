@@ -7,10 +7,10 @@
 <h2 class="titulo">@ViewBag.Title</h2>
 <div class="contenedor">
     <p class="texto">Selecciona para publicar tu disponibilidad:</p>
-    
+
 
     <div class="cont">
-        <form method="post" action="/Veterinario/PublicarDisponibilidad">
+        <form id="guardarForm">
             <label for="id_dia">Fecha:</label><br />
 
             <select id="id_dia" name="id_dia">
@@ -30,12 +30,70 @@
                 }
             </select><br />
             <div class="contBoton">
+                 <button type="button" class="botonForm botonVol" onclick="window.history.back();">Volver</button>
                 <button type="submit" class="botonForm">Publicar</button>
             </div>
 
         </form>
     </div>
-    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+document.getElementById('guardarForm').addEventListener('submit', function (e) {
+    e.preventDefault(); // Evita envío tradicional
+
+    const formData = new FormData(this);
+
+    fetch('@Url.Action("PublicarDisponibilidad", "Veterinario")', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success && data.redirectUrl) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Guardado exitoso',
+                text: data.message || 'La información fue guardada correctamente.',
+                showConfirmButton: false,
+                timer: 3000,
+                customClass: {
+                    popup: 'swal2-popup',
+                    title: 'swal2-title',
+                    content: 'swal2-content'
+                }
+            }).then(() => {
+                window.location.href = data.redirectUrl;
+            });
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: data.message || 'Ocurrió un error al guardar.',
+                confirmButtonText: 'Aceptar',
+                customClass: {
+                    confirmButton: 'boton'
+                   
+                }
+            });
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Error inesperado. Intente de nuevo más tarde.',
+            confirmButtonText: 'Aceptar',
+            customClass: {
+                confirmButton: 'boton'
+               
+            }
+        });
+    });
+});
+</script>
+
 <style>
     body {
         background-image: url('/Imagenes/fondo_pub_citas.png');
@@ -44,11 +102,13 @@
         background-attachment: fixed; /* para que no se mueva al hacer scroll */
         background-position: center;
     }
+
     .texto {
         text-align: center;
         margin-bottom: 15px;
-        font-size:1.1em;
+        font-size: 1.1em;
     }
+
     .titulo {
         margin-top: 50px;
         margin-bottom: 30px;
@@ -63,9 +123,16 @@
         margin: 0 auto;
         border: 4px solid white;
     }
+
     .cont {
-        
-        display:flex;
+        display: flex;
         justify-content: center;
+    }
+    .boton {
+        font-size: 1em;
+        margin-top: 0;
+        color: #2f2f2f;
+        text-shadow: none;
+        background-color: #d9a86c;
     }
 </style>

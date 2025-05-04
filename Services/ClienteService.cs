@@ -1,5 +1,6 @@
 ﻿using Clinipet.Dtos;
 using Clinipet.Repositories;
+using Clinipet.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,35 +29,44 @@ namespace Clinipet.Services
         public CitaEspecDto RegistrarCitaEspec(CitaEspecDto citaModel)
 
         {
-            CitaEspecDto responseUserDto = new CitaEspecDto();
+            CitaEspecDto citaEspecDto = new CitaEspecDto();
             ClienteRepository clienteRepository = new ClienteRepository();
+            FechaUtility fechaUtility = new FechaUtility();
             Console.WriteLine("Estoy en el servicio");
             try
             {
                 citaModel.id_motivo = 1;
                 citaModel.id_servicio = clienteRepository.ObtenerIdServicioPorEspecialidad(citaModel.nom_espec);
-
+                citaModel.id_estado = 3; //Agendada
+                //citaModel.id_estado_dispon = 2;
                 //citaModel.id_servicio = 1;
 
-                if (clienteRepository.RegistrarCitaEspecializada(citaModel) != 0)
+                string nom_dia = citaModel.nom_dia; 
+                DateTime fecha_cita = fechaUtility.ObtenerProximaFecha(nom_dia);
+                citaModel.fecha_cita = fecha_cita;
+
+                clienteRepository.ActualizarEstadoDispon(citaModel);
+               
+                int respuesta= clienteRepository.RegistrarCitaEspecializada(citaModel);
+                if (respuesta != 0)
                 {
-                    responseUserDto.Response = 1;
-                    responseUserDto.Mensaje = "Creación exitosa";
+                    citaEspecDto.Response = 1;
+                    citaEspecDto.Mensaje = "Creación exitosa";
 
                 }
                 else
                 {
-                    responseUserDto.Response = 0;
-                    responseUserDto.Mensaje = "Algo pasó";
+                    citaEspecDto.Response = 0;
+                    citaEspecDto.Mensaje = "Algo pasó";
                 }
 
-                return responseUserDto;
+                return citaEspecDto;
             }
             catch (Exception e)
             {
-                responseUserDto.Response = 0;
-                responseUserDto.Mensaje = e.InnerException?.ToString();
-                return responseUserDto;
+                citaEspecDto.Response = 0;
+                citaEspecDto.Mensaje = e.InnerException?.ToString();
+                return citaEspecDto;
             }
 
         }
@@ -125,6 +135,14 @@ namespace Clinipet.Services
             List<CitaGeneralDto> citasGenerales = clienteRepository.HistorialCitasGenerales(id_usu);
 
             return citasGenerales;
+
+        }
+        public List<CitaEspecDto> HistorialCitasEspec(int id_usu)
+        {
+            ClienteRepository clienteRepository = new ClienteRepository();
+            List<CitaEspecDto> citasEsp = clienteRepository.HistorialCitasEspec(id_usu);
+
+            return citasEsp;
 
         }
     }

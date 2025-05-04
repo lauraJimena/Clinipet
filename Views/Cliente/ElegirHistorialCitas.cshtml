@@ -1,0 +1,55 @@
+﻿
+@{
+    ViewBag.Title = "ElegirHistorialCitas";
+}
+<link rel="stylesheet" href="@Url.Content("~/Estilos/estilos.css")">
+<h2>Elegir Historial</h2>
+
+<div class="contenedor">
+
+
+    <div class="opciones">
+        
+        <div class="opcion opcion2">
+            <img src="~/Imagenes/historial_cita.png" alt="Historial Citas">
+            <a href="@Url.Action("HistorialCitasGenerales", "Cliente")" class="links"><p>Citas Generales</p></a>
+
+        </div>
+        <div class="opcion">
+            <img src="~/Imagenes/mascota_regis.png" alt="Mascotas Registradas">
+            <a href="@Url.Action("HistorialCitasEspec", "Cliente")" class="links"><p>Citas Especializadas</p></a>
+
+        </div>
+    </div>
+</div>
+<div class="cajaBoton">
+
+    <button type="button" class="botonForm botonVol" onclick="window.history.back();">&laquo; Volver</button>
+</div>
+<style>
+    body {
+        background-image: url('/Imagenes/fondo_masc_regis.png');
+        background-size: cover; /* para cubrir toda la pantalla */
+        background-repeat: no-repeat;
+        background-attachment: fixed; /* para que no se mueva al hacer scroll */
+    }
+    .contenedor{
+        margin-bottom:-10px;
+    }
+    h2{
+        margin-bottom:-10px;
+        margin-top:50px;
+    }
+    .botonVol {
+        background-color: #4f7768;
+        border: none;
+        padding: 15px;
+        font-size: 1.19em;
+        box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
+    }
+    .cajaBoton {
+        width: 100%;
+        text-align: center;
+    }
+
+</style>

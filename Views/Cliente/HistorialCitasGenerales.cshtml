@@ -35,9 +35,7 @@
     </tbody>
 </table>
 <div class="cajaBoton">
-    <form method="get" action="/Cliente/IndexCliente">
-        <button class="btnSalir boton">Volver</button>
-    </form>
+    <button type="button" class="botonForm botonVol" onclick="window.history.back();">Volver</button>
 </div>
 <style>
     h2 {
@@ -67,6 +65,9 @@
         padding: 10px 20px;
         font-size: 1.02em;
         text-shadow: 1px 1px 3px white;
+    }
+    .botonVol {
+        background-color: #4f7768;
     }
 
     .cajaImg {

@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Security;
 
 namespace Clinipet.Controllers
 {
@@ -27,7 +28,25 @@ namespace Clinipet.Controllers
         {
             return View();
         }
-        //RegistroCliente lo realizan tanto clientes como asistentes
+        //Cerrar Sesión
+        public ActionResult CerrarSesion()
+        {
+            Session.Clear();
+            FormsAuthentication.SignOut(); 
+            return RedirectToAction("Login", "General");
+        }
+
+        public ActionResult SesionCerrada()
+        {
+            // Evita que la página quede en la caché del navegador
+            Response.Cache.SetCacheability(HttpCacheability.NoCache);
+            Response.Cache.SetExpires(DateTime.UtcNow.AddSeconds(-1));
+            Response.Cache.SetNoStore();
+
+            return View(); // Renderiza la vista "SesionCerrada.cshtml" en lugar de redirigir nuevamente
+        }   
+
+        
         public ActionResult RegistroCliente()
         {
             UserDto user = new UserDto();
@@ -170,14 +189,13 @@ namespace Clinipet.Controllers
                
                     if (mascResponse.Response == 1)
                     {
-                        //return Json(new { success = true, message = "Registro exitoso" });
-                        return RedirectToAction("Index", "Home");                     
+                        return Json(new { success = true, redirectUrl = Url.Action("IndexCliente", "Cliente") });
                     }
                  
                     else
                     {
-                        return RedirectToAction("About", "Home");
-                           
+                        return Json(new { success = false, message = "No se pudo confirmar la cita." });
+
                     }
                 }
                 else
