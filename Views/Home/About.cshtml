@@ -1,8 +1,130 @@
 ﻿@{
-    ViewBag.Title = "About";
+    ViewBag.Title = "Acerca de";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <link rel="stylesheet" href="@Url.Content("~/Estilos/estilos.css")">
-<h2>@ViewBag.Title.</h2>
-<h3>@ViewBag.Message</h3>
+<div class="acerca-contenedor">
+    <h2>Acerca de Nosotros</h2>
 
-<p>Use this area to provide additional information.</p>
+    <div class="fila izquierda naranja">
+        <h2>¿Quiénes Somos?</h2>
+        <p>Somos una clínica veterinaria dedicada al cuidado integral de las mascotas con amor y profesionalismo.</p>
+    </div>
+    <img class="imagen imgIzquierda" src="~/Imagenes/quienes_somos.png" alt="" />
+
+    <div class="fila derecha verde">
+        <h2>Nuestro equipo</h2>
+        <p>Contamos con veterinarios apasionados, preparados y con gran vocación de servicio.</p>
+    </div>
+    <img class="imagen imgDerecha" src="~/Imagenes/nuestro_equipo.png" alt="" />
+
+    <div class="fila izquierda naranja">
+        <h2>Valores</h2>
+        <p class="valores">
+            🐶 Amor por los animales<br>
+            🎓 Profesionalismo<br>
+            💬 Respeto y empatía<br>
+            🩺 Compromiso con la salud<br>
+
+        </p>
+    </div>
+    <img class="imagen imgIzquierda imgValores" src="~/Imagenes/valores.png" alt="" />
+
+    <div class="fila derecha verde">
+        <h2>Misión</h2>
+        <p>Brindar atención veterinaria de calidad, cuidando la salud de cada mascota que atendemos.</p>
+    </div>
+    <img class="imagen imgDerecha" src="~/Imagenes/mision.png" alt="" />
+
+    <div class="fila izquierda naranja">
+        <h2>Visión</h2>
+        <p>Ser reconocidos como una clínica veterinaria líder en atención personalizada y tecnologías al servicio del bienestar animal.</p>
+    </div>
+    <img class="imagen imgIzquierda" src="~/Imagenes/vision.png" alt="" />
+</div>
+
+
+<style>
+    h2 {
+        margin-top: 40px;
+    }
+
+    body {
+        margin: 0;
+        padding: 0;
+        background-image: url('/Imagenes/fondo_dispon_gen.png');
+        background-size: cover; /* para cubrir toda la pantalla */
+        background-repeat: no-repeat;
+        background-attachment: fixed; /* para que no se mueva al hacer scroll */
+        background-position: center;
+    }
+
+    .acerca-contenedor {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 40px 20px;
+    }
+
+    .titulo-principal {
+        text-align: center;
+        font-size: 32px;
+        font-weight: bold;
+        margin-bottom: 50px;
+        color: #222;
+    }
+
+    .fila {
+        width: 60%;
+        padding: 50px;
+        box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.5);      
+        border-radius: 50%;
+        color: #222;
+        
+    }
+
+        .fila h2 {
+            margin-top: 0;
+            font-size: 1.7em;
+            font-weight: bold;
+        }
+        .fila p{
+            text-align:center;
+        }
+        .fila .valores{
+            margin-left:30%;
+            text-align:left;
+        }
+    .izquierda {
+        margin-left: 0;
+        margin-right: auto;
+    }
+
+    .derecha {
+        margin-left: auto;
+        margin-right: 0;
+    }
+
+    .naranja {
+        
+        background-color: #d9a05f;
+    }
+
+    .verde {
+       margin-top:-20px;
+        background-color: #76a58a;
+    }
+    .imagen{
+        width:280px;
+    }
+    .imgIzquierda{
+        margin-top:-250px;
+        margin-left:70%;
+    }
+    .imgDerecha {
+        margin-top: -200px;
+        margin-left: 10%;
+    }
+    .imgValores{
+        margin-top:-380px;
+    }
+</style>

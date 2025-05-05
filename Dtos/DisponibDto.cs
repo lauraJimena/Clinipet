@@ -16,6 +16,7 @@ namespace Clinipet.Dtos
         public string nom_hora { get; set; } = string.Empty;
         public string nom_espec { get; set; } = string.Empty;
         public int id_servicio { get; set; }
+        public int id_estado { get; set; }
         public string nom_serv { get; set; } = string.Empty;
         public string nom_masc { get; set; } = string.Empty;
         

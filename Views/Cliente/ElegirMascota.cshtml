@@ -35,24 +35,17 @@
 
     <div class="cajaBoton">
         <a href="@Url.Content("~/Cliente/ServiciosGenerales")" class="boton">Volver</a>
-        <button type="submit" class="boton botonConfir" onclick="mostrarConfirmacion(event)">Confirmar</button>
+        
+        <button type="button" class="boton botonConfirm" id="confirmButton">Confirmar</button>
 
     </div>
 </form>
-@Html.Partial("_ModalConfirm")
-<script>
-    // Guardar el formulario en una variable global
-    let formulario = document.getElementById("confirmForm");
 
-    function mostrarConfirmacion(event) {
-        event.preventDefault(); // Detiene el envío inmediato del formulario
-        mostrarModal("¿Estás seguro?", "Confirma que deseas agendar la cita.");
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="@Url.Content("~/Scripts/popupConfirm.js")"></script>
 
-        // Guarda el formulario globalmente
-        window.formulario = document.getElementById("confirmForm");
-    }
 
-</script>
+
 <style>
     body {
         background-image: url('/Imagenes/fondo_elegir_masc.png');
@@ -76,7 +69,7 @@
         margin-bottom: 0;
     }
 
-    .mascotaItem {    
+    .mascotaItem {
         width: 60%;
     }
 
@@ -102,19 +95,30 @@
         background-color: #4f7768;
         color: white;
     }
+
     .cajaMascota:hover {
         background-color: #9fb2a9;
     }
 
     .cajaBoton {
-        
         font-size: 1.1em;
         text-align: center;
     }
-
-    .botonConfir {
+    .botonCancel {
+        background-color: #948e8e;
+        border-radius: 20px;
+    }
+    .botonConfirm {
         background-color: #d9a86c;
     }
+    .botonConfir {
+        font-size: 1em;
+        color: #2f2f2f;
+        text-shadow: none;
+        background-color: #d9a86c;
+        border-radius: 20px;
+    }
+    
 </style>
 
 

@@ -1,0 +1,156 @@
+﻿
+@{
+    ViewBag.Title = "HistorialCitas";
+}
+<link rel="stylesheet" href="@Url.Content("~/Estilos/estilos.css")">
+<h2>Agenda de Citas</h2>
+@model  Clinipet.Dtos.HistorialCitasDto
+@if (Model.Citas.Any())
+{
+    <table>
+        <thead>
+            <tr>
+
+                <th>Cliente</th>
+                <th>Mascota</th>
+                <th>Día</th>
+                <th>Hora</th>
+                <th>Fecha</th>
+                <th>Estado</th>
+
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var citaEspec in Model.Citas)
+            {
+                <tr>
+
+                    <td>@citaEspec.nom_usu</td>
+                    <td>@citaEspec.nom_masc</td>
+                    <td>@citaEspec.nom_dia</td>
+                    <td>@citaEspec.nom_hora</td>
+                    <td>@citaEspec.fecha_cita.ToString("yyyy-MM-dd")</td>
+                    <td>@citaEspec.nom_estado</td>
+
+
+                </tr>
+
+            }
+        </tbody>
+    </table>
+
+    <div class="cajaBoton">
+
+        <button type="button" class="botonForm" onclick="toggleDisponibilidad()">Ver disponibilidad</button>
+        <button type="button" class="botonForm botonVol" onclick="window.history.back();">Volver</button>
+    </div>
+    
+}
+else
+{
+    <div class="cajaMensaje">
+        <p class="mensaje">No tienes citas registradas. </p>
+        <div class="cajaBoton2">
+            <button type="button" class="botonForm botonVol" onclick="window.history.back();">Volver</button>
+        </div>
+    </div>
+}
+<div id="disponibilidad" style="display: none;">
+    <h2>Tu Disponibilidad</h2>
+    @if (Model.Disponib.Any())
+    {
+        <table class="tabla2">
+            <thead>
+                <tr>
+                    <th>Día</th>
+                    <th>Hora</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var dispon in Model.Disponib)
+                {
+                    <tr>
+
+                        <td>@dispon.nom_dia</td>
+                        <td>@dispon.nom_hora</td>
+
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <div class="cajaMensaje cajaMensaje2">
+            <p class="mensaje">Seleccciona si deseas publicar nuevas disponibilidades</p>
+            <div class="cajaBoton2">
+                <button type="button" class="botonForm botonVol" onclick="window.history.back();">Volver</button>
+                <button type="button" class="botonForm" onclick="window.location.href='/Veterinario/PubCitas'">Publicar</button>
+            </div>
+        </div>      
+
+    }
+
+    else
+    {
+        <div class="cajaMensaje">
+            <p class="mensaje">No tienes disponibilidad en este momento. <br />¡Publica nuevas disponibilidades!</p>
+            <div class="cajaBoton2">
+                <button type="button" class="botonForm botonVol" onclick="window.history.back();">Volver</button>
+                <button type="button" class="botonForm" onclick="window.location.href='/Veterinario/PubCitas'">Publicar</button>
+            </div>
+        </div>
+
+    }
+</div>
+<script>
+    function toggleDisponibilidad() {
+        var disponibilidad = document.getElementById("disponibilidad");
+        if (disponibilidad.style.display === "none") {
+            disponibilidad.style.display = "block";
+        } else {
+            disponibilidad.style.display = "none";
+        }
+    }
+</script>
+
+<style>
+    body {
+        background-image: url('/Imagenes/fondo_masc_regis.png');
+        background-size: cover; /* para cubrir toda la pantalla */
+        background-repeat: no-repeat;
+        background-attachment: fixed; /* para que no se mueva al hacer scroll */
+    }
+
+    h2 {
+        margin-top: 45px;
+    }
+
+    .cajaBoton {
+        text-align: right;
+        margin-right: 5%;
+    }
+
+    .cajaBoton2 {
+        text-align: center;
+    }
+
+    .botonVol {
+        border: 0.3px solid #545454;
+       
+    }
+
+    .cajaMensaje {
+        margin-top: 15px;
+    }
+
+    .cajaMensaje2 {
+        padding-top: 10px;
+        width: 45%;
+    }
+
+    .tabla2 {
+        width: 40%;
+    }
+    .botonForm {
+        border: 0.3px solid #545454;
+    }
+</style>

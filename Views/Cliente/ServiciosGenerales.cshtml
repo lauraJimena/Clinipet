@@ -6,23 +6,24 @@
 <h2>Servicios Generales</h2>
 @model List<Clinipet.Dtos.ServicioDto>
 
-
-
-
 <form method="post" action="@Url.Action("CitasGenDispon", "Cliente")">
     <div class="contenedor-cards">
         @foreach (var servicioGeneral in Model)
         {
             var idUnico = "servicio_" + servicioGeneral.id_servicio;
-        <div class="card-servicio">
-            <input class="seleccion" type="radio" id="@idUnico" name="id_servicio" value="@servicioGeneral.id_servicio" required/>
-            <label for="@idUnico">@servicioGeneral.nom_serv</label>          
-        </div>
+            <div class="card-servicio">
+                <input class="seleccion" type="radio" id="@idUnico" name="id_servicio" value="@servicioGeneral.id_servicio" required />
+                <label for="@idUnico">@servicioGeneral.nom_serv</label>
+            </div>
         }
     </div>
     <div class="cajaBoton">
-        <button type="submit" class="boton">Siguiente</button>
+        <button type="button" class="botonForm botonVol" onclick="window.location.href='@Url.Action("IndexCliente", "Cliente")'">Volver</button>
+        
+        <button type="submit" class="botonForm">Siguiente</button>
+
     </div>
+    
 </form>
 <style>
     body {
@@ -87,10 +88,13 @@
         margin-top:0px;
         text-align:center;
     }
-    .boton{
-        font-size:1.05em;
+    .botonForm {
+        border: 0.3px solid #545454;
     }
-    
+    .botonVol {
+        background-color: #4f7768;
+      
+    }
 
     h2.titulo-servicio {
         text-align: center;

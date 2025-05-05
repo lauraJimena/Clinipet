@@ -1,0 +1,128 @@
+﻿@{
+    ViewBag.Title = "Servicios";
+}
+<link rel="stylesheet" href="@Url.Content("~/Estilos/estilos.css")">
+<div class="servicios-container">
+    <h2>Servicios</h2>
+
+ 
+    <div class="servicio bloque-superior">
+        <div class="texto">
+            <h3>Generales</h3>
+            <p>Te ofrecemos servicios para el cuidado de tu mascota:</p>
+            <ul>
+                <li>🐾 Vacunación</li>
+                <li>🐾Desparasitación</li>
+                <li>🐾Control de peso</li>
+                <li>🐾Baño y peluquería</li>
+                <li>🐾Esterilización</li>
+            </ul>
+        </div>
+        <div class="imagen-container derecha">
+            <img src="~/Imagenes/general.jpeg" alt="Perro en baño">
+        </div>
+    </div>
+
+   
+    <div class="servicio bloque-inferior">
+
+        <div class="texto">
+            <h3>Especializados</h3>
+            <p>
+                CliniPet cuenta con personal capacitado para ofrecer atención especializada a tus mascotas.
+                Conoce nuestros servicios especializados disponibles y agenda tu cita.
+
+            </p>
+            <div class="cajaBoton">
+                <a class="boton" href="@Url.Content("~/General/Login")">Ver más&raquo;</a>
+            </div>
+        </div>
+        <div class="imagen-container izquierda">
+            <img src="~/Imagenes/especial.jpg" alt="Veterinaria con gato">
+        </div>
+    </div>
+</div>
+
+<style>
+    body {
+        background-image: url('/Imagenes/fondo_masc_regis.png');
+        background-size: cover; /* para cubrir toda la pantalla */
+        background-repeat: no-repeat;
+        background-attachment: fixed; /* para que no se mueva al hacer scroll */
+        
+    }
+    .servicios-container {
+   
+    padding: 30px;
+    border-radius: 12px;
+    
+}
+
+.servicio {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    border-radius: 12px;
+    overflow: hidden;
+    flex-wrap: wrap;
+    box-shadow: 3px 3px 10px gray;
+}
+
+    .bloque-superior {
+        background-color: rgba(217, 168, 108, 0.7);
+    }
+
+    .bloque-inferior {
+        background-color: rgba(115, 162, 141, 0.7);      
+        text-align: justify;
+        flex-direction: row-reverse;
+    }
+
+.texto {
+    padding: 50px;
+    flex: 1;
+    min-width: 280px;
+}
+
+.texto h3 {
+    font-size: 1.7em;
+    text-shadow: 2px 2px 1px white;
+    font-weight:800;
+    text-align:center;
+    margin-bottom: 25px;
+}
+
+    .texto ul {
+        list-style:none;
+        font-size: 1.13em;
+        font-weight: 500;
+        padding-left: 220px;
+        margin: 0;
+    }
+    .texto p {
+        font-weight: 500;
+        font-size: 1.15em;
+    }
+
+.imagen-container {
+    padding: 15px;
+}
+
+.imagen-container img {
+    width: 400px;
+    height: auto;
+    border-radius:30px;
+    object-fit: contain;
+}
+.cajaBoton{
+    margin-top:30px;
+    text-align:center;
+}
+    .boton {
+        background-color: #d9a86c;
+        margin: auto;
+    }
+
+
+</style>

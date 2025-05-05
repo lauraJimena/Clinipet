@@ -122,11 +122,13 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\AsistenteController.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\ClienteController.cs" />
     <Compile Include="Controllers\GeneralController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\VeterinarioController.cs" />
     <Compile Include="Dtos\CitaEspecDto.cs" />
+    <Compile Include="Dtos\HistorialCitasDto.cs" />
     <Compile Include="Dtos\MascotaCitaDto.cs" />
     <Compile Include="Dtos\CitaGeneralDto.cs" />
     <Compile Include="Dtos\ServicioDto.cs" />
@@ -147,6 +149,7 @@
     <Compile Include="Services\GeneralService.cs" />
     <Compile Include="Services\VeterinarioService.cs" />
     <Compile Include="Utilities\DBContextUtility.cs" />
+    <Compile Include="Utilities\FechaUtility.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-theme.css" />
@@ -169,6 +172,7 @@
     <Content Include="Imagenes\contacto.png" />
     <Content Include="Imagenes\descrip_consult.png" />
     <Content Include="Imagenes\encab_citas_gen.png" />
+    <Content Include="Imagenes\especial.jpg" />
     <Content Include="Imagenes\facebook.png" />
     <Content Include="Imagenes\fondo_agenda_espec.png" />
     <Content Include="Imagenes\fondo_buscar_masc.png" />
@@ -188,13 +192,17 @@
     <Content Include="Imagenes\fondo_mascota.png" />
     <Content Include="Imagenes\fondo_pub_citas.png" />
     <Content Include="Imagenes\Eliminar_Usu.jpeg" />
+    <Content Include="Imagenes\general.jpeg" />
     <Content Include="Imagenes\huella.png" />
     <Content Include="Imagenes\icono_gato.png" />
     <Content Include="Imagenes\icono_perro.png" />
     <Content Include="Imagenes\logo_gato.png" />
     <Content Include="Imagenes\logo_perro.png" />
     <Content Include="Imagenes\mascotas_encab2.png" />
+    <Content Include="Imagenes\mision.png" />
+    <Content Include="Imagenes\nuestro_equipo.png" />
     <Content Include="Imagenes\pub_dispon.png" />
+    <Content Include="Imagenes\quienes_somos.png" />
     <Content Include="Imagenes\RegisVete.jpeg" />
     <Content Include="Imagenes\RegistroVeterinario.jpg" />
     <Content Include="Imagenes\GenerarReport.jpeg" />
@@ -213,10 +221,13 @@
     <Content Include="Imagenes\registro.jpg" />
     <Content Include="Imagenes\registro_masc_fondo.jpg" />
     <Content Include="Imagenes\cita_serv_general.png" />
+    <Content Include="Imagenes\valores.png" />
     <Content Include="Imagenes\veterinario_perro.jpg" />
+    <Content Include="Imagenes\vision.png" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
+    <Content Include="Scripts\popup.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
     <Content Include="Scripts\jquery-3.4.1.slim.js" />
@@ -227,6 +238,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\popupConfirm.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -239,7 +251,7 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\Home\Contact.cshtml" />
+    <Content Include="Views\Home\Servicios.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\General\Login.cshtml" />
     <Content Include="Views\General\RegistroCliente.cshtml" />
@@ -267,11 +279,19 @@
     <Content Include="Views\Veterinario\BuscarCliente.cshtml" />
     <Content Include="Views\Veterinario\ElegirMascDescrip.cshtml" />
     <Content Include="Views\Veterinario\DescripConsulta.cshtml" />
+    <Content Include="Views\Veterinario\ElegirCitaEspec.cshtml" />
+    <Content Include="Views\Veterinario\HistorialCitas.cshtml" />
+    <Content Include="Views\Cliente\HistorialCitasEspec.cshtml" />
+    <Content Include="Views\Cliente\ElegirHistorialCitas.cshtml" />
+    <Content Include="Views\Veterinario\HistorialMascota.cshtml" />
+    <Content Include="Views\Veterinario\ObtenerMascotas.cshtml" />
+    <Content Include="Views\General\SesionCerrada.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Repositories\Models\" />
     <Folder Include="Views\Asistente\" />
+    <Folder Include="Views\Base\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

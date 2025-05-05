@@ -4,20 +4,25 @@
 }
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <link rel="stylesheet" href="@Url.Content("~/Estilos/estilos.css")">
-<div class="modal-buscar">
-    <div class="modal-contenido">
+<div class="cajaBuscar">
+    <div class="cajaContenido">
         <h2>Buscar Cliente</h2>
         <form action="@Url.Action("BuscarCliente", "Veterinario")" method="post">
             <label for="documento"><strong>Numero de documento del cliente</strong></label>
-            <div class="campo-busqueda">
+            <div class="campoBusqueda">
                 <span class="icono">&#128269;</span>
                 <input type="text" id="documento" name="num_ident" required pattern="\d*" title="Solo se permiten números" placeholder="Ingresa número" />
             </div>
+
             <button type="submit" class="botonForm">Buscar</button>
+
         </form>
-    </div>
+    </div>   
 </div>
-<!-- Este script SIEMPRE se ejecuta -->
+<div class="cajaBoton">
+    <button type="button" class="botonForm botonVol" onclick="window.location.href='@Url.Action("IndexVeterinario", "Veterinario")'">Volver a Inicio</button>
+</div>
+<!-- Restringir la entrada de caracteres, permitiendo solo numeros -->
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const input = document.getElementById('documento');
@@ -93,15 +98,15 @@
         background-position: center;
     }
 
-    .modal-buscar {
+    .cajaBuscar {
         display: flex;
         justify-content: center;
         align-items: center;
-        margin-top: 130px;
+        margin-top: 120px;
         margin-bottom: 80px;
     }
 
-    .modal-contenido {
+    .cajaContenido {
         background-color: #7ba88f;
         padding: 30px;
         border-radius: 15px;
@@ -111,37 +116,45 @@
         text-align: center;
     }
 
-        .modal-contenido h2 {
+        .cajaContenido h2 {
             margin-bottom: 20px;
         }
 
-        .modal-contenido label {
+        .cajaContenido label {
             display: block;
             margin-bottom: 10px;
         }
 
-    .campo-busqueda {
+    .campoBusqueda {
         position: relative;
         margin-bottom: 20px;
     }
 
-        .campo-busqueda input {
+        .campoBusqueda input {
+            margin-left: 10px;
             width: 100%;
             padding: 8px 8px 8px 30px;
-            border-radius: 15px;
+            border-radius: 20px;
             border: 1px solid #333;
             outline: none;
         }
 
     .icono {
         position: absolute;
-        left: 40px;
+        left: 40px;     
         top: 40%;
         transform: translateY(-50%);
-        font-size: 16px;
+        font-size: 18px;
     }
-
+    
+    .cajaBoton{
+        margin-top:-50px;
+        text-align:center;
+    }
     .botonForm {
+        
+        border: 0.3px solid #545454;
+    
         margin-top: 0px;
     }
 </style>

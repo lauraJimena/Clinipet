@@ -10,7 +10,7 @@
 
         <form id="loginForm">
             <label for="numeroIdentidad">Número de Identidad:</label><br />
-            <input type="text" id="numeroIdentidad" name="num_ident" required pattern="\d+" title="Solo se permiten números" /><br />
+            <input type="text" id="documento" name="num_ident" required pattern="\d+" title="Solo se permiten números" /><br />
 
             <label for="contraseña">Contraseña:</label><br />
             <input type="password" id="contraseña" name="contras_usu" required /><br />
@@ -35,6 +35,17 @@
         </div>
     }
 </div>
+<!-- Restringir la entrada de caracteres, permitiendo solo numeros -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const input = document.getElementById('documento');
+        if (input) {
+            input.addEventListener('input', function () {
+                this.value = this.value.replace(/\D/g, '');
+            });
+        }
+    });
+</script>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
@@ -74,7 +85,7 @@ document.getElementById('loginForm').addEventListener('submit', function (e) {
                     text: data.message,
                     showConfirmButton: false,
                     timer: 3000, // 3 segundos
-                    
+
                     customClass: {
                         popup: 'swal2-popup',
                         title: 'swal2-title',
@@ -98,7 +109,7 @@ document.getElementById('loginForm').addEventListener('submit', function (e) {
                     text: 'swal2-text',
                     content: 'swal2-content',
                     confirmButton: 'boton'
-                  
+
                 }
             });
         }
@@ -182,39 +193,14 @@ document.getElementById('loginForm').addEventListener('submit', function (e) {
         .mensaje p {
             margin: 10px 0 0 0;
         }
-    .swal2-popup {
-        font-size: 1em; /* Tamaño de la fuente */
-        padding: 30px; /* Padding similar al de la vista de registro */
-        border-radius: 20px; /* Bordes redondeados */
-        background-color: white !important; /* Color de fondo similar al del mensaje de error */
-        
-    }
 
-    .swal2-title {
-        font-weight: bold; /* Negrita para el título */     
-        color: #d9a86c;
-    }
-
-    .swal2-content {
-        margin-top: 10px; /* Espaciado entre el título y el contenido */
-      
-    }
-    .swal2-icon{
-        margin-bottom:0px;
-        margin-top:5px;
-    }
-    .swal2-text{
-        
-        margin-bottom:0;
-    }
     .boton {
-        font-size:1em;
+        font-size: 1em;
         margin-top: 0;
         color: #2f2f2f;
         text-shadow: none;
         background-color: #d9a86c;
     }
-   
 </style>
 
 
