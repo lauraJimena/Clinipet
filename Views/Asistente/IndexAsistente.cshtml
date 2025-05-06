@@ -1,0 +1,65 @@
+﻿
+@{
+    ViewBag.Title = "IndexAsistente";
+}
+
+<link rel="stylesheet" href="@Url.Content("~/Estilos/estilos.css")">
+
+<div class="contenedor">
+    <h2 class="tituloIndex">¡Hola, Asistente @Session["Nombre"]! </h2>
+
+    <div class="opciones">
+        <div class="opcion">
+            <img src="~/Imagenes/registrar_usuario.png" alt="Registrar usuario">
+            <a href="@Url.Action("RegistroUsuario", "Asistente")" class="links"><p>Registrar Usuario</p></a>
+
+        </div>
+        <div class="opcion opcion2">
+            <img src="~/Imagenes/registrar_mascota.png" alt="Registrar Mascota">
+            <a href="@Url.Action("RegistroMascota", "Asistente")" class="links"><p>Registrar Mascota</p></a>
+
+        </div>
+        <div class="opcion">
+            <img src="~/Imagenes/consultar_citas.png" class="imgServ" alt="Consultar Citas">
+            <a href="@Url.Action("ConsultarCitas", "Asistente")" class="links"><p>Consultar Citas</p></a>
+
+        </div>
+        <div class="opcion opcion2">
+            <img src="~/Imagenes/agendar_citas.png" alt="Agendar Citas">
+            <a href="@Url.Action("AgendarCitas", "Asistente")" class="links"><p>Agendar Citas</p></a>
+
+        </div>
+    </div>
+</div>
+
+
+<style>
+    body {
+        background-image: url('/Imagenes/fondo_dispon.png');
+        background-size: cover; /* para cubrir toda la pantalla */
+        background-repeat: no-repeat;
+        background-attachment: fixed; /* para que no se mueva al hacer scroll */
+        background-position: center;
+    }
+
+    .tituloIndex {
+        margin-top: 55px;
+    }
+
+    .contenedor {
+        text-align: center;
+        padding: 0px;
+        overflow-x: auto;
+        max-width: 100%; /* Que ocupe todo el ancho */
+    }
+
+
+    .opcion img {
+        width: 100%;
+        border-radius: 25px;
+        margin-bottom: 30px;
+    }
+</style>
+
+
+

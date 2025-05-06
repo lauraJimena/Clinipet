@@ -122,12 +122,16 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\AsistenteController.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\ClienteController.cs" />
     <Compile Include="Controllers\GeneralController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\VeterinarioController.cs" />
     <Compile Include="Dtos\CitaEspecDto.cs" />
+    <Compile Include="Dtos\CitaEspecVistaDto.cs" />
+    <Compile Include="Dtos\HistorialCitasDto.cs" />
     <Compile Include="Dtos\MascotaCitaDto.cs" />
+    <Compile Include="Dtos\CitaGeneralDto.cs" />
     <Compile Include="Dtos\ServicioDto.cs" />
     <Compile Include="Dtos\DisponibDto.cs" />
     <Compile Include="Dtos\MascotaDto.cs" />
@@ -137,14 +141,17 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\AdminRepository.cs" />
+    <Compile Include="Repositories\AsistenteRepository.cs" />
     <Compile Include="Repositories\ClienteRepository.cs" />
     <Compile Include="Repositories\GeneralRepository.cs" />
     <Compile Include="Repositories\VeterinarioRepository.cs" />
+    <Compile Include="Services\AdminService.cs" />
     <Compile Include="Services\AsistenteService.cs" />
     <Compile Include="Services\ClienteService.cs" />
     <Compile Include="Services\GeneralService.cs" />
     <Compile Include="Services\VeterinarioService.cs" />
     <Compile Include="Utilities\DBContextUtility.cs" />
+    <Compile Include="Utilities\FechaUtility.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-theme.css" />
@@ -162,24 +169,42 @@
     <Content Include="Imagenes\banner_2.png" />
     <Content Include="Imagenes\banner_3.png" />
     <Content Include="Imagenes\cita_espec.png" />
+    <Content Include="Imagenes\consultar_agenda.png" />
+    <Content Include="Imagenes\consult_hist.png" />
     <Content Include="Imagenes\contacto.png" />
+    <Content Include="Imagenes\descrip_consult.png" />
+    <Content Include="Imagenes\encab_citas_gen.png" />
+    <Content Include="Imagenes\especial.jpg" />
     <Content Include="Imagenes\facebook.png" />
     <Content Include="Imagenes\fondo_agenda_espec.png" />
+    <Content Include="Imagenes\fondo_buscar_masc.png" />
+    <Content Include="Imagenes\fondo_caja_serv.png" />
+    <Content Include="Imagenes\fondo_cambio_contras.jpg" />
     <Content Include="Imagenes\fondo_dispon.png" />
+    <Content Include="Imagenes\fondo_dispon_gen.png" />
+    <Content Include="Imagenes\fondo_elegir_masc.png" />
+    <Content Include="Imagenes\fondo_elimin_usu.jpg" />
+    <Content Include="Imagenes\fondo_generales.png" />
     <Content Include="Imagenes\fondo_index.png" />
     <Content Include="Imagenes\fondo_index2.png" />
     <Content Include="Imagenes\fondo_login.png" />
-    <Content Include="Imagenes\fondo_masc.png" />
+    <Content Include="Imagenes\fondo_mascotas.png" />
+    <Content Include="Imagenes\fondo_servicios.png" />
+    <Content Include="Imagenes\fondo_masc_regis.png" />
     <Content Include="Imagenes\fondo_mascota.png" />
     <Content Include="Imagenes\fondo_pub_citas.png" />
     <Content Include="Imagenes\Eliminar_Usu.jpeg" />
+    <Content Include="Imagenes\general.jpeg" />
     <Content Include="Imagenes\huella.png" />
     <Content Include="Imagenes\icono_gato.png" />
     <Content Include="Imagenes\icono_perro.png" />
     <Content Include="Imagenes\logo_gato.png" />
     <Content Include="Imagenes\logo_perro.png" />
-    <Content Include="Imagenes\mascotas_encab.png" />
     <Content Include="Imagenes\mascotas_encab2.png" />
+    <Content Include="Imagenes\mision.png" />
+    <Content Include="Imagenes\nuestro_equipo.png" />
+    <Content Include="Imagenes\pub_dispon.png" />
+    <Content Include="Imagenes\quienes_somos.png" />
     <Content Include="Imagenes\RegisVete.jpeg" />
     <Content Include="Imagenes\RegistroVeterinario.jpg" />
     <Content Include="Imagenes\GenerarReport.jpeg" />
@@ -198,9 +223,13 @@
     <Content Include="Imagenes\registro.jpg" />
     <Content Include="Imagenes\registro_masc_fondo.jpg" />
     <Content Include="Imagenes\cita_serv_general.png" />
+    <Content Include="Imagenes\valores.png" />
+    <Content Include="Imagenes\veterinario_perro.jpg" />
+    <Content Include="Imagenes\vision.png" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
+    <Content Include="Scripts\popup.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
     <Content Include="Scripts\jquery-3.4.1.slim.js" />
@@ -211,6 +240,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\popupConfirm.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -223,7 +253,7 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\Home\Contact.cshtml" />
+    <Content Include="Views\Home\Servicios.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\General\Login.cshtml" />
     <Content Include="Views\General\RegistroCliente.cshtml" />
@@ -239,11 +269,35 @@
     <Content Include="Views\Shared\_ModalConfirm.cshtml" />
     <Content Include="Views\Cliente\ListadoMascotas.cshtml" />
     <Content Include="Views\Cliente\MascotasRegistradas.cshtml" />
+    <Content Include="Views\Admin\EliminarVeterinario.cshtml" />
+    <Content Include="Views\Admin\EliminarAsistente.cshtml" />
+    <Content Include="Views\Admin\EliminarUsuarios.cshtml" />
+    <Content Include="Views\Cliente\ServiciosGenerales.cshtml" />
+    <Content Include="Views\Cliente\CitasGenDispon.cshtml" />
+    <Content Include="Views\Cliente\ElegirMascota.cshtml" />
+    <Content Include="Views\Cliente\HistorialCitasGenerales.cshtml" />
+    <Content Include="Views\Veterinario\IndexVeterinario.cshtml" />
+    <Content Include="Views\General\CambiarContraseña.cshtml" />
+    <Content Include="Views\Veterinario\BuscarCliente.cshtml" />
+    <Content Include="Views\Veterinario\ElegirMascDescrip.cshtml" />
+    <Content Include="Views\Veterinario\DescripConsulta.cshtml" />
+    <Content Include="Views\Veterinario\ElegirCitaEspec.cshtml" />
+    <Content Include="Views\Veterinario\HistorialCitas.cshtml" />
+    <Content Include="Views\Cliente\HistorialCitasEspec.cshtml" />
+    <Content Include="Views\Cliente\ElegirHistorialCitas.cshtml" />
+    <Content Include="Views\Veterinario\HistorialMascota.cshtml" />
+    <Content Include="Views\Veterinario\ObtenerMascotas.cshtml" />
+    <Content Include="Views\General\SesionCerrada.cshtml" />
+    <Content Include="Views\Asistente\IndexAsistente.cshtml" />
+    <Content Include="Views\Asistente\RegistroUsuario.cshtml" />
+    <Content Include="Views\Asistente\RegistroMascota.cshtml" />
+    <Content Include="Views\Asistente\ConsultarCitas.cshtml" />
+    <Content Include="Views\Asistente\AgendarCitas.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Repositories\Models\" />
-    <Folder Include="Views\Asistente\" />
+    <Folder Include="Views\Base\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

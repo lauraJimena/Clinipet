@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Security;
 
 namespace Clinipet.Controllers
 {
@@ -16,12 +17,36 @@ namespace Clinipet.Controllers
         {
             return View();
         }
+        public ActionResult CerrarSesionYVolver()
+        {
+            Session.Clear(); // Elimina todas las variables de sesión
+            return RedirectToAction("Index", "Home"); // Redirige al inicio
+        }
+
         //Login igual para todos los roles
         public ActionResult Login()
         {
             return View();
         }
-        //RegistroCliente lo realizan tanto clientes como asistentes
+        //Cerrar Sesión
+        public ActionResult CerrarSesion()
+        {
+            Session.Clear();
+            FormsAuthentication.SignOut(); 
+            return RedirectToAction("Login", "General");
+        }
+
+        public ActionResult SesionCerrada()
+        {
+            // Evita que la página quede en la caché del navegador
+            Response.Cache.SetCacheability(HttpCacheability.NoCache);
+            Response.Cache.SetExpires(DateTime.UtcNow.AddSeconds(-1));
+            Response.Cache.SetNoStore();
+
+            return View(); // Renderiza la vista "SesionCerrada.cshtml" en lugar de redirigir nuevamente
+        }   
+
+        
         public ActionResult RegistroCliente()
         {
             UserDto user = new UserDto();
@@ -29,85 +54,81 @@ namespace Clinipet.Controllers
         }
         public ActionResult RegistroMascota()
         {
-            GeneralService generalService = new GeneralService();
-            
-            /*List<MascotaDto> razas;     
-            razas = generalService.obtenerRazas();
-
-
-            //Convertir la lista raza en SelectList para pasar a la vista
-            ViewBag.Razas = razas.Select(r => new SelectListItem
-              {
-                  Value = r.id_raza.ToString(),
-                  Text = r.nom_raza,
-                 Group = new SelectListGroup { Name = r.nom_tipo } // Group para almacenar el tipo
-             }).ToList();*/
-
-            //List<MascotaDto> tipos;
-            //tipos = generalService.obtenerTipos();
-
-            // Convertir la lista tipo en SelectList para pasar a la vista
-            /*ViewBag.Tipos = tipos.Select(t => new SelectListItem
+            if (Session["UsuLoguedo"] != null)
             {
-                Value = t.id_tipo.ToString(),
-                Text = t.nom_tipo
-            }).ToList();*/
+                GeneralService generalService = new GeneralService();
+                ViewBag.Razas = generalService.ObtenerRazasSelect();
+                ViewBag.Tipos = generalService.ObtenerTiposSelect();
 
-            ViewBag.Razas = generalService.ObtenerRazasSelect();
-            ViewBag.Tipos = generalService.ObtenerTiposSelect();
-
-            return View();
-        }
-       
-
-        [HttpPost]
-        public ActionResult Login(UserDto nuevoUsu)
-        {
-            GeneralService userService = new GeneralService();
-            UserDto userResponse = userService.Login(nuevoUsu);
-            System.Diagnostics.Debug.WriteLine("Llegué al método Login");
-            if (userResponse.Response == 1)
-            {
-                // Almacena los datos en variables de sesión
-                Session["Id"] = userResponse.id_usu;
-                Session["Nombre"] = userResponse.nom_usu;
-                Session["Apellido"] = userResponse.apel_usu;
-                Session["Num_docu"] = userResponse.num_ident;
-                Session["Rol"] = userResponse.id_rol;
-                //Session["Especialid"] = userResponse.id_espec;
-                System.Diagnostics.Debug.WriteLine(Session["Rol"]);
-                
-
-                if (userResponse.id_rol == 1)//Administrador
-                {
-                    return RedirectToAction("IndexCliente", "Cliente");
-                }               
-                if (userResponse.id_rol == 2)//Asistente
-                {
-                    return RedirectToAction("IndexCliente", "Cliente");
-                }
-                if (userResponse.id_rol == 3)//Cliente
-                {
-                    return RedirectToAction("IndexCliente", "Cliente");
-                }
-                if (userResponse.id_rol == 4)//Veterinario
-                {
-                    return RedirectToAction("Contact", "Home");
-                }
-
-
-                {
-                    return RedirectToAction("RegistroCliente");
-                }
-
+                return View();
             }
             else
             {
-                // Muestra el mensaje de error si las credenciales son incorrectas
-                ModelState.AddModelError("", userResponse.Mensaje);
-            }
 
-            return View();
+                return RedirectToAction("Login", "General");
+            }           
+
+        }
+
+        //POST: General
+        [HttpPost]
+        public ActionResult Login(UserDto nuevoUsu)
+        {
+            try
+            {
+                System.Diagnostics.Debug.WriteLine("Datos recibidos - num_ident: " + nuevoUsu.num_ident + " contras_usu: " + nuevoUsu.contras_usu);
+                GeneralService userService = new GeneralService();
+                UserDto userResponse = userService.Login(nuevoUsu);
+                System.Diagnostics.Debug.WriteLine("Llegué al método Login");
+
+                if (userResponse != null && userResponse.id_usu != 0)
+                {
+                    if (userResponse.Response == 1)
+                    {
+                        // Almacena los datos en variables de sesión
+                        Session["UsuLoguedo"] = userResponse;
+                        Session["Id"] = userResponse.id_usu;
+                        Session["Nombre"] = userResponse.nom_usu;
+                        Session["Apellido"] = userResponse.apel_usu;
+                        Session["Num_docu"] = userResponse.num_ident;
+                        Session["Rol"] = userResponse.id_rol;
+                        Session["Contras"] = userResponse.contras_usu;
+
+                        // Si necesita cambiar la contraseña, redirige a la vista de cambio de contraseña
+                        if (userResponse.cambio_contras == true)
+                        {
+                            return Json(new { success = true, changePassword = true, message = "Debes actualizar tu contraseña." });
+                        }
+                        else
+                        {
+                            // Si no necesita cambiar la contraseña, redirige al índice de cada usuario
+                            if (userResponse.id_rol == 1) //Administrador
+                            {
+                                return Json(new { success = true, redirectUrl = Url.Action("IndexAdmin", "Admin"), message = "Inicio de sesión exitoso" });
+                            }
+                            if (userResponse.id_rol == 2) //Asistente
+                            {
+                                return Json(new { success = true, redirectUrl = Url.Action("IndexAsistente", "Asistente"), message = "Inicio de sesión exitoso" });
+                            }
+                            if (userResponse.id_rol == 3) //Cliente
+                            {
+                                return Json(new { success = true, redirectUrl = Url.Action("IndexCliente", "Cliente"), message = "Inicio de sesión exitoso" });
+                            }
+                            if (userResponse.id_rol == 4) //Veterinario
+                            {
+                                return Json(new { success = true, redirectUrl = Url.Action("IndexVeterinario", "Veterinario"), message = "Inicio de sesión exitoso" });
+                            }
+                        }
+                    }
+                }
+                // Si las credenciales son incorrectas, redirige de nuevo al login con un mensaje de error
+                return Json(new { success = false, message = "Credenciales incorrectas." });
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("Error en Login: " + ex.ToString());
+                return Json(new { success = false, message = "Ocurrió un error en el servidor. Intenta de nuevo." });
+            }
         }
 
 
@@ -125,7 +146,6 @@ namespace Clinipet.Controllers
                     return Json(new { success = true, message = userResponse.Mensaje }); // Si la creación fue exitosa.
 
                 }
-
                 else
                 {
                     if (userResponse.Response == -1)
@@ -143,9 +163,7 @@ namespace Clinipet.Controllers
                         else
                         {
                             return RedirectToAction("About", "Home"); // Si el registro falla
-                        }
-                        
-                       
+                        }                                            
                     }
 
                 }
@@ -161,26 +179,31 @@ namespace Clinipet.Controllers
         public ActionResult RegistroMascota(MascotaDto nuevaMasc)
         {
             try
+            {
+                if (Session["UsuLoguedo"] != null)
                 {
-                    System.Diagnostics.Debug.WriteLine(Session["Id"]);
-                    nuevaMasc.id_usu = Convert.ToInt32(Session["Id"]); // Asigna el ID del usuario logueado
-                    GeneralService mascService = new GeneralService(); // instancia el UserService.
-                    MascotaDto mascResponse = mascService.RegistrarMascota(nuevaMasc); // Llama al método de creación de usuario.
+                     System.Diagnostics.Debug.WriteLine(Session["Id"]);
+                     nuevaMasc.id_usu = Convert.ToInt32(Session["Id"]); // Asigna el ID del usuario logueado
+                     GeneralService mascService = new GeneralService(); // instancia el UserService.
+                     MascotaDto mascResponse = mascService.RegistrarMascota(nuevaMasc); // Llama al método de creación de usuario.
                
-                if (mascResponse.Response == 1)
+                    if (mascResponse.Response == 1)
                     {
-                        //return Json(new { success = true, message = "Registro exitoso" });
-                    return RedirectToAction("Index", "Home");
-                    //return RedirectToAction("Index", "Home");// Redirige a la vista principal si la creación fue exitosa.
-                }
+                        return Json(new { success = true, redirectUrl = Url.Action("IndexCliente", "Cliente") });
+                    }
                  
+                    else
+                    {
+                        return Json(new { success = false, message = "No se pudo confirmar la cita." });
+
+                    }
+                }
                 else
                 {
-                    return RedirectToAction("About", "Home");
-                           
+                    return RedirectToAction("Login", "General");
                 }
-   
-                }
+            }
+            
             catch (Exception ex)
             {
                     string mensaje = ex.Message;
@@ -188,5 +211,61 @@ namespace Clinipet.Controllers
             }
 
         }
+
+        [HttpGet]
+        public ActionResult CambiarContraseña()
+        {
+            // Validar que esté iniciada la sesión
+            if (Session["Num_docu"] == null || Session["Rol"] == null)
+            {
+                // Si no hay sesión, redirigir a Login
+                return RedirectToAction("Login", "General");
+            }
+
+            return View();
+        }
+
+
+        [HttpPost]
+        public ActionResult CambiarContraseña(UserDto user)
+        {
+            try
+            {
+                // Instanciamos el servicio.
+                GeneralService contrasService = new GeneralService();
+
+                // Llamamos al método CambiarContraseña, pasando la contraseña actual y la nueva contraseña.
+                bool cambioExitoso = contrasService.CambiarContraseña(user.num_ident, user.contras_usu, user.contras_nueva);
+
+                if (cambioExitoso)
+                {
+                    if (user.id_rol == 2) // Asistente
+                    {
+                        ViewBag.MensajeExito = "Contraseña actualizada correctamente.";
+                        return RedirectToAction("IndexAsistente", "Asistente");
+                    }
+                    else if (user.id_rol == 4) // Veterinario
+                    {
+                        ViewBag.MensajeExito = "Contraseña actualizada correctamente.";
+                        return RedirectToAction("IndexVeterinario", "Veterinario");
+                    }
+
+                    return RedirectToAction("Login", "General");
+                }
+                else
+                {
+                    // Si el cambio de contraseña falló, mostramos un error.
+                    ViewBag.Error = "Hubo un error al cambiar la contraseña.";
+                    return View();
+                }
+            }
+            catch (Exception ex)
+            {
+                // Si hay una excepción, la capturamos y mostramos un mensaje de error.
+                ViewBag.Error = "Error: " + ex.Message;
+                return View();
+            }
+        }
     }
+
 }

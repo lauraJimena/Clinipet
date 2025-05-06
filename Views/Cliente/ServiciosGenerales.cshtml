@@ -1,0 +1,112 @@
+﻿
+@{
+    ViewBag.Title = "ServiciosGenerales";
+}
+<link rel="stylesheet" href="@Url.Content("~/Estilos/estilos.css")">
+<h2>Servicios Generales</h2>
+@model List<Clinipet.Dtos.ServicioDto>
+
+<form method="post" action="@Url.Action("CitasGenDispon", "Cliente")">
+    <div class="contenedor-cards">
+        @foreach (var servicioGeneral in Model)
+        {
+            var idUnico = "servicio_" + servicioGeneral.id_servicio;
+            <div class="card-servicio">
+                <input class="seleccion" type="radio" id="@idUnico" name="id_servicio" value="@servicioGeneral.id_servicio" required />
+                <label for="@idUnico">@servicioGeneral.nom_serv</label>
+            </div>
+        }
+    </div>
+    <div class="cajaBoton">
+        <button type="button" class="botonForm botonVol" onclick="window.location.href='@Url.Action("IndexCliente", "Cliente")'">Volver</button>
+        
+        <button type="submit" class="botonForm">Siguiente</button>
+
+    </div>
+    
+</form>
+<style>
+    body {
+        background-image: url('/Imagenes/fondo_servicios.png');
+        background-size: cover; /* para cubrir toda la pantalla */
+        background-repeat: no-repeat;
+        background-attachment: fixed; /* para que no se mueva al hacer scroll */
+        background-position: center;
+    }
+    h2 {
+        margin-top: 50px;
+        margin-bottom: 15px;
+    }
+
+    .contenedor-cards {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        margin: auto;
+        max-width: 510px;
+        background-image: url('/Imagenes/fondo_caja_serv.png');
+        background-size: cover; /* para cubrir toda la pantalla */             
+        padding: 30px;
+        border-radius: 20px;
+        border: 5px solid white;
+        box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .card-servicio {
+        background-color: rgba(230, 230, 230, 0.5);
+        border: 2px solid #dcdcdc;
+        border-radius: 10px;
+        padding: 20px;
+        width: 320px;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        transition: transform 0.2s ease;
+    }
+        .card-servicio:hover {
+            transform: translateY(-3px);
+            width: 340px;
+        }
+
+        
+    .card-servicio label{
+        font-size: 18px;
+        font-weight: 500;
+        color: #333;
+        cursor: pointer;
+        flex: 1;       
+    }
+    input[type="radio"] {
+        cursor: pointer;
+        transform: scale(1.5); /* Aumenta el tamaño.*/
+        margin-right: 10px;
+    }
+
+    .cajaBoton{
+        margin-top:0px;
+        text-align:center;
+    }
+    .botonForm {
+        border: 0.3px solid #545454;
+    }
+    .botonVol {
+        background-color: #4f7768;
+      
+    }
+
+    h2.titulo-servicio {
+        text-align: center;
+        margin-top: 20px;
+        font-size: 26px;
+        color: #333;
+    }
+    .seleccion {
+        margin-bottom: 0;
+        width: 50px;
+              
+    }
+</style>
+
+

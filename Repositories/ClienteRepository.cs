@@ -145,8 +145,8 @@ namespace Clinipet.Repositories
             Connection.Connect();
 
             string SQL = "INSERT INTO [clinipet].[dbo].[cita_espec] " +
-                         "(id_servicio, id_motivo, diagnost, id_mascota, id_dispon, id_estado, recomen) " +
-                         "VALUES (@id_servicio, @id_motivo, @diagnost, @id_mascota, @id_dispon, @id_estado, @recomen)";
+                         "(id_servicio, id_motivo, diagnost, id_mascota, id_dispon, id_estado, recomen, fecha_cita) " +
+                         "VALUES (@id_servicio, @id_motivo, @diagnost, @id_mascota, @id_dispon, @id_estado, @recomen, @fecha_cita)";
 
             using (SqlCommand command = new SqlCommand(SQL, Connection.CONN()))
             {
@@ -157,6 +157,32 @@ namespace Clinipet.Repositories
                 command.Parameters.AddWithValue("@id_dispon", cita.id_dispon);
                 command.Parameters.AddWithValue("@id_estado", cita.id_estado);
                 command.Parameters.AddWithValue("@recomen", cita.recomen);
+                command.Parameters.AddWithValue("@fecha_cita", cita.fecha_cita);
+
+
+                comando = command.ExecuteNonQuery();
+            }
+
+            Connection.Disconnect();
+            return comando;
+        }
+        public int RegistrarCitaGeneral(CitaGeneralDto citaGeneral)
+        {
+            int comando = 0;
+            DBContextUtility Connection = new DBContextUtility();
+            Connection.Connect();
+
+            string SQL = "INSERT INTO [clinipet].[dbo].[cita_general] " +
+                         "(id_dispon, id_estado, id_mascota, id_servicio) " +
+                         "VALUES (@id_dispon, @id_estado, @id_mascota, @id_servicio)";
+
+            using (SqlCommand command = new SqlCommand(SQL, Connection.CONN()))
+            {
+                
+                command.Parameters.AddWithValue("@id_dispon", citaGeneral.id_dispon);                           
+                command.Parameters.AddWithValue("@id_estado", citaGeneral.id_estado);
+                command.Parameters.AddWithValue("@id_mascota", citaGeneral.id_mascota);
+                command.Parameters.AddWithValue("@id_servicio", citaGeneral.id_servicio);
 
                 comando = command.ExecuteNonQuery();
             }
@@ -188,6 +214,199 @@ namespace Clinipet.Repositories
             return idServicio;
         }
         
+        public List<ServicioDto> ListadoServiciosGenerales()
+
+        {
+            List<ServicioDto> citasGenerales = new List<ServicioDto>();
+            DBContextUtility Connection = new DBContextUtility();
+            Connection.Connect();
+
+            string sql = "SELECT " +
+             "id_servicio, " +
+             "nombre " +            
+             "FROM servicio " +            
+             "WHERE tipo_servicio = 0";
+
+            using (SqlCommand cmd = new SqlCommand(sql, Connection.CONN()))
+            {
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        ServicioDto dispon = new ServicioDto
+                        {
+
+                            id_servicio = reader.GetInt32(0),
+                            nom_serv = reader.GetString(1),
+                            
+                        };
+                        citasGenerales.Add(dispon);
+                    }
+                }
+            }
+
+            return citasGenerales;
+
+        }
+        public int ActualizarEstadoDispon(CitaEspecDto citaEspec)
+        {
+
+            int comando = 0;
+            DBContextUtility Connection = new DBContextUtility();
+            Connection.Connect();
+
+            string SQL = "UPDATE disponibilidad SET " +
+                "id_estado = 2 " +
+                "WHERE id_dispon = @id_dispon";
+
+            using (SqlCommand cm = new SqlCommand(SQL, Connection.CONN()))
+            {
+
+                cm.Parameters.AddWithValue("@id_dispon", citaEspec.id_dispon);
+                
+
+
+                comando = cm.ExecuteNonQuery();
+            }
+
+            return comando;
+
+        }
+        public List<DisponibDto> ObtenerCitasGenDispon(int id_servicio)
+        {
+            List<DisponibDto> citasGenerales = new List<DisponibDto>();
+            DBContextUtility Connection = new DBContextUtility();
+            Connection.Connect();
+
+            string sql = "SELECT " +
+             "u.id_usu idUsuario, " +
+             "s.nombre nombreServicio, " +
+             "di.nombre Dia, " +
+             "h.nom_hora Hora, " +
+             "d.id_dispon idDispon, " +
+             "s.id_servicio IdServicio " +
+             "FROM serv_dispon sd " +
+             "JOIN disponibilidad d ON sd.id_dispon = d.id_dispon " +
+             "JOIN usuario u ON d.id_usu = u.id_usu " +
+             "JOIN servicio s ON sd.id_servicio = s.id_servicio " +
+             "JOIN dia di ON d.id_dia = di.id_dia " +
+             "JOIN hora h ON d.id_hora = h.id_hora " +
+             "WHERE s.id_estado = 1 AND u.id_rol = 2 AND sd.id_servicio = @id_servicio";//En donde sea el asistente quien público la dispon
+
+            using (SqlCommand command = new SqlCommand(sql, Connection.CONN()))
+            {
+                command.Parameters.AddWithValue("@id_servicio", id_servicio);
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        DisponibDto dispon = new DisponibDto
+                        {
+                            id_usu = reader.GetInt32(0),
+                            nom_serv = reader.GetString(1),                          
+                            nom_dia = reader.GetString(2),
+                            nom_hora = reader.GetString(3),
+                            id_dispon = reader.GetInt32(4),
+                            id_servicio = reader.GetInt32(5)
+                        };
+                        citasGenerales.Add(dispon);
+                    }
+                }
+            }
+
+            return citasGenerales;
+        }
+        public List<CitaGeneralDto> HistorialCitasGenerales(int id_usu)
+        {
+            List<CitaGeneralDto> citasGenerales = new List<CitaGeneralDto>();
+            DBContextUtility Connection = new DBContextUtility();
+            Connection.Connect();
+
+            string sql = "SELECT " +          
+             "cg.id_cita_gen, " +
+             "di.nombre, " +
+             "h.nom_hora, " +
+             "e.nom_estado, " +
+             "m.nom_masc, " +
+             "s.nombre " +
+             "FROM cita_general cg " +
+             "JOIN disponibilidad d ON cg.id_dispon = d.id_dispon " +
+             "JOIN mascota m ON cg.id_mascota = m.id_mascota " +
+             "JOIN servicio s ON cg.id_servicio = s.id_servicio " +
+             "JOIN dia di ON d.id_dia = di.id_dia " +
+             "JOIN hora h ON d.id_hora = h.id_hora " +
+             "JOIN estado e ON cg.id_estado = e.id_estado " +
+             "WHERE m.id_usu = @id_usu"; //Las citas generales del usuario 
+
+            using (SqlCommand command = new SqlCommand(sql, Connection.CONN()))
+            {
+                command.Parameters.AddWithValue("@id_usu", id_usu);
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        CitaGeneralDto citaGeneral = new CitaGeneralDto
+                        {
+                            id_cita_gen = reader.GetInt32(0),                           
+                            nom_dia = reader.GetString(1),
+                            nom_hora = reader.GetString(2),
+                            nom_estado = reader.GetString(3),
+                            nom_masc = reader.GetString(4),
+                            nom_serv= reader.GetString(5),
+                            
+                        };
+                        citasGenerales.Add(citaGeneral);
+                    }
+                }
+            }
+
+            return citasGenerales;
+        }
+        public List<CitaEspecDto> HistorialCitasEspec(int id_usu)
+        {
+            List<CitaEspecDto> citasGenerales = new List<CitaEspecDto>();
+            DBContextUtility Connection = new DBContextUtility();
+            Connection.Connect();
+
+            string sql = "SELECT ce.id_cita_esp, mo.nombre, s.nombre, ce.diagnost, di.nombre, " +
+               "h.nom_hora, e.nom_estado, m.nom_masc, ce.recomen " +
+               "FROM cita_espec ce " +
+               "JOIN disponibilidad d ON ce.id_dispon = d.id_dispon " +
+               "JOIN mascota m ON ce.id_mascota = m.id_mascota " +
+               "JOIN servicio s ON ce.id_servicio = s.id_servicio " +
+               "JOIN dia di ON d.id_dia = di.id_dia " +
+               "JOIN hora h ON d.id_hora = h.id_hora " +
+               "JOIN estado e ON ce.id_estado = e.id_estado " +
+               "JOIN motivo mo ON ce.id_motivo = mo.id_motivo " +
+               "WHERE m.id_usu = @id_usu;"; //Las citas generales del usuario 
+
+            using (SqlCommand command = new SqlCommand(sql, Connection.CONN()))
+            {
+                command.Parameters.AddWithValue("@id_usu", id_usu);
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        CitaEspecDto citaGeneral = new CitaEspecDto
+                        {
+                            id_cita_esp = reader.GetInt32(0),
+                            nom_motivo = reader.GetString(1),
+                            nom_serv = reader.GetString(2),
+                            diagnost = reader.GetString(3),
+                            nom_dia = reader.GetString(4),
+                            nom_hora = reader.GetString(5),
+                            nom_estado = reader.GetString(6),
+                            nom_masc = reader.GetString(7),
+                            recomen = reader.GetString(8),
+
+                        };
+                        citasGenerales.Add(citaGeneral);
+                    }
+                }
+            }
+
+            return citasGenerales;
+        }
 
 
 

@@ -1,60 +1,206 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "Iniciar Sesión";
 }
+
 <link rel="stylesheet" href="@Url.Content("~/Estilos/estilos.css")">
 
-    <div class="contenedor">
-        <div class="cont">
-            <h2 class="titulo">Iniciar Sesión</h2>
-            <form action="@Url.Action("Login", "General")" method="post">
-                <label for="numeroIdentidad">Número de Identidad:</label><br />
-                <input type="text" id="numeroIdentidad" name="num_ident" required pattern="\d+" title="Solo se permiten números"/><br />
+<div class="contenedor">
+    <div class="cont">
+        <h2 class="titulo">Iniciar Sesión</h2>
 
-                <label for="contraseña">Contraseña:</label><br />
-                <input type="password" id="contraseña" name="contras_usu" required /><br />
-                <div class="contBoton">
+        <form id="loginForm">
+            <label for="numeroIdentidad">Número de Identidad:</label><br />
+            <input type="text" id="documento" name="num_ident" required pattern="\d+" title="Solo se permiten números" /><br />
+
+            <label for="contraseña">Contraseña:</label><br />
+            <input type="password" id="contraseña" name="contras_usu" required /><br />
+            <div class="contBoton">
                 <button type="submit" class="botonForm">Ingresar</button>
-                </div>
-            </form>
-        </div>
-        <img class="imagenFondo" src="~/Imagenes/login.jpg" alt="">
+            </div>
+        </form>
+
+        <!-- Aquí se mostrarán los errores -->
+        <div id="errorMessage" style="color: red; text-align: center; margin-top: 10px;"></div>
+
     </div>
+
+    <img class="imagenFondo" src="~/Imagenes/login.jpg" alt="">
+
+    @* El mensaje de cambio de contraseña se muestra solo si TempData lo trae *@
+    @if (TempData["CambioContrasena"] != null && (bool)TempData["CambioContrasena"] == true)
+    {
+        <div id="mensajeCambioContrasena" class="mensaje">
+            <h2>Es necesario actualizar tu contraseña</h2>
+            <p>Serás redirigido en unos segundos...</p>
+        </div>
+    }
+</div>
+<!-- Restringir la entrada de caracteres, permitiendo solo numeros -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const input = document.getElementById('documento');
+        if (input) {
+            input.addEventListener('input', function () {
+                this.value = this.value.replace(/\D/g, '');
+            });
+        }
+    });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<!-- Script para manejar el envío del formulario con fetch -->
+<script>
+document.getElementById('loginForm').addEventListener('submit', function (e) {
+    e.preventDefault(); // Evita envío tradicional
+
+    const formData = new FormData(this);
+
+    fetch('@Url.Action("Login", "General")', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            if (data.changePassword) {
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Actualizar contraseña',
+                    text: data.message,
+                    confirmButtonText: 'Continuar',
+                    customClass: {
+                        popup: 'swal2-popup',
+                        title: 'swal2-title',
+                        content: 'swal2-content',
+                        confirmButton: 'boton'
+                    }
+                }).then(() => {
+                    window.location.href = '@Url.Action("CambiarContraseña", "General")';
+                });
+            } else if (data.redirectUrl) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Inicio de sesión exitoso',
+                    text: data.message,
+                    showConfirmButton: false,
+                    timer: 3000, // 3 segundos
+
+                    customClass: {
+                        popup: 'swal2-popup',
+                        title: 'swal2-title',
+                        content: 'swal2-content',
+                        confirmButton: 'boton'
+                    }
+                }).then(() => {
+                    window.location.href = data.redirectUrl;
+                });
+            }
+        } else {
+            // Mostrar error con SweetAlert
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: data.message,
+                confirmButtonText: 'Intentar de nuevo',
+                customClass: {
+                    popup: 'swal2-popup',
+                    title: 'swal2-title',
+                    text: 'swal2-text',
+                    content: 'swal2-content',
+                    confirmButton: 'boton'
+
+                }
+            });
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Ocurrió un error inesperado. Intenta de nuevo más tarde.',
+            confirmButtonText: 'Aceptar',
+            customClass: {
+                popup: 'swal2-popup',
+                title: 'swal2-title',
+                content: 'swal2-content',
+                icon: 'swal2-icon'
+            }
+        });
+    });
+});
+</script>
 
 <style>
     body {
         background-image: url('/Imagenes/fondo_login.png');
-        background-size: cover; /* para cubrir toda la pantalla */
+        background-size: cover;
         background-repeat: no-repeat;
-        background-attachment: fixed; /* para que no se mueva al hacer scroll */
+        background-attachment: fixed;
         background-position: center;
     }
+
     .titulo {
         margin-top: 0px;
         margin-bottom: 50px;
         font-size: 2.1em;
     }
-    label{
-        font-size:1.1em;
-        font-weight:700;
+
+    label {
+        font-size: 1.1em;
+        font-weight: 700;
     }
+
     .contenedor {
-        padding:0;
-        display: flex;  
-        align-items: center; /* Alinea verticalmente */
-        justify-content: center; /* centra horizontalmente */
-        gap: 110px; /* Espacia entre el formulario y la imagen */
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 110px;
         margin: auto;
     }
+
     .cont {
-        height:430px;
+        height: 430px;
         width: 700px;
         margin-top: 0;
         margin-left: 150px;
-        flex-direction: column; /* Elementos en columna */
+        flex-direction: column;
     }
-    
-    
-   
-    
+
+    /* Estilo para el mensaje de alerta centrado */
+    .mensaje {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: #f8d7da;
+        color: #721c24;
+        padding: 20px;
+        border-radius: 10px;
+        text-align: center;
+        font-size: 1.2em;
+        z-index: 9999;
+    }
+
+        .mensaje h2 {
+            margin: 0;
+            font-size: 1.8em;
+            font-weight: bold;
+        }
+
+        .mensaje p {
+            margin: 10px 0 0 0;
+        }
+
+    .boton {
+        font-size: 1em;
+        margin-top: 0;
+        color: #2f2f2f;
+        text-shadow: none;
+        background-color: #d9a86c;
+    }
 </style>
+
+

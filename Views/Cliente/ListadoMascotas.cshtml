@@ -42,6 +42,11 @@
         </tbody>
     </table>
 </div>
+<div class="cajaBoton">
+    <form method="get" action="/Cliente/CitasEspecDispon">
+        <button class="btnSalir boton">Volver</button>
+    </form>
+</div>
 <style>
     body {
         background-image: url('/Imagenes/fondo_mascota.png');
@@ -65,7 +70,7 @@
     .tabla {
         font-size: 1.08em;
         border-collapse: separate;
-        border-spacing: 0 20px; /*Solo espacio abajo*/
+        border-spacing: 0 15px; /*Solo espacio abajo*/
         width: 75%;
         
     }
@@ -82,7 +87,7 @@
         border-bottom-right-radius: 50%;
     }
     td{
-        padding:20px;
+        padding:15px;
     }
     td p{
         font-weight:600;
@@ -93,6 +98,14 @@
     }
     .logo_perro, .logo_gato{
         width:70px;
+    }
+    .cajaBoton {
+        width: 87%;
+        text-align: right;
+    }
+    .boton {
+        margin-top:0;
+        padding: 10px 20px;
     }
     
 </style>

@@ -1,0 +1,95 @@
+﻿
+@{
+    ViewBag.Title = "ElegirCitaEspec";
+}
+
+
+@model List<Clinipet.Dtos.CitaEspecDto>
+<link rel="stylesheet" href="@Url.Content("~/Estilos/estilos.css")">
+<h2>Elegir Cita</h2>
+@if (Model != null && Model.Any())
+{
+    <div class="cajaImg">
+        <img class="mascotasEncab" src="~/Imagenes/mascotas_encab2.png" alt="Perro" />
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>Especialidad</th>
+                <th>Veterinario</th>
+                <th>Día</th>
+                <th>Hora</th>
+                <th class="añadir">Añadir Descripción</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var citaEspec in Model)
+            {
+                <tr>
+                    <td>@citaEspec.nom_serv</td>
+                    <td>@citaEspec.nom_usu</td>
+                    <td>@citaEspec.nom_dia</td>
+                    <td>@citaEspec.nom_hora</td>
+                    <td>
+                        <form action="@Url.Action("DescripConsulta", "Veterinario")" method="post">
+                            <input type="hidden" name="id_usu" value="@Session["Id"]" />
+                            <input type="hidden" name="id_dispon" value="@citaEspec.id_dispon" />
+                            <input type="hidden" name="id_cita_esp" value="@citaEspec.id_cita_esp" />
+                            <button type="submit" class="botonSec botonForm">Añadir &raquo;</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div class="cajaBoton">
+        <button type="button" class="botonForm botonVol" onclick="window.history.back();">Volver</button>
+    </div>
+    
+}
+else
+{
+    <div class="cajaMensaje">
+        <p class="mensaje">No hay citas registradas para esta mascota.</p>
+        <div class="cajaBoton">
+            <button type="button" class="botonForm" onclick="window.history.back();">Volver</button>
+        </div>
+    </div>
+
+}
+<style>
+    body {
+        background-image: url('/Imagenes/fondo_masc_regis.png');
+        background-size: cover; /* para cubrir toda la pantalla */
+        background-repeat: no-repeat;
+        background-attachment: fixed; /* para que no se mueva al hacer scroll */
+    }
+
+    h2 {
+        margin-top: 45px;
+    }
+
+    .cajaImg {
+        text-align: center;
+    }
+
+    .mascotasEncab {
+        width: 35%;
+    }
+
+    .cajaBoton {
+        text-align: center;
+    }
+
+    .añadir {
+        width: 200px;
+    }
+
+    .botonForm {
+        border: 1px solid #2f2f2f;
+    }
+
+    .botonVol {
+        background-color: #4f7768;
+    }
+</style>

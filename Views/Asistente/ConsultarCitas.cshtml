@@ -1,0 +1,136 @@
+﻿
+@{
+    ViewBag.Title = "ConsultarCitas";
+}
+
+@model List<Clinipet.Dtos.CitaEspecVistaDto>
+<link rel="stylesheet" href="@Url.Content("~/Estilos/estilos.css")">
+<h2>Agenda de Citas</h2>
+
+<!-- Formulario de búsqueda por día -->
+<div class="contenedorBusqueda">
+    <form action="@Url.Action("ConsultarCitas", "Asistente")" method="get" class="formularioBusqueda">
+        <select name="idDia" class="inputBusqueda">
+            <option value="">-- Selecciona un día --</option>
+            <option value="1">Lunes</option>
+            <option value="2">Martes</option>
+            <option value="3">Miércoles</option>
+            <option value="4">Jueves</option>
+            <option value="5">Viernes</option>
+            <option value="6">Sábado</option>
+        </select>
+        <button type="submit" class="botonSec botonForm">Filtrar</button>
+    </form>
+</div>
+
+<table>
+    <thead>
+        <tr>
+            <th>Dia</th>
+            <th>Hora</th>
+            <th>Servicio</th>
+            <th>Mascota</th>
+            <th>Veterinario</th>
+            <th>Estado</th>
+            <th>Cambiar Estado</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var cita in Model)
+        {
+            <tr>
+                <td>@cita.nom_dia</td>
+                <td>@cita.nom_hora</td>
+                <td>@cita.nom_servicio</td>
+                <td>@cita.nom_mascota</td>
+                <td>@cita.nom_veterinario</td>
+                <td>@cita.estado</td>
+                <td>
+                    <form action="@Url.Action("CambiarEstadoCita", "Asistente")" method="post">
+                        <input type="hidden" name="id_cita_esp" value="@cita.id_cita_esp" />
+                        <select name="nuevo_estado" class="botonForm">
+                            <option value="3" @(cita.estado == "Agendada" ? "selected" : "")>Agendada</option>
+                            <option value="4" @(cita.estado == "En curso" ? "selected" : "")>En curso</option>
+                            <option value="5" @(cita.estado == "Completada" ? "selected" : "")>Completada</option>
+                        </select>
+                        <button type="submit" class="botonSec">Actualizar</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div class="cajaBoton">
+    <form method="get" action="/Asistente/IndexAsistente">
+        <button class="btnSalir boton">Volver</button>
+    </form>
+</div>
+
+<style>
+
+    .contenedorBusqueda {
+        display: flex;
+        justify-content: center;
+        margin-top: 30px;
+        margin-bottom: 30px;
+    }
+
+    .inputBusqueda {
+        padding: 8px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        width: 300px;
+        font-size: 16px;
+    }
+
+    h2 {
+        margin-top: 40px;
+        margin-bottom: 5px;
+        font-size: 2.25em;
+    }
+
+    body {
+        background-image: url('/Imagenes/fondo_dispon.png');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-position: center;
+    }
+
+    .mascotasEncab {
+        width: 35%;
+    }
+
+    .cajaBoton {
+        width: 95%;
+        text-align: right;
+    }
+
+    .boton {
+        padding: 10px 20px;
+    }
+
+    .cajaImg {
+        text-align: center;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+        table th, table td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: center;
+        }
+
+    .botonSec {
+        padding: 6px 12px;
+    }
+</style>
+
+
+

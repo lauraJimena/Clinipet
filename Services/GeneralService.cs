@@ -24,6 +24,7 @@ namespace Clinipet.Services
                 userModel.id_espec = 1;
                 userModel.id_nivel = 1;
                 userModel.id_estado = 1;
+                userModel.cambio_contras = false; // No necesita cambiar contraseña
 
 
                 if (userRepository.ExisteCorreo(userModel.correo_usu))
@@ -117,11 +118,12 @@ namespace Clinipet.Services
         public List<DisponibDto> ObtenerCitasDispon()
         {
             GeneralRepository generalRepository = new GeneralRepository();
-            List<DisponibDto> citasDispon = generalRepository.ObtenerCitasDisponibles();
+            List<DisponibDto> citasDispon = generalRepository.ObtenerCitasEspecDispon();
 
             return citasDispon;
             
         }
+       
         public List<MascotaDto> ObtenerRazas()
 
         {
@@ -165,38 +167,20 @@ namespace Clinipet.Services
                 Text = t.nom_tipo
             }).ToList();
         }
-        /*public UserDto PublicarDispon(DisponibDto disponModel)
+
+
+        public bool CambiarContraseña(string numIdent, string contrasenaActual, string nuevaContrasena)
         {
-
-            DisponibDto responseDisponDto = new DisponibDto();
-            VeterinarioRepository disponRepository = new VeterinarioRepository();
-            Console.WriteLine("Estoy en el servicio");
-
-
+            GeneralRepository contrasRepository = new GeneralRepository();
             try
             {
-                //disponModel.id_estado = 1;
-                disponModel.id_usu = ObtenerIdUsuarioLogueado(); // Suponiendo que tomas el ID del veterinario desde sesión o claims
-
-                int resultado =disponRepository.PublicarDispon(disponModel);
-
-                if (resultado > 0)
-                {
-                    responseUserDto.Response = 1;
-                    responseUserDto.Mensaje = "Creación exitosa";
-
-                }
-
-                
-                return responseUserDto;
+                return contrasRepository.CambiarContraseña(numIdent, contrasenaActual, nuevaContrasena);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                responseUserDto.Response = 0;
-                responseUserDto.Mensaje = e.InnerException?.ToString();
-                return responseUserDto;
+                throw new Exception("Error al cambiar la contraseña: " + ex.Message);
             }
-        }*/
+        }
 
     }
 }

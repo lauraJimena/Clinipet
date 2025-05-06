@@ -26,9 +26,10 @@
 
     <div class="col-md-4">
 
-        <p class="texto"><b>CliniPet</b> es una clínica veterinaria que te ofrece variedad de servicios para cuidar la salud de tus mascotas.</p>
+        <p class="texto"><b>CliniPet</b> es una clínica veterinaria que te ofrece 
+        variedad de servicios para cuidar la salud de tus mascotas.</p>
 
-        <p><a class="btn btn-default boton" href="https://go.microsoft.com/fwlink/?LinkId=301866">Ver más&raquo;</a><p />
+        <p><a class="btn btn-default boton" href="@Url.Content("~/Home/About")">Ver más&raquo;</a><p />
 
     </div>
     <div class="col-md-4">
@@ -63,7 +64,7 @@
         .col-md-4 p  {
             width: 380px;
             font-weight: 500;
-            font-size: 1.2em;
+            font-size: 1.13em;
             text-align: center;
             margin-top: 0px;
             margin-left: 250px;
@@ -71,6 +72,7 @@
         }
 
     .boton {
+        font-size:0.84em;
         position: relative; /* Permite que el `z-index` funcione */
         z-index: 1000; /* Un valor alto para colocarlo encima */
     }
@@ -149,11 +151,11 @@
     }
 
     .prev {
-        left: 130px;
+        left: 145px;
     }
 
     .next {
-        right: 130px;
+        right: 145px;
     }
 </style>
 <script>

@@ -4,122 +4,184 @@
 }
 @model Clinipet.Dtos.MascotaCitaDto
 <link rel="stylesheet" href="@Url.Content("~/Estilos/estilos.css")">
+
+
 <h2>Agendamiento de cita</h2>
+
 <div class="cajaTabla">
     <p>Revisa la siguiente información y confirma tu cita:</p>
+
     <table class="tabla">
-
-        <tr>
-            <th>Fecha</th>
-            <td>@Model.Disponib.nom_dia</td>
-        </tr>
-        <tr>
-            <th>Hora</th>
-            <td>@Model.Disponib.nom_hora</td>
-        </tr>
-        <tr>
-            <th>Médico</th>
-            <td>@Model.Disponib.nom_usu</td>
-        </tr>
-        <tr>
-            <th>Especialidad</th>
-            <td>@Model.Disponib.nom_espec</td>
-        </tr>
-
-        <tr>
-            <th>Mascota</th>
-            <td>@Model.Mascota.nom_masc</td>
-        </tr>
-        <tr>
-            <th>Dueño</th>
-            <td>@Model.Mascota.nom_usu</td>
-        </tr>
-
+        <tr><th>Fecha</th><td>@Model.Disponib.nom_dia</td></tr>
+        <tr><th>Hora</th><td>@Model.Disponib.nom_hora</td></tr>
+        <tr><th>Médico</th><td>@Model.Disponib.nom_usu</td></tr>
+        <tr><th>Especialidad</th><td>@Model.Disponib.nom_espec</td></tr>
+        <tr><th>Mascota</th><td>@Model.Mascota.nom_masc</td></tr>
+        <tr><th>Dueño</th><td>@Model.Mascota.nom_usu</td></tr>
     </table>
-    <div class="cajaBtn">
 
+    <div class="cajaBtn">
         <form method="post" action="@Url.Action("CitasEspecDispon", "Cliente")">
             <input type="hidden" name="id_usu" value="@Model.IdUsu" />
             <button class="boton boton2" type="submit">Volver</button>
         </form>
+
         <form action="@Url.Action("ConfirmarCita", "Cliente")" method="post" id="confirmForm">
             <input type="hidden" name="id_mascota" value="@Model.Mascota.id_mascota" />
             <input type="hidden" name="id_usu" value="@Model.IdUsu" />
             <input type="hidden" name="id_dispon" value="@Model.Disponib.id_dispon" />
             <input type="hidden" name="id_servicio" value="@Model.Disponib.id_servicio" />
             <input type="hidden" name="nom_espec" value="@Model.Disponib.nom_espec" />
-            <button type="submit" class="boton" onclick="mostrarConfirmacion(event)">Confirmar</button>
-
+            <input type="hidden" name="nom_dia" value="@Model.Disponib.nom_dia" />
+            <button type="button" class="boton" id="confirmButton">Confirmar</button>
         </form>
     </div>
 </div>
- @Html.Partial("_ModalConfirm")
-    <script>
-        // Guardar el formulario en una variable global
-        let formulario = document.getElementById("confirmForm");
 
-        function mostrarConfirmacion(event) {
-            event.preventDefault(); // Detiene el envío inmediato del formulario
-            mostrarModal("¿Estás seguro?", "Confirma que deseas agendar la cita.");
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.getElementById("confirmButton").addEventListener("click", function () {
+            Swal.fire({
+                title: "¿Estás seguro?",
+                text: "Confirma que deseas agendar la cita.",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Sí, confirmar",
+                cancelButtonText: "Cancelar",
+                customClass: {
+                    popup: 'swal2-popup',
+                    title: 'swal2-title',
+                    content: 'swal2-content',
+                    confirmButton: 'botonConfir',
+                    cancelButton: 'botonCancel',
 
-            // Guarda el formulario globalmente
-            window.formulario = document.getElementById("confirmForm");
-        }
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    enviarFormulario();
+                }
+            });
+        });
+    });
 
-    </script>
+    function enviarFormulario() {
+        const form = document.getElementById("confirmForm");
+        const formData = new FormData(form);
 
-    <style>
-        body {
-            background-image: url('/Imagenes/fondo_agenda_espec.png');
-            background-size: cover; /* para cubrir toda la pantalla */
-            background-repeat: no-repeat;
-            background-attachment: fixed; /* para que no se mueva al hacer scroll */
-            background-position: center;
-        }
+        fetch(form.action, {
+            method: "POST",
+            body: formData
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success && data.redirectUrl) {
+                    Swal.fire({
+                        icon: "success",
+                        title: "Cita confirmada",
+                        text: data.message || "Tu cita ha sido agendada exitosamente.",
+                        showConfirmButton: false,
+                        timer: 3000,
+                        customClass: {
+                            popup: 'swal2-popup',
+                            title: 'swal2-title',
+                            content: 'swal2-content',
+                            confirmButton: 'botonConfir'
+                        }
+                    }).then(() => {
+                        window.location.href = data.redirectUrl;
+                    });
+                } else {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Error",
+                        text: data.message || "Ocurrió un error al confirmar la cita.",
+                        confirmButtonText: "OK"
+                    });
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: "Error inesperado. Intenta de nuevo más tarde.",
+                    confirmButtonText: "OK"
+                });
+            });
+    }
+</script>
 
-        h2 {
-            margin-top: 35px;
-            margin-bottom: 20px;
-        }
-        p {
-            text-align: center;
-        }
-        .cajaTabla {
-            margin: auto;
-            width: 53%;
-            padding: 30px;
-            border-radius: 20px;
-            background-color: rgba(199, 203, 202, 0.75);
-        }
-        .tabla {
-            border-spacing: 3.5px;
-            width: 88%;
-        }
-        th {
-            color: white;
-            text-shadow: -1.5px -1.5px 0 #545454;
-            background-color: #78a890;
-            border: 1px solid #545454;
-            width: 40%;
-            border-radius: 10px;
-        }
+<style>
+    body {
+        background-image: url('/Imagenes/fondo_agenda_espec.png');
+        background-size: cover; /* para cubrir toda la pantalla */
+        background-repeat: no-repeat;
+        background-attachment: fixed; /* para que no se mueva al hacer scroll */
+        background-position: center;
+    }
 
-        td {
-            border: 1px solid gray;
-            border-radius: 10px;
-        }
+    h2 {
+        margin-top: 35px;
+        margin-bottom: 20px;
+    }
 
-        .cajaBtn {
-            font-size: 1.15em;
-            display: flex;
-            gap: 1rem; /* Espacio entre botones */
-            justify-content: center; /* Centra los botones horizontalmente (opcional) */
-            margin-top: 1rem; /* Separación del contenido anterior */
-        }
-        .boton{
-            background-color: #d9a86c;
-        }
-        .boton2 {
-            background-color: #4f7768;
-        }
-    </style>
+    p {
+        text-align: center;
+    }
+
+    .cajaTabla {
+        margin: auto;
+        width: 53%;
+        padding: 30px;
+        border-radius: 20px;
+        background-color: rgba(199, 203, 202, 0.75);
+    }
+
+    .tabla {
+        border-spacing: 3.5px;
+        width: 88%;
+    }
+
+    th {
+        color: white;
+        text-shadow: -1.5px -1.5px 0 #545454;
+        background-color: #78a890;
+        border: 1px solid #545454;
+        width: 40%;
+        border-radius: 10px;
+    }
+
+    td {
+        border: 1px solid gray;
+        border-radius: 10px;
+    }
+
+    .cajaBtn {
+        font-size: 1.15em;
+        display: flex;
+        gap: 1rem; /* Espacio entre botones */
+        justify-content: center; /* Centra los botones horizontalmente (opcional) */
+        margin-top: 1rem; /* Separación del contenido anterior */
+    }
+
+    .boton {
+        background-color: #d9a86c;
+        font-size: 0.88em;
+    }
+    .botonCancel {
+        background-color: #948e8e;
+        border-radius: 20px;
+    }
+    .botonConfir {
+        font-size: 1em;       
+        color: #2f2f2f;
+        text-shadow: none;
+        background-color: #d9a86c;
+        border-radius:20px;
+    }
+
+    .boton2 {
+        background-color: #4f7768;
+    }
+</style>

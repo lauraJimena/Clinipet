@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
 using Clinipet.Dtos;
 using Clinipet.Utilities;
@@ -74,6 +75,120 @@ namespace Clinipet.Repositories
 
             db.Disconnect();
             return existe;
+        }
+
+        public List<UserDto> ObtenerVeterinarios()
+        {
+            List<UserDto> listaVeterinarios = new List<UserDto>();
+
+            string sql = "SELECT u.id_usu, u.nom_usu, u.apel_usu, u.num_ident, e.nom_espec " +
+                     "FROM usuario u " +
+                     "JOIN especialidad e ON u.id_espec = e.id_espec " +
+                     "WHERE u.id_rol = 4 AND u.id_estado = 1";
+
+            DBContextUtility Connection = new DBContextUtility();
+            Connection.Connect();
+
+            using (SqlCommand command = new SqlCommand(sql, Connection.CONN()))
+            {
+               
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        listaVeterinarios.Add(new UserDto
+                        {
+                            id_usu = reader.GetInt32(0),
+                            nom_usu = reader.GetString(1),
+                            apel_usu = reader.GetString(2),
+                            num_ident = reader.GetString(3),
+                            nom_espec = reader.GetString(4),
+                        });
+                    }
+                }
+            } return listaVeterinarios; 
+        }
+
+        // Método para eliminar un veterinario
+        public void EliminVete(int id_usu)
+        {
+            try
+            {
+                DBContextUtility Connection = new DBContextUtility();
+                Connection.Connect();
+
+                string sql = "UPDATE usuario SET id_estado = 2 WHERE id_usu = @id_usu";
+
+                using (SqlCommand command = new SqlCommand(sql, Connection.CONN()))
+                {
+                    command.Parameters.AddWithValue("@id_usu", id_usu);
+                    command.ExecuteNonQuery();
+                }
+
+                Connection.Disconnect();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("ERROR AL CAMBIAR ESTADO: " + ex.Message);
+                throw;
+            }
+        }
+
+        //Obtener asistentes
+        public List<UserDto> ObtenerAsistentes()
+        {
+            List<UserDto> listaAsistentes = new List<UserDto>();
+
+            string sql = "SELECT id_usu, nom_usu, apel_usu, num_ident " +
+                     "FROM usuario " +
+                     "WHERE id_rol = 2 AND id_estado = 1";
+
+            DBContextUtility Connection = new DBContextUtility();
+            Connection.Connect();
+
+            using (SqlCommand command = new SqlCommand(sql, Connection.CONN()))
+            {
+
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        listaAsistentes.Add(new UserDto
+                        {
+                            id_usu = reader.GetInt32(0),
+                            nom_usu = reader.GetString(1),
+                            apel_usu = reader.GetString(2),
+                            num_ident = reader.GetString(3),
+                        });
+                    }
+                }
+            }
+            return listaAsistentes;
+        }
+
+        // Método para eliminar un asistente
+        public void EliminAsis(int id_usu)
+        {
+            try
+            {
+                DBContextUtility Connection = new DBContextUtility();
+                Connection.Connect();
+
+                string sql = "UPDATE usuario SET id_estado = 2 WHERE id_usu = @id_usu";
+
+                using (SqlCommand command = new SqlCommand(sql, Connection.CONN()))
+                {
+                    command.Parameters.AddWithValue("@id_usu", id_usu);
+                    command.ExecuteNonQuery();
+                }
+
+                Connection.Disconnect();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("ERROR AL CAMBIAR ESTADO: " + ex.Message);
+                throw;
+            }
         }
     }
 }

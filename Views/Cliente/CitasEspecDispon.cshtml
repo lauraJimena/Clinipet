@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="@Url.Content("~/Estilos/estilos.css")">
 <h2>Citas disponibles</h2>
 <div class="cajaImg">
-    <img class="mascotas_encab" src="~/Imagenes/mascotas_encab2.png" alt="Perro" />
+    <img class="mascotasEncab" src="~/Imagenes/mascotas_encab2.png" alt="Perro" />
 </div>
 <table>
     <thead>
@@ -22,22 +22,27 @@
     <tbody>
         @foreach (var dispon in Model)
         {
-            <tr>
-                <td>@dispon.nom_serv</td>
-                <td>@dispon.nom_usu</td>
-                <td>@dispon.nom_dia</td>
-                <td>@dispon.nom_hora</td>
-                <td>
-                    <form action="@Url.Action("ListadoMascotas", "Cliente")" method="post">
-                        <input type="hidden" name="id_usu" value="@Session["Id"]" />
-                        <input type="hidden" name="id_dispon" value="@dispon.id_dispon" />
-                        <button type="submit" class="botonSec botonForm">Agendar &raquo;</button>
-                    </form>
-                </td>
-            </tr>
+        <tr>
+            <td>@dispon.nom_serv</td>
+            <td>@dispon.nom_usu</td>           
+            <td>@dispon.nom_dia</td>
+            <td>@dispon.nom_hora</td>
+            <td>
+                <form action="@Url.Action("ListadoMascotas", "Cliente")" method="post">
+                    <input type="hidden" name="id_usu" value="@Session["Id"]" />
+                    <input type="hidden" name="id_dispon" value="@dispon.id_dispon" />
+                    <button type="submit" class="botonSec botonForm">Agendar &raquo;</button>
+                </form>
+            </td>
+        </tr>
         }
     </tbody>
 </table>
+<div class="cajaBoton">
+    <form method="get" action="/Cliente/IndexCliente">
+        <button class="btnSalir boton">Volver</button>
+    </form>
+</div>
 <style>
     h2 {
         margin-top: 40px;
@@ -52,12 +57,22 @@
         background-attachment: fixed; /* para que no se mueva al hacer scroll */
         background-position: center;
     }
-    .mascotas_encab{
+    .mascotasEncab{
        
         width:35%;
+    }
+    .cajaBoton {
+        width: 95%;
+        text-align: right;
+    }
+    .boton{
+        padding:10px 20px;
     }
     .cajaImg {
         text-align:center;
     }
+    
+
+    
 
 </style>

@@ -25,9 +25,8 @@ namespace Clinipet.Services
                 nuevoVete.id_rol = 4;        // Veterinario
                 nuevoVete.id_nivel = 1;      // Nivel básico
                 nuevoVete.id_estado = 1;     // Activo
+                nuevoVete.cambio_contras = true; // Requiere cambiar contraseña al iniciar
                 //nuevoVete.id_espec = 10;     
-
-                //System.Diagnostics.Debug.WriteLine($"Nombre: {nuevoAsist.nom_usu}, Apellido: {nuevoAsist.apel_usu}, ID Tipo Doc: {nuevoAsist.id_tipo_ident}, Especialidad: {nuevoAsist.id_espec}");
 
                 // Validaciones
                 if (VeteRepo.ExisteCorreo(nuevoVete.correo_usu))
@@ -42,20 +41,19 @@ namespace Clinipet.Services
                     {
                         userResponse.Response = -2;
                         userResponse.Mensaje = "El numero de documento ya existe. Intente nuevamente.";
-                        //userResponse.Mensaje = "Asistente registrado con éxito";
                     }
                     else
                     {
                         if (VeteRepo.RegistrarUsuario(nuevoVete) != 0)
                         {
                             userResponse.Response = 1;
-                            userResponse.Mensaje = "Creación exitosa";
+                            userResponse.Mensaje = "Veterinario registrado exitosamente.";
 
                         }
                         else
                         {
                             userResponse.Response = 0;
-                            userResponse.Mensaje = "Algo pasó";
+                            userResponse.Mensaje = "Algo salió mal durante el registro.";
                         }
                     }
 
@@ -77,34 +75,35 @@ namespace Clinipet.Services
             return generalRepository.ObtenerEspecialidad();
         }
         public DisponibDto PublicarDisponibilidad(DisponibDto dispon)
-        {
-            //GeneralRepository userRepository = new GeneralRepository();
+        {           
 
             VeterinarioRepository veterinarioRepository = new VeterinarioRepository();
-            DisponibDto disponibResponse = new DisponibDto();
+            DisponibDto disponibRespuesta = new DisponibDto();
             
             try
             {
+                dispon.id_estado = 1; //Disponibilidad Activa
                 int id_dispon = veterinarioRepository.PublicarDispon(dispon);
+                
                 if (id_dispon != 0)
                 {                                     
                     ServicioDto servicio = new ServicioDto();                    
                     servicio.id_dispon = id_dispon;                   
                     if (veterinarioRepository.RegistrarServicio_Dispon(servicio) != 0){
-                        disponibResponse.Response = 1;
-                        disponibResponse.Mensaje = "Cita publicada correctamente";
-                        System.Diagnostics.Debug.WriteLine(servicio.id_servicio);
+                        disponibRespuesta.Response = 1;
+                        disponibRespuesta.Mensaje = "Cita publicada correctamente";
+                       
                     }                                      
 
                 }
             }
             catch (Exception e)
             {
-                disponibResponse.Response = 0;
-                disponibResponse.Mensaje = e.InnerException?.ToString() ?? e.Message;
-                return disponibResponse;
+                disponibRespuesta.Response = 0;
+                disponibRespuesta.Mensaje = e.InnerException?.ToString() ?? e.Message;
+                return disponibRespuesta;
             }
-            return disponibResponse;
+            return disponibRespuesta;
 
         }
         
@@ -133,5 +132,109 @@ namespace Clinipet.Services
 
             
         }
+        public List<SelectListItem> ObtenerMotivoSelect()
+        {
+            VeterinarioRepository veterinarioRepository = new VeterinarioRepository();
+            List<CitaEspecDto> motivo= veterinarioRepository.ObtenerMotivo();
+
+            return motivo.Select(m => new SelectListItem // Convertir la lista raza en SelectList para pasar a la vista
+            {
+                Value = m.id_motivo.ToString(),
+                Text = m.nom_motivo,
+
+            }).ToList();
+
+
+        }
+        public List<MascotaDto> ListadoMascotas(string num_ident)
+
+        {
+            VeterinarioRepository veterinarioRepository = new VeterinarioRepository();
+            List<MascotaDto> mascotas = veterinarioRepository.ListadoMascotas(num_ident);
+
+            return mascotas;
+        }
+        public UserDto ObtenerUsuarioPorNumIdent(string num_ident)
+        {
+            VeterinarioRepository veterinarioRepository = new VeterinarioRepository();
+            UserDto usu = veterinarioRepository.ObtenerUsuarioPorNumIdent(num_ident);
+            return usu;
+        }
+        public List<CitaEspecDto> ObtenerCitasEspecAgend(int id_usu, int id_mascota)
+        {
+            VeterinarioRepository veterinarioRepository = new VeterinarioRepository();
+            List<CitaEspecDto> citasDispon = veterinarioRepository.ObtenerCitasEspecAgend(id_usu, id_mascota);
+
+            return citasDispon;
+
+        }
+        public List<CitaEspecDto> ObtenerHistorialCitas(int id_usu)
+        {
+            VeterinarioRepository veterinarioRepository = new VeterinarioRepository();
+            List<CitaEspecDto> citas = veterinarioRepository.ObtenerHistorialCitas(id_usu);
+
+            return citas;
+
+        }
+        public List<DisponibDto> ObtenerDisponib(int id_usu)
+        {
+            VeterinarioRepository veterinarioRepository = new VeterinarioRepository();
+            List<DisponibDto> citas = veterinarioRepository.ObtenerDisponib(id_usu);
+
+            return citas;
+
+        }
+        public CitaEspecDto ActualizarDescripConsulta(CitaEspecDto citaEspec)
+        {
+                  
+            CitaEspecDto citaEspecDto = new CitaEspecDto();
+            VeterinarioRepository veterRepository = new VeterinarioRepository();
+            
+            try
+            {
+                citaEspec.id_estado = 5;//Cita completada
+
+                if (veterRepository.ActualizarDescripConsulta(citaEspec) != 0)
+                {
+                    citaEspecDto.Response = 1;
+                    citaEspecDto.Mensaje = "Creación exitosa";
+
+                }
+                else
+                {
+                    citaEspecDto.Response = 0;
+                    citaEspecDto.Mensaje = "Algo pasó";
+                }
+
+                return citaEspecDto;
+            }
+            catch (Exception e)
+            {
+                citaEspecDto.Response = 0;
+                citaEspecDto.Mensaje = e.InnerException?.ToString();
+                return citaEspecDto;
+            }
+
+        }
+        public List<CitaEspecDto> ObtenerHistorialMascota(int id_usu)
+        {
+            VeterinarioRepository veterinarioRepository = new VeterinarioRepository();
+            List<CitaEspecDto> citas = veterinarioRepository.ObtenerHistorialMascota(id_usu);
+
+            return citas;
+
+        }
+        public List<MascotaDto> ObtenerMascotas(int id_usu)
+        {
+            VeterinarioRepository veterinarioRepository = new VeterinarioRepository();
+            List<MascotaDto> mascotas = veterinarioRepository.ObtenerMascotas(id_usu);
+
+            return mascotas;
+
+        }
+
+
+
+
     }
 }

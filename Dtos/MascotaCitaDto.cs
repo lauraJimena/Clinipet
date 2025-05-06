@@ -11,6 +11,7 @@ namespace Clinipet.Dtos
         public MascotaDto Mascota { get; set; }
         public DisponibDto Disponib { get; set; }
         public int IdDispon { get; set; }
+        public int IdServicio { get; set; }
         public int IdUsu { get; set; }
     }
 }

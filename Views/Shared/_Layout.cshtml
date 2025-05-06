@@ -1,14 +1,26 @@
-﻿<!DOCTYPE html>
-<link href= "https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;700;800;900&family=Quicksand:wght@300..700&display=swap" rel="stylesheet">
+﻿
+<!DOCTYPE html>
+
 
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="@Url.Content("~/Estilos/estilos.css")">
     <title>@ViewBag.Title - CliniPet</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+
+    <script type="text/javascript">
+    // Detecta si la página se cargó desde el caché (por ejemplo, al volver con el botón "Atrás")
+    window.addEventListener("pageshow", function (event) {
+        if (event.persisted || (window.performance && window.performance.navigation.type === 2)) { //event.persisted es true cuando la página fue recuperada desde el caché del navegador
+            // Forzar recarga completa desde el servidor
+            window.location.reload(); //Recarga la página desde el servidor, no desde la caché.
+        }
+    });
+    </script>
     <style>
         /* Estilos para que se carguen primero que los que vienen por defecto en ASP.NET*/
         .navbar {
@@ -25,11 +37,12 @@
                 font-weight: bold;
                 color: #2f2f2f;
             }
-            .navbar .navbar-brand:hover {               
-                font-size: 1.55em;               
-            }
 
-        
+                .navbar .navbar-brand:hover {
+                    font-size: 1.55em;
+                }
+
+
 
         .tit {
             margin-top: 18px;
@@ -42,14 +55,15 @@
         }
 
         .navbar-collapse .nav .links {
-            margin-top:3px;
+            margin-top: 3px;
             color: #2f2f2f;
             font-weight: 500;
             font-size: 1.1em;
         }
-        .navbar-collapse .nav .links:hover{
-            font-size: 1.29em;
-        }
+
+            .navbar-collapse .nav .links:hover {
+                font-size: 1.29em;
+            }
 
         footer {
             border-radius: 10px;
@@ -135,9 +149,17 @@
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Inicio", "Index", "Home", new { area = "" }, new { @class = "links" })</li>
                     <li>@Html.ActionLink("Acerca de", "About", "Home", new { area = "" }, new { @class = "links" })</li>
-                    <li>@Html.ActionLink("Contacto", "Contact", "Home", new { area = "" }, new { @class = "links" })</li>
-                    <li>@Html.ActionLink("Iniciar Sesión", "Login", "General", new { area = "" }, new { @class = "links" })</li>
+                    <li>@Html.ActionLink("Servicios", "Servicios", "Home", new { area = "" }, new { @class = "links" })</li>
                     <li>@Html.ActionLink("Registro Cliente", "RegistroCliente", "General", new { area = "" }, new { @class = "links" })</li>
+                    @if (Session["UsuLoguedo"] != null)
+                    {
+                        <li>@Html.ActionLink("Cerrar Sesión", "CerrarSesion", "General", new { area = "" }, new { @class = "links" })</li>
+                    }
+                    else
+                    {
+                        <li>@Html.ActionLink("Iniciar Sesión", "Login", "General", new { area = "" }, new { @class = "links" })</li>
+                    }
+
                 </ul>
             </div>
         </div>

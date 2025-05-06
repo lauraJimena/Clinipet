@@ -1,0 +1,160 @@
+﻿
+@{
+    ViewBag.Title = "DescripConsulta";
+}
+
+<link rel="stylesheet" href="@Url.Content("~/Estilos/estilos.css")">
+<h2>Descripción de Consulta</h2>
+<div class="contenedor">
+    <div class="cajaDescrip">
+        <div class="cajaForm">
+            <form id="guardarForm">
+                <label for="motivo"><strong>Motivo de la consulta:</strong></label><br />
+                <select class="" id="motivo" name="id_motivo" required>
+                    <option value="" disabled selected hidden>Seleccione un motivo</option>
+                    @foreach (var motivo in ViewBag.Motivo)
+                    {
+                        <option value="@motivo.Value">@motivo.Text</option>
+                    }
+                </select><br />
+
+                <label for="descripcion"><strong>Diagnóstico: </strong></label><br />
+                <textarea class="campo" id="diagnost" name="diagnost" cols="80" rows="4" placeholder="Escribe una descripción aquí..." required></textarea><br />
+                <label for="recomendaciones"><strong>Recomendaciones: </strong></label><br />
+                <textarea id="recomendaciones" name="recomen" rows="4" cols="70" placeholder="Escribe recomendaciones aquí..." required></textarea><br />
+                <input type="hidden" name="id_cita_esp" value="@ViewBag.IdCitaEsp" />
+                <div class="cajaBtn">
+                    <button type="button" class="botonForm botonVol" onclick="window.history.back();">Volver</button>
+                    <button type="submit" class="botonForm">Guardar</button>
+
+                </div>
+
+            </form>
+        </div>
+
+    </div>
+    <img class="imagenFondo" src="~/Imagenes/veterinario_perro.jpg" alt="">
+</div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+document.getElementById('guardarForm').addEventListener('submit', function (e) {
+    e.preventDefault(); // Evita envío tradicional
+
+    const formData = new FormData(this);
+
+    fetch('@Url.Action("DescripConsulta", "Veterinario")', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success && data.redirectUrl) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Guardado exitoso',
+                text: data.message || 'La información fue guardada correctamente.',
+                showConfirmButton: false,
+                timer: 3000,
+                customClass: {
+                    popup: 'swal2-popup',
+                    title: 'swal2-title',
+                    content: 'swal2-content',
+                    confirmButton: 'boton'
+                }
+            }).then(() => {
+                window.location.href = data.redirectUrl;
+            });
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: data.message || 'Ocurrió un error al guardar.',
+                confirmButtonText: 'OK'
+            });
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Error inesperado. Intente de nuevo más tarde.',
+            confirmButtonText: 'OK'
+        });
+    });
+});
+</script>
+
+
+<style>
+
+    body {
+        background-color: #e6e6e6;
+    }
+
+    h2 {
+        margin-top: 45px;
+        margin-bottom: 20px;
+    }
+
+    .contenedor {
+        width: 100%;
+        display: flex;
+        align-items: center; /* Centra verticalmente */
+        padding: 0px;
+    }
+
+    /* Estilo para la imagen a la derecha */
+    .imagenFondo {
+        box-shadow: 3px 0px 10px gray;
+        width: 100%;
+        max-width: 500px;
+        height: 600px;
+        padding: 0;
+        margin-left: 0;
+        margin-right: 5%;
+        border-radius: 0px 20px 20px 0;
+    }
+
+    .cajaDescrip {
+        box-shadow: 0px 3px 10px gray;
+        margin-left: 5%;
+        display: flex;
+        background-color: #9fb2a9;
+        border-radius: 20px 0px 0px 20px;
+        padding: 35px;
+        width: 100%;
+        justify-content: center;
+        height: 600px;
+    }
+
+    .cajaForm {
+        text-align: left;
+        margin: auto;
+    }
+
+    textarea {
+        border-radius: 15px;
+        padding: 10px;
+        border: 1px black solid;
+    }
+
+    label {
+        margin-top: 15px;
+    }
+
+    .cajaBtn {
+        text-align: center;
+    }
+
+    .botonVol {
+          border: 1px solid #2f2f2f;
+    }
+    .boton {
+        font-size: 1em;
+        margin-top: 0;
+        color: #2f2f2f;
+        text-shadow: none;
+        background-color: #d9a86c;
+    }
+</style>
