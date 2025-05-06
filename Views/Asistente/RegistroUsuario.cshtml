@@ -1,0 +1,111 @@
+﻿@model Clinipet.Dtos.UserDto
+
+@{
+    ViewBag.Title = "RegistroUsuario";
+}
+
+<link rel="stylesheet" href="@Url.Content("~/Estilos/estilos.css")">
+
+
+<body class="bodyForm">
+    <div class="contenedor">
+        <div class="cont">
+            <div class="cajaTitulo"><h2 class="titulo">Registro de Usuario</h2></div>
+
+            <form id="registroForm" method="post" asp-action="RegistroUsuario" asp-controller="Asistente">
+                <label for="nom_usu">Nombres:</label><br />
+                <input type="text" asp-for="nom_usu" id="nom_usu" name="nom_usu" required /><br />
+                @Html.ValidationMessageFor(model => model.nom_usu, "", new { @class = "text-danger" })
+
+                <label for="apel_usu">Apellidos:</label><br />
+                <input type="text" asp-for="apel_usu" id="apel_usu" name="apel_usu" required /><br />
+                @Html.ValidationMessageFor(model => model.apel_usu, "", new { @class = "text-danger" })
+
+                <label for="id_tipo_ident">Tipo de Documento:</label><br />
+                <select id="id_tipo_ident" asp-for="id_tipo_ident" name="id_tipo_ident" required>
+                    <option value="">Seleccione...</option>
+                    <option value="1">Cédula</option>
+                    <option value="2">Pasaporte</option>
+
+                </select>
+                @Html.ValidationMessageFor(model => model.id_tipo_ident, "", new { @class = "text-danger" })
+                <br />
+
+                <label for="num_iden">Número de Documento:</label><br />
+                <input type="text" id="num_ident" asp-for="num_ident" name="num_ident" required pattern="\d+" title="Solo se permiten números" /><br />
+                @Html.ValidationMessageFor(model => model.num_ident, "", new { @class = "text-danger" })
+
+                <label for="correo_usu">Correo:</label><br />
+                <input type="email" id="correo_usu" asp-for="correo_usu" name="correo_usu" required /><br />
+                @Html.ValidationMessageFor(model => model.correo_usu, "", new { @class = "text-danger" })
+
+                <label for="tel_usu">Teléfono:</label><br />
+                <input type="tel" id="tel_usu" asp-for="tel_usu" name="tel_usu" required pattern="\d+" title="Solo se permiten números" /><br />
+                @Html.ValidationMessageFor(model => model.tel_usu, "", new { @class = "text-danger" })
+
+                <label for="contras_usu">Contraseña:</label><br />
+                <input type="password" id="contras_usu" asp-for="contras_usu" name="contras_usu" required /><br />
+                @Html.ValidationMessageFor(model => model.contras_usu, "", new { @class = "text-danger" })
+
+                <div class="contBoton">
+                    <button type="submit" class="botonForm">Registrar</button>
+                </div>
+            </form>
+        </div>
+        <img class="imagenFondo" src="~/Imagenes/fondo_RegistroUsu.jpeg" alt="">
+    </div>
+
+</body>
+<script>
+    document.getElementById("registroForm").addEventListener("submit", function (event) {
+        event.preventDefault(); // Evita la recarga de la página
+
+        var formData = new FormData(this);
+
+        fetch('@Url.Action("RegistroUsuario", "Asistente")', {
+            method: "POST",
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Redirige si el registro fue exitoso
+                alert("Registro exitoso");
+                window.location.href = "/Home/Index";
+            } else {
+                // Muestra el modal si hay error
+                mostrarModal("Error", data.message);
+            }
+        })
+        .catch(error => console.error("Error:", error));
+    });
+</script>
+<style>
+    .cajaTitulo {
+        justify-items: center; /* Alinea horizontalmente */
+    }
+
+    .titulo {
+        width: 150%;
+        margin-top: 0px;
+        margin-bottom: 30px;
+        margin-left: 0px;
+    }
+
+    .contenedor {
+        padding: 0;
+        display: flex;
+        align-items: center; /* Alinea verticalmente */
+        gap: 108px; /* Espacia entre el formulario y la imagen */
+        margin-left: 0px;
+    }
+
+    .cont {
+        height: 600px;
+        width: 400px;
+        margin-top: 0;
+        margin-left: 40px;
+        flex-direction: column; /* Elementos en columna */
+    }
+</style>
+
