@@ -128,6 +128,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\VeterinarioController.cs" />
     <Compile Include="Dtos\CitaEspecDto.cs" />
+    <Compile Include="Dtos\CitaEspecVistaDto.cs" />
     <Compile Include="Dtos\HistorialCitasDto.cs" />
     <Compile Include="Dtos\MascotaCitaDto.cs" />
     <Compile Include="Dtos\CitaGeneralDto.cs" />
@@ -140,6 +141,7 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\AdminRepository.cs" />
+    <Compile Include="Repositories\AsistenteRepository.cs" />
     <Compile Include="Repositories\ClienteRepository.cs" />
     <Compile Include="Repositories\GeneralRepository.cs" />
     <Compile Include="Repositories\VeterinarioRepository.cs" />
@@ -286,11 +288,15 @@
     <Content Include="Views\Veterinario\HistorialMascota.cshtml" />
     <Content Include="Views\Veterinario\ObtenerMascotas.cshtml" />
     <Content Include="Views\General\SesionCerrada.cshtml" />
+    <Content Include="Views\Asistente\IndexAsistente.cshtml" />
+    <Content Include="Views\Asistente\RegistroUsuario.cshtml" />
+    <Content Include="Views\Asistente\RegistroMascota.cshtml" />
+    <Content Include="Views\Asistente\ConsultarCitas.cshtml" />
+    <Content Include="Views\Asistente\AgendarCitas.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Repositories\Models\" />
-    <Folder Include="Views\Asistente\" />
     <Folder Include="Views\Base\" />
   </ItemGroup>
   <ItemGroup>
