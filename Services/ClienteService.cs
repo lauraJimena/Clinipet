@@ -26,7 +26,7 @@ namespace Clinipet.Services
             return clienteRepository.ObtenerMascotaPorId(id_mascota);
 
         }
-        public CitaEspecDto RegistrarCitaEspec(CitaEspecDto citaModel)
+        public CitaEspecDto RegistrarCitaEspec(CitaEspecDto citaModel, UserDto usuModel, MascotaDto mascotaModel)
 
         {
             CitaEspecDto citaEspecDto = new CitaEspecDto();
@@ -51,6 +51,10 @@ namespace Clinipet.Services
                 if (respuesta != 0)
                 {
                     citaEspecDto.Response = 1;
+                    EmailConfigUtility gestorCorreo = new EmailConfigUtility();
+                    String destinatario = usuModel.correo_usu;
+                    String asunto = "Cita confirmada exitosamente!";
+                    gestorCorreo.EnviarCorreoCita(destinatario, asunto, usuModel, citaModel, mascotaModel);
                     citaEspecDto.Mensaje = "Creación exitosa";
 
                 }

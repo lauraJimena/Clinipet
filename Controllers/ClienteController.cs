@@ -302,15 +302,24 @@ namespace Clinipet.Controllers
         }
         
         [HttpPost]
-        public ActionResult ConfirmarCita(CitaEspecDto nuevaCita)
+        public ActionResult ConfirmarCita(CitaEspecDto nuevaCita, int id_mascota)
         {
             try
             {
-                ClienteService clienteService = new ClienteService(); // instancia el UserService.
-                CitaEspecDto citaResponse = clienteService.RegistrarCitaEspec(nuevaCita); // Llama al método de creación de usuario.
-                
-                    if (citaResponse.Response == 1)
+                ClienteService clienteService = new ClienteService(); // instancia el UserService.         
+                UserDto usuRespuesta = new UserDto();
+                MascotaDto mascota = clienteService.ObtenerMascotaPorId(id_mascota);
+                usuRespuesta.correo_usu = Session["Correo"].ToString();
+                usuRespuesta.nom_usu = Session["Nombre"].ToString();
+                usuRespuesta.apel_usu = Session["Apellido"].ToString();
+                usuRespuesta.num_ident = Session["Num_docu"].ToString();
+
+
+                CitaEspecDto citaRespuesta = clienteService.RegistrarCitaEspec(nuevaCita, usuRespuesta, mascota);
+
+                if (citaRespuesta.Response == 1)
                     {
+
                     return Json(new { success = true, redirectUrl = Url.Action("IndexCliente") });
                     
                     }
@@ -335,7 +344,7 @@ namespace Clinipet.Controllers
             {
                 ClienteService clienteService = new ClienteService(); // instancia el UserService.
                 CitaGeneralDto citaGenResponse = clienteService.AgendarCitaGeneral(nuevaCita); // Llama al método de creación de usuario.
-
+               
                 if (citaGenResponse.Response == 1)
                 {
                     return Json(new { success = true, redirectUrl = Url.Action("IndexCliente") });

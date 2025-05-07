@@ -93,6 +93,7 @@ namespace Clinipet.Controllers
                         Session["Num_docu"] = userResponse.num_ident;
                         Session["Rol"] = userResponse.id_rol;
                         Session["Contras"] = userResponse.contras_usu;
+                        Session["Correo"] = userResponse.correo_usu;
 
                         // Si necesita cambiar la contraseña, redirige a la vista de cambio de contraseña
                         if (userResponse.cambio_contras == true)
@@ -140,18 +141,19 @@ namespace Clinipet.Controllers
             {
                 GeneralService userService = new GeneralService(); // instancia el UserService.
                 UserDto userResponse = userService.RegistrarCliente(nuevoUsu); // Llama al método de creación de usuario.
-                Console.WriteLine(userResponse.correo_usu);
+              
                 if (userResponse.Response == 1)
                 {
-                    return Json(new { success = true, message = userResponse.Mensaje }); // Si la creación fue exitosa.
+                    userResponse.Mensaje = "Cliente registrado exitosamente.";     
+                    return Json(new { success = true, redirectUrl = Url.Action("Login", "General")});
 
                 }
                 else
                 {
                     if (userResponse.Response == -1)
                     {
-                        
-                        return Json(new { success = false, message = userResponse.Mensaje }); //Si el correo ya existe
+                       
+                        return Json(new { success = false, message = userResponse.Mensaje }); //Si el correo ya existe                      
                     }
                     else
                     {
@@ -162,7 +164,7 @@ namespace Clinipet.Controllers
                         }
                         else
                         {
-                            return RedirectToAction("About", "Home"); // Si el registro falla
+                            return View("Error"); // Si el registro falla
                         }                                            
                     }
 

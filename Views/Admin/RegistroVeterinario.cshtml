@@ -12,7 +12,7 @@
 
             @using (Html.BeginForm("RegistVet", "Admin", FormMethod.Post, new { id = "registroVetForm" }))
             {
-                @Html.AntiForgeryToken()
+               
 
                 <label for="nom_usu">Nombres:</label><br />
                 <input type="text" id="nom_usu" asp-for="nom_usu" name="nom_usu" required /><br />
@@ -78,6 +78,27 @@
         </div>
     </div>
 </body>
+<!-- Validar solo números-->
+<script>
+
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const numIdentInput = document.getElementById('num_ident');
+        const telInput = document.getElementById('tel_usu'); // Campo del teléfono
+
+        if (numIdentInput) {
+            numIdentInput.addEventListener('input', function () {
+                this.value = this.value.replace(/\D/g, ''); // Elimina cualquier letra
+            });
+        }
+
+        if (telInput) {
+            telInput.addEventListener('input', function () {
+                this.value = this.value.replace(/\D/g, ''); // Aplica la misma validación al teléfono
+            });
+        }
+    });
+</script>
 
 <script>
     document.getElementById("registroVetForm").addEventListener("submit", function (event) {
@@ -156,9 +177,10 @@
         flex-direction: column;
     }
 
-
+    
     .contBoton button {
         margin-top: 10px;
+        
     }
 
     .text-danger {

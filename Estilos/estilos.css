@@ -231,3 +231,17 @@ th, td {
 .swal2-text {
     margin-bottom: 0;
 }
+.botonConfir {
+    font-size: 1em;
+    margin-top: 0;
+    color: #2f2f2f;
+    text-shadow: none;
+    background-color: #d9a86c;
+}
+.botonCancel {
+    font-size: 1em;
+    margin-top: 0;
+    color: #2f2f2f;
+    text-shadow: none;
+    background-color: #d9a86c;
+}

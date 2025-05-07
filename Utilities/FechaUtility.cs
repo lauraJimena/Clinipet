@@ -10,18 +10,18 @@ namespace Clinipet.Utilities
         public DateTime ObtenerProximaFecha(string nombreDia)
         {
             // Traducir de español a inglés
-            var diasTraducidos = new Dictionary<string, DayOfWeek>(StringComparer.OrdinalIgnoreCase)
-    {
-        { "domingo", DayOfWeek.Sunday },
-        { "lunes", DayOfWeek.Monday }, 
-        { "martes", DayOfWeek.Tuesday },
-        { "miércoles", DayOfWeek.Wednesday },
-        { "miercoles", DayOfWeek.Wednesday }, // por si no lleva tilde
-        { "jueves", DayOfWeek.Thursday },
-        { "viernes", DayOfWeek.Friday },
-        { "sábado", DayOfWeek.Saturday },
-        { "sabado", DayOfWeek.Saturday } 
-    };
+        var diasTraducidos = new Dictionary<string, DayOfWeek>(StringComparer.OrdinalIgnoreCase)
+        {
+            { "domingo", DayOfWeek.Sunday },
+            { "lunes", DayOfWeek.Monday }, 
+            { "martes", DayOfWeek.Tuesday },
+            { "miércoles", DayOfWeek.Wednesday },
+            { "miercoles", DayOfWeek.Wednesday }, // por si no lleva tilde
+            { "jueves", DayOfWeek.Thursday },
+            { "viernes", DayOfWeek.Friday },
+            { "sábado", DayOfWeek.Saturday },
+            { "sabado", DayOfWeek.Saturday } 
+        };
 
             if (!diasTraducidos.TryGetValue(nombreDia.ToLower(), out DayOfWeek diaDeseado))
             {

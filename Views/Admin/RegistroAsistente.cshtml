@@ -65,6 +65,28 @@
     </div>
 
 </body>
+<!-- Validar solo números-->
+<script>
+  
+   
+        document.addEventListener('DOMContentLoaded', function () {
+        const numIdentInput = document.getElementById('num_ident');
+        const telInput = document.getElementById('tel_usu'); // Campo del teléfono
+
+        if (numIdentInput) {
+            numIdentInput.addEventListener('input', function () {
+                this.value = this.value.replace(/\D/g, ''); // Elimina cualquier letra
+            });
+        }
+
+        if (telInput) {
+            telInput.addEventListener('input', function () {
+                this.value = this.value.replace(/\D/g, ''); // Aplica la misma validación al teléfono
+            });
+        }
+    });
+</script>
+
 <script>
     document.getElementById("registroForm").addEventListener("submit", function (event) {
         event.preventDefault(); // Evita la recarga de la página

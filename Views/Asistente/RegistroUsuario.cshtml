@@ -56,6 +56,17 @@
     </div>
 
 </body>
+<!-- Validar solo números-->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const input = document.getElementById('num_ident');
+        if (input) {
+            input.addEventListener('input', function () {
+                this.value = this.value.replace(/\D/g, '');
+            });
+        }
+    });
+</script>
 <script>
     document.getElementById("registroForm").addEventListener("submit", function (event) {
         event.preventDefault(); // Evita la recarga de la página

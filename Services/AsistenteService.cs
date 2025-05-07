@@ -44,6 +44,11 @@ namespace Clinipet.Services
                         if (AsistRepo.RegistrarUsuario(nuevoAsist) != 0)
                         {
                             userResponse.Response = 1;
+                            //Enviar Correo Bienvenida
+                            EmailConfigUtility gestorCorreo = new EmailConfigUtility();
+                            String destinatario = nuevoAsist.correo_usu;
+                            String asunto = "Bienvenido al sistema de CliniPet!";
+                            gestorCorreo.EnviarCorreoBienv(destinatario, asunto, nuevoAsist);
                             userResponse.Mensaje = "Asistente registrado exitosamente.";
 
                         }

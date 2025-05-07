@@ -14,6 +14,7 @@ namespace Clinipet.Dtos
         public int id_estado { get; set; }
         public int serv_dispon { get; set; }
         public int id_dispon{ get; set; }
+        public int total_citas { get; set; }
 
     }
 }

@@ -28,7 +28,7 @@
             background-color: #9fb2a9;
             box-shadow: 0px 7px 15px rgba(0, 0, 0, 0.22);
             border-color: #9fb2a9;
-            height: 11.8%;
+            height: 12%;
         }
 
             .navbar .navbar-brand {
@@ -36,22 +36,28 @@
                 font-size: 1.3em;
                 font-weight: bold;
                 color: #2f2f2f;
+                margin-right:10px;
             }
 
                 .navbar .navbar-brand:hover {
                     font-size: 1.55em;
                 }
 
-
-
         .tit {
-            margin-top: 18px;
+            color: #353535 !important;
+            margin-top: 19px;
+           
+            font-size: 1.55em !important;
             text-shadow: -1.5px -1.5px 0 gray;
         }
-
-        .navbar-brand img.logo {
-            margin-top: 1px;
-            margin-right: 8px; /* Espacio entre el logo y el texto */
+            .tit:hover {
+                color: white !important;
+                font-size: 1.8em !important;
+            }
+        .navbar-brand .logo {          
+            
+            margin-right:-30px;         
+           
         }
 
         .navbar-collapse .nav .links {
@@ -63,7 +69,19 @@
 
             .navbar-collapse .nav .links:hover {
                 font-size: 1.29em;
+                 
+            
             }
+        .sesion {
+            background-color: #d9a86c;
+            border-radius: 60px;
+            box-shadow: 2px 2px 5px gray;   
+            margin-left:15px;
+        }
+        .navbar-collapse .nav .sesion:hover {
+            background-color: #948e8e;
+            font-size: 1.2em;
+        }
 
         footer {
             border-radius: 10px;
@@ -134,7 +152,7 @@
         <div class="container">
             <div class="navbar-header">
                 <a href="@Url.Action("Index", "Home")" class="navbar-brand">
-                    <img src="@Url.Content("~/Imagenes/logo_clinipet.png")" alt="CliniPet Logo" width="65" height="55" class="logo">
+                    <img src="@Url.Content("~/Imagenes/logo_clinipet_sin_fondo.png")" alt="CliniPet Logo" width="124" height="68" class="logo">
                 </a>
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                     <span class="icon-bar"></span>
@@ -153,11 +171,11 @@
                     <li>@Html.ActionLink("Registro Cliente", "RegistroCliente", "General", new { area = "" }, new { @class = "links" })</li>
                     @if (Session["UsuLoguedo"] != null)
                     {
-                        <li>@Html.ActionLink("Cerrar Sesión", "CerrarSesion", "General", new { area = "" }, new { @class = "links" })</li>
+                        <li>@Html.ActionLink("Cerrar Sesión", "CerrarSesion", "General", new { area = "" }, new { @class = "links sesion" })</li>
                     }
                     else
                     {
-                        <li>@Html.ActionLink("Iniciar Sesión", "Login", "General", new { area = "" }, new { @class = "links" })</li>
+                        <li>@Html.ActionLink("Iniciar Sesión", "Login", "General", new { area = "" }, new { @class = "links sesion" })</li>
                     }
 
                 </ul>
