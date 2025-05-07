@@ -6,6 +6,8 @@ using System.Web.Mvc;
 using Clinipet.Dtos;
 using Clinipet.Services;
 using Clinipet.Repositories;
+using Rotativa;
+using Clinipet.Utilities;
 
 namespace Clinipet.Controllers
 {
@@ -306,7 +308,17 @@ namespace Clinipet.Controllers
             // Recarga la lista después de eliminar
             return RedirectToAction("EliminarAsistente");
         }
+        public ActionResult ReporteServicios()
+        {
+           ReporteService reporService = new ReporteService();
+            
+            var modelo = reporService.ObtenerDatosReporteServicios();
+            //var reportData = _reportService.GetReportData();
+            return ReportUtility.GenerarPdf(this.ControllerContext, modelo);
 
-       
+        }
+
+
+
     }
 }

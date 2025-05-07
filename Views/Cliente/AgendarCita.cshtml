@@ -14,7 +14,7 @@
     <table class="tabla">
         <tr><th>Fecha</th><td>@Model.Disponib.nom_dia</td></tr>
         <tr><th>Hora</th><td>@Model.Disponib.nom_hora</td></tr>
-        <tr><th>Médico</th><td>@Model.Disponib.nom_usu</td></tr>
+        <tr><th>Veterinario</th><td>@Model.Disponib.nom_usu</td></tr>
         <tr><th>Especialidad</th><td>@Model.Disponib.nom_espec</td></tr>
         <tr><th>Mascota</th><td>@Model.Mascota.nom_masc</td></tr>
         <tr><th>Dueño</th><td>@Model.Mascota.nom_usu</td></tr>
@@ -33,6 +33,10 @@
             <input type="hidden" name="id_servicio" value="@Model.Disponib.id_servicio" />
             <input type="hidden" name="nom_espec" value="@Model.Disponib.nom_espec" />
             <input type="hidden" name="nom_dia" value="@Model.Disponib.nom_dia" />
+            <input type="hidden" name="nom_masc" value="@Model.Mascota.nom_masc" />
+            <input type="hidden" name="nom_hora" value="@Model.Disponib.nom_hora" />
+            <input type="hidden" name="nom_usu" value="@Model.Disponib.nom_usu" />
+
             <button type="button" class="boton" id="confirmButton">Confirmar</button>
         </form>
     </div>

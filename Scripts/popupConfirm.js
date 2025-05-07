@@ -70,7 +70,15 @@ function enviarFormulario() {
                 icon: "error",
                 title: "Error",
                 text: "Error inesperado. Intenta de nuevo más tarde.",
-                confirmButtonText: "OK"
+                confirmButtonText: "OK",
+                 customClass: {
+                    popup: 'swal2-popup',
+                    title: 'swal2-title',
+                    content: 'swal2-content',
+                    confirmButton: 'botonConfir',
+                    cancelButton: 'botonCancel',
+
+                }
             });
         });
 }

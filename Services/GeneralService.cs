@@ -1,8 +1,10 @@
 ﻿using Clinipet.Dtos;
 using Clinipet.Repositories;
+using Clinipet.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 //En GeneralService van todos los metodos en comun entre roles
@@ -29,9 +31,9 @@ namespace Clinipet.Services
 
                 if (userRepository.ExisteCorreo(userModel.correo_usu))
                 {
-                    responseUserDto.Response = -1;
+                    responseUserDto.Response = -1;                   
                     responseUserDto.Mensaje = "El correo ya existe. Intente nuevamente.";
-                    //userResponse.Mensaje = "Asistente registrado con éxito";
+                  
                 }
                 else
                 {
@@ -39,15 +41,30 @@ namespace Clinipet.Services
                     {
                         responseUserDto.Response = -2;
                         responseUserDto.Mensaje = "El numero de documento ya existe. Intente nuevamente.";
-                        //userResponse.Mensaje = "Asistente registrado con éxito";
+                       
                     }
                     else
                     {
                         if (userRepository.RegistrarUsuario(userModel) != 0)
                         {
                             responseUserDto.Response = 1;
-                            responseUserDto.Mensaje = "Creación exitosa";
 
+                            // Enviar correo en segundo plano
+                            Task.Run(() =>
+                            {
+                                try
+                                {
+                                    EmailConfigUtility gestorCorreo = new EmailConfigUtility();
+                                    String destinatario = userModel.correo_usu;
+                                    String asunto = "Bienvenido al sistema de CliniPet!";
+                                    gestorCorreo.EnviarCorreoBienv(destinatario, asunto, userModel);
+                                }
+                                catch (Exception ex)
+                                {
+                                    // Aquí puedes loguear el error o tomar acciones, pero no debe afectar el registro
+                                    Console.WriteLine("Error al enviar el correo: " + ex.Message);
+                                }
+                            });
                         }
                         else
                         {

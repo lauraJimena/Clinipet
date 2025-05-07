@@ -11,7 +11,7 @@
         <div class="cont">
             <div class="cajaTitulo"><h2 class="titulo">Registro de Cliente</h2></div>
 
-            <form id="registroForm" method="post" asp-action="RegistroCliente" asp-controller="General">
+            <form id="guardarForm" method="post" asp-action="RegistroCliente" asp-controller="General" data-url="@Url.Action("RegistroCliente", "General")">
                 <label for="nom_usu">Nombres:</label><br />
                 <input type="text" asp-for="nom_usu" id="nom_usu" name="nom_usu" required /><br />
                 @Html.ValidationMessageFor(model => model.nom_usu, "", new { @class = "text-danger" })
@@ -55,27 +55,18 @@
     </div>
 
 </body>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="@Url.Content("~/Scripts/popup.js")"></script>
+<!-- Validar solo números-->
 <script>
-    document.getElementById("registroForm").addEventListener("submit", function (event) {
-        event.preventDefault(); // Evita la recarga de la página
-
-        var formData = new FormData(this);
-
-        fetch('@Url.Action("RegistroCliente", "General")', {
-            method: "POST",
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                // Redirige si el registro fue exitoso               
-                window.location.href = "/Home/Index";
-            } else {
-                // Muestra el modal si hay error
-                mostrarModal("Error", data.message);
-            }
-        })
-        .catch(error => console.error("Error:", error));
+    document.addEventListener('DOMContentLoaded', function () {
+        const input = document.getElementById('num_ident');
+        if (input) {
+            input.addEventListener('input', function () {
+                this.value = this.value.replace(/\D/g, '');
+            });
+        }
     });
 </script>
 <style>
@@ -105,5 +96,4 @@
         margin-left: 40px;
         flex-direction: column; /* Elementos en columna */
     }
-
 </style>
