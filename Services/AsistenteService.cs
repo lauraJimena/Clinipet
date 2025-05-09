@@ -224,6 +224,103 @@ namespace Clinipet.Services
             return repo.ObtenerCitasPorDia(id_dia);
         }
 
-       
+
+        public DisponibDto obtenerDisponPorId(int id_dispon)
+
+        {
+            System.Diagnostics.Debug.WriteLine("Estoy en obtenerCitaPorId");
+            AsistenteRepository asisRepository = new AsistenteRepository();
+            return asisRepository.ObtenerDisponPorId(id_dispon);
+
+        }
+
+        public MascotaDto ObtenerMascotaPorId(int id_mascota)
+
+        {
+            System.Diagnostics.Debug.WriteLine("Estoy en obtenerMascotaPorId");
+            AsistenteRepository asisRepository = new AsistenteRepository();
+            return asisRepository.ObtenerMascotaPorId(id_mascota);
+
+        }
+
+        public List<MascotaDto> ListadoMascotas(int id_usu)
+
+        {
+
+            AsistenteRepository asisRepository = new AsistenteRepository();
+            List<MascotaDto> mascotas = asisRepository.ListadoMascotas(id_usu);
+
+            return mascotas;
+        }
+
+        public List<MascotaDto> ListadoTodasMascotas()
+        {
+            AsistenteRepository asisRepository = new AsistenteRepository();
+            System.Diagnostics.Debug.WriteLine(">>> Entrando a ListadoTodasMascotas");
+            List<MascotaDto> mascotas = asisRepository.ListarTodasLasMascotas();
+            System.Diagnostics.Debug.WriteLine($">>> Mascotas encontradas: {mascotas.Count}");
+            return mascotas;
+        }
+
+        public List<ServicioDto> ListadoServiciosGenerales()
+
+        {
+
+            AsistenteRepository asisRepository = new AsistenteRepository();
+            List<ServicioDto> serviciosGenerales = asisRepository.ListadoServiciosGenerales();
+
+            return serviciosGenerales;
+        }
+
+        public List<DisponibDto> ObtenerCitasGenDispon(int id_servicio)
+        {
+            AsistenteRepository asisclienteRepository = new AsistenteRepository();
+            List<DisponibDto> citasGenDispon = asisclienteRepository.ObtenerCitasGenDispon(id_servicio);
+
+            return citasGenDispon;
+
+        }
+
+        public CitaGeneralDto AgendarCitaGeneral(CitaGeneralDto citaModel)
+
+        {
+            CitaGeneralDto responseCitaGenDto = new CitaGeneralDto();
+            AsistenteRepository asisRepository = new AsistenteRepository();
+            Console.WriteLine("Estoy en el servicio");
+            try
+            {
+
+                citaModel.id_servicio = citaModel.id_servicio;
+                citaModel.id_estado = 3; //Agendada
+                if (asisRepository.RegistrarCitaGeneral(citaModel) != 0)
+                {
+                    responseCitaGenDto.Response = 1;
+                    responseCitaGenDto.Mensaje = "Creación exitosa";
+
+                }
+                else
+                {
+                    responseCitaGenDto.Response = 0;
+                    responseCitaGenDto.Mensaje = "Algo pasó";
+                }
+
+                return responseCitaGenDto;
+            }
+            catch (Exception e)
+            {
+                responseCitaGenDto.Response = 0;
+                responseCitaGenDto.Mensaje = e.InnerException?.ToString();
+                return responseCitaGenDto;
+            }
+
+        }
+
+        public List<MascotaDto> BuscarMascotas(string nombreMascota, string cedulaDueno)
+        {
+            AsistenteRepository asisRepository = new AsistenteRepository();
+            List<MascotaDto> mascotas = asisRepository.BuscarMascotas(nombreMascota, cedulaDueno);
+            return mascotas;
+        }
+
     }
 }

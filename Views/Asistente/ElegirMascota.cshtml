@@ -1,0 +1,135 @@
+﻿
+@{
+    ViewBag.Title = "ElegirMascota";
+}
+
+@model Clinipet.Dtos.MascotaCitaDto
+<link rel="stylesheet" href="@Url.Content("~/Estilos/estilos.css")">
+
+<h2>Seleccionar mascota</h2>
+@if (ViewBag.Mensaje != null)
+{
+    <div class="alert alert-warning">
+        @ViewBag.Mensaje
+    </div>
+}
+
+<form method="post" action="@Url.Action("ElegirMascota", "Asistente")" class="form-inline" style="margin-bottom: 20px; text-align:center;">
+    <input type="hidden" name="id_dispon" value="@Model.IdDispon" />
+    <input type="hidden" name="id_usu" value="@Model.IdUsu" />
+    <input type="hidden" name="id_servicio" value="@Model.IdServicio" />
+
+    <input type="text" name="nombreMascota" placeholder="Nombre de la mascota" value="@ViewBag.NombreMascota" />
+    <input type="text" name="cedulaDueno" placeholder="Cédula del dueño" value="@ViewBag.CedulaDueno" />
+    <button type="submit" class="boton">Buscar</button>
+</form>
+
+<form method="post" action="@Url.Action("ConfirmarCitaGeneral", "Asistente")" id="confirmForm">
+    <input type="hidden" name="id_dispon" value="@Model.IdDispon" />
+    <input type="hidden" name="id_usu" value="@Model.IdUsu" />
+    <input type="hidden" name="id_servicio" value="@Model.IdServicio" />
+    <div class="contenedorMascotasGrid">
+        @foreach (var mascota in Model.Mascotas)
+        {
+            <div class="mascotaItem">
+                <input type="radio" name="id_mascota" id="mascota_@mascota.id_mascota" value="@mascota.id_mascota" hidden />
+                <label for="mascota_@mascota.id_mascota" class="cajaMascota">
+                    <strong>@mascota.nom_masc</strong><br />
+                    Edad: @mascota.edad_masc años<br />
+                    Tipo: @mascota.nom_tipo<br />
+                    Raza: @mascota.nom_raza
+                </label>
+            </div>
+        }
+    </div>
+
+    <div class="cajaBoton">
+        <a href="@Url.Content("~/Asistente/ServiciosGenerales")" class="boton">Volver</a>
+
+        <button type="button" class="boton botonConfirm" id="confirmButton">Confirmar</button>
+
+    </div>
+</form>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="@Url.Content("~/Scripts/popupConfirm.js")"></script>
+
+
+
+<style>
+    body {
+        background-image: url('/Imagenes/fondo_elegir_masc.png');
+        background-size: cover; /* para cubrir toda la pantalla */
+        background-repeat: no-repeat;
+        background-attachment: fixed; /* para que no se mueva al hacer scroll */
+        background-position: center;
+    }
+
+    h2 {
+        margin-top: 50px;
+        margin-bottom: 20px;
+    }
+
+    .contenedorMascotasGrid {
+        margin-left: 16%;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px 0px; /* 12px vertical, 8px horizontal */
+        padding: 0 0;
+        margin-bottom: 0;
+    }
+
+    .mascotaItem {
+        width: 60%;
+    }
+
+        .mascotaItem strong {
+            font-size: 1.2em;
+            font-weight: 800;
+        }
+
+    .cajaMascota {
+        display: block;
+        width: 100%;
+        padding: 5px;
+        background-color: #c7cbca;
+        border-radius: 50px;
+        text-align: center;
+        font-size: 18px;
+        cursor: pointer;
+        box-shadow: -1px -1px 8px #545454;
+        transition: all 0.3s ease;
+    }
+
+    input[type="radio"]:checked + .cajaMascota {
+        background-color: #4f7768;
+        color: white;
+    }
+
+    .cajaMascota:hover {
+        background-color: #9fb2a9;
+    }
+
+    .cajaBoton {
+        font-size: 1.1em;
+        text-align: center;
+    }
+
+    .botonCancel {
+        background-color: #948e8e;
+        border-radius: 20px;
+    }
+
+    .botonConfirm {
+        background-color: #d9a86c;
+    }
+
+    .botonConfir {
+        font-size: 1em;
+        color: #2f2f2f;
+        text-shadow: none;
+        background-color: #d9a86c;
+        border-radius: 20px;
+    }
+</style>
+
