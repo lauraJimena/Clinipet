@@ -87,6 +87,8 @@
     });
 </script>
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script>
     document.getElementById("registroForm").addEventListener("submit", function (event) {
         event.preventDefault(); // Evita la recarga de la página
@@ -100,15 +102,45 @@
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                // Redirige si el registro fue exitoso
-               // mostrarModal("Éxito", data.message);
-                window.location.href = '@Url.Action("IndexAdmin", "Admin")';
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Registro exitoso',
+                    text: data.message,
+                    showConfirmButton: false,
+                    timer: 1800,
+                    customClass: {
+                        popup: 'swal2-popup',
+                        title: 'swal2-title',
+                        content: 'swal2-content'
+                    }
+                }).then(() => {
+                    window.location.href = '@Url.Action("IndexAdmin", "Admin")';
+                });
             } else {
-                // Muestra el modal si hay error
-                mostrarModal("Error", data.message);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: data.message,
+                    confirmButtonText: 'Intentar de nuevo',
+                    customClass: {
+                        popup: 'swal2-popup',
+                        title: 'swal2-title',
+                        text: 'swal2-text',
+                        content: 'swal2-content',
+                        confirmButton: 'boton'
+                    }
+                });
             }
         })
-        .catch(error => console.error("Error:", error));
+        .catch(error => {
+            console.error("Error:", error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Ocurrió un error inesperado. Intenta de nuevo más tarde.',
+                confirmButtonText: 'Aceptar'
+            });
+        });
     });
 </script>
 <style>

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Mail;
 using System.Web;
+using System.Web.Hosting;
 
 namespace Clinipet.Utilities
 {
@@ -84,12 +85,16 @@ namespace Clinipet.Utilities
                 email.Headers.Add("Importance", "High");
 
                 // Crea el recurso LinkedResource para la imagen que se mostrará inline
-                LinkedResource logo = new LinkedResource(@"C:\Users\viher\source\repos\Clinipet\Imagenes\logo_clinipet_sin_fondo.png", "image/png");
+                //LinkedResource logo = new LinkedResource(@"C:\Users\viher\source\repos\Clinipet\Imagenes\logo_clinipet_sin_fondo.png", "image/png");
+                string rutaLogo = HostingEnvironment.MapPath("~/Imagenes/logo_clinipet_sin_fondo.png");
+                LinkedResource logo = new LinkedResource(rutaLogo, "image/png");
                 logo.ContentId = "LogoCliniPet";  // Este ID será utilizado en el HTML
                 logo.ContentType.Name = "logo_clinipet.png";
 
                 // Nueva imagen (bienvenida)
-                LinkedResource imagenBienvenida = new LinkedResource(@"C:\Users\viher\source\repos\Clinipet\Imagenes\correo_bienv.jpg", "image/jpg");
+                //LinkedResource imagenBienvenida = new LinkedResource(@"C:\Users\viher\source\repos\Clinipet\Imagenes\correo_bienv.jpg", "image/jpg");
+                string rutaBienv = HostingEnvironment.MapPath("~/Imagenes/correo_bienv.jpg");
+                LinkedResource imagenBienvenida = new LinkedResource(rutaBienv, "image/jpg");
                 imagenBienvenida.ContentId = "ImagenBienvenida";
                 logo.ContentType.Name = "bienvenido_clinipet.png";
 
