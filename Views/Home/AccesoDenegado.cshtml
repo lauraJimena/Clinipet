@@ -1,0 +1,50 @@
+﻿
+@{
+    ViewBag.Title = "Acceso Denegado";
+}
+<link rel="stylesheet" href="@Url.Content("~/Estilos/estilos.css")">
+<h2>Acceso Denegado</h2>
+
+<div class="contenedorAccesoDenegado">
+    <h1>🚫 No tienes permiso para acceder a esta página.</h1>
+    <p>Estás intentando acceder a una página a la cual no tienes permiso</p>
+
+    <div class="botonesAcceso">     
+        <a href="@Url.Action("CerrarSesionYVolver", "General")" class="boton">Volver al inicio</a>
+    </div>
+</div>
+
+<style>
+    body {
+        background-image: url('/Imagenes/fondo_index2.png');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-position: center;
+        height: 100vh; /* Asegura que el cuerpo cubra toda la altura de la ventana */
+        justify-content: center;
+        align-items: center; /* Centra todo el contenido de la página */
+    }
+    h2{
+        margin-top:40px;
+    }
+    .contenedorAccesoDenegado {
+        text-align: center;
+        padding: 50px;
+        background-color: #f8d7da;
+        border-radius: 10px;
+        color: #721c24;
+    }
+
+    .botonesAcceso {
+        margin-top: 20px;
+    }
+
+    .boton {
+        font-size: 1em;
+        margin-top: 0;
+        color: #2f2f2f;
+        text-shadow: none;
+        background-color: #d9a86c;
+    }
+</style>

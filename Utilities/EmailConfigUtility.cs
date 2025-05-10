@@ -28,13 +28,14 @@ namespace Clinipet.Utilities
                 UseDefaultCredentials = false,
                 Credentials = new NetworkCredential(User, Password)
             };
+            
         }
         // Método para enviar correos
         public void EnviarCorreoCita(string destinatario, string asunto, UserDto user, CitaEspecDto cita, MascotaDto mascota)
         {
             try
             {
-                string mensaje = ObtenerPlantillaCita(user, cita, mascota);
+                string mensaje = ObtenerPlantillaCitaEspec(user, cita, mascota);
                 email = new MailMessage(User, destinatario, asunto, mensaje)
                 {
                     IsBodyHtml = true
@@ -55,9 +56,7 @@ namespace Clinipet.Utilities
 
                 // Agrega el recurso de la imagen a la vista alterna
                 vista.LinkedResources.Add(logo);
-
-                
-
+              
                 email.AlternateViews.Add(vista);
 
 
@@ -120,6 +119,51 @@ namespace Clinipet.Utilities
                 throw; // Asegúrate de manejar esta excepción donde se llama a este método
             }
         }
+        public void EnviarCorreoRestablecimiento(string destinatario, string asunto, UserDto user, string token)
+        {
+            try
+            {
+         
+                string mensaje = ObtenerPlantillaRestab(user, token); // Pasa el token aquí
+                email = new MailMessage(User, destinatario, asunto, mensaje)
+                {
+                    IsBodyHtml = true
+                };
+                // Cabeceras para marcar el correo como de alta prioridad
+                email.Headers.Add("X-Priority", "1"); // Alta prioridad
+                email.Headers.Add("X-MSMail-Priority", "High");
+                email.Headers.Add("Importance", "High");
+
+                // Crea el recurso LinkedResource para la imagen que se mostrará inline
+               
+                string rutaLogo = HostingEnvironment.MapPath("~/Imagenes/logo_clinipet_sin_fondo.png");
+                LinkedResource logo = new LinkedResource(rutaLogo, "image/png");
+                logo.ContentId = "LogoCliniPet";  // Este ID será utilizado en el HTML
+                logo.ContentType.Name = "logo_clinipet.png";           
+
+                // Crea una vista alterna que contiene el cuerpo del correo en HTML
+                AlternateView vista = AlternateView.CreateAlternateViewFromString(mensaje, null, "text/html");
+
+                // Agrega el recurso de la imagen a la vista alterna
+                vista.LinkedResources.Add(logo);
+            
+
+                email.AlternateViews.Add(vista);
+
+
+                cliente.Send(email);
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error al enviar correo: " + ex.Message);
+                throw; // Asegúrate de manejar esta excepción donde se llama a este método
+            }
+        }
+
+
+
+
         // Método para obtener la plantilla de bienvenido
         private string ObtenerPlantillaBienv(UserDto user)
         {
@@ -134,8 +178,16 @@ namespace Clinipet.Utilities
             return ObtenerPlantillaCita(usu, cita, mascota);
 
         }
+        // Método para obtener la plantilla de restablcer contraseña
+        private string ObtenerPlantillaRestab(UserDto usu, string token)
+        {
+
+            return ObtenerPlantillaRestablecer(usu, token);
+
+        }
+
         // Plantilla de cita confirmada
-       private string ObtenerPlantillaCita(UserDto usu, CitaEspecDto cita, MascotaDto mascota)
+        private string ObtenerPlantillaCita(UserDto usu, CitaEspecDto cita, MascotaDto mascota)
         {
             return $@"
             <!DOCTYPE html>
@@ -285,6 +337,62 @@ namespace Clinipet.Utilities
                 
                 </table>
             </body>";
+
+        }
+        // Plantilla de bienvenido 
+        private string ObtenerPlantillaRestablecer(UserDto user, string token)
+        {
+           
+            string baseUrl = "https://localhost:44388/";
+            string urlCambio = $"{baseUrl}General/RestablecerContras?token={token}";
+
+            return $@"
+    <body style='margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #9fb2a9;'>
+        <table role='presentation' width='100%' cellspacing='0' cellpadding='0' border='0' align='center'>
+            <tr>
+                <td align='center'>
+                    <table width='700' style='background-color: #ffffff;'>
+
+                        <!-- Encabezado -->
+                        <tr>
+                            <td style='background-color: #78a890; padding: 20px;'>
+                                <table width='100%'>
+                                    <tr>
+                                        <td style='text-align: center;'>
+                                            <img src='cid:LogoCliniPet' alt='Logo CliniPet' style='max-width:150px;'/>
+                                        </td>
+                                        <td style='width: 80%; text-align: left;'>
+                                            <h1 style='margin: 0; color: white; font-size: 26px;'>Restablecer Contraseña</h1>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+
+                        <!-- Contenido -->
+                        <tr style='background-color:#e4e4e3; padding:15px;'>
+                            <td style='padding: 20px;'>
+                                <div style='background-color: #d9a86c; padding: 20px; border-radius: 10px; color: #333333; font-size: 17px; text-align: center;'>
+                                    <p>Recibimos una solicitud para restablecer tu contraseña en <strong>CliniPet</strong>.</p>
+                                    <p>Haz clic en el botón de abajo para cambiar tu contraseña de forma segura:</p>
+                                    <a href='{urlCambio}' style='display: inline-block; padding: 12px 24px; background-color: #78a890; color: white; text-decoration: none; border-radius: 8px; font-size: 16px; margin-top: 10px;'>Restablecer Contraseña</a>
+                                    <p style='margin-top: 15px; font-size: 14px;'>Si no solicitaste este cambio, puedes ignorar este mensaje.</p>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <!-- Footer -->
+                        <tr>
+                            <td style='background-color: #78a890; text-align: center; padding: 15px;'>
+                                <p style='color: white; margin: 0; font-size: 14px;'>© 2025 CliniPet</p>
+                            </td>
+                        </tr>
+
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </body>";
 
         }
 

@@ -198,6 +198,60 @@ namespace Clinipet.Services
                 throw new Exception("Error al cambiar la contraseña: " + ex.Message);
             }
         }
+        public UserDto BuscarPorIdentidad(string num_ident)
+        {                 
+            try
+            {
+
+                GeneralRepository repo = new GeneralRepository();
+                return repo.ObtenerUsuarioPorIdentidad(num_ident);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al cambiar la contraseña: " + ex.Message);
+            }
+        }
+       
+        public void EnviarCorreoRestablecimiento(UserDto usu)
+        {
+            GeneralRepository repo = new GeneralRepository();
+            //UserDto usuario = repo.BuscarPorCorreo(correo);
+
+            if (usu != null)
+            {
+                string token = Guid.NewGuid().ToString();
+                DateTime expiracion = DateTime.Now.AddHours(1);
+
+                // Guardar el token en la base de datos
+                repo.GuardarTokenRecuperacion(usu.id_usu, token, expiracion);
+
+
+                //Enviar Correo
+                EmailConfigUtility gestorCorreo = new EmailConfigUtility();
+                String destinatario = usu.correo_usu;
+                String asunto = "Restablecimiento de Contraseña";
+                gestorCorreo.EnviarCorreoRestablecimiento(destinatario, asunto, usu, token);
+            }
+        }
+        public bool RestablecerContrasena(int idUsuario, string nuevaContrasena)
+        {
+            GeneralRepository repo = new GeneralRepository();
+            //string hashContrasena = SeguridadService.HashearSHA256(nuevaContrasena); //Aca la encriptación
+            int resultado = repo.RestablecerContrasena(idUsuario, nuevaContrasena);
+            return resultado > 0;
+        }
+        public int? ObtenerIdUsuarioPorToken(string token)
+        {
+            GeneralRepository repo = new GeneralRepository();
+            return repo.ObtenerIdUsuarioPorToken(token);
+        }
+
+
+
+
+
+
+
 
     }
 }

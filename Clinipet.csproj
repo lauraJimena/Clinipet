@@ -136,6 +136,7 @@
     <Compile Include="Dtos\MascotaCitaDto.cs" />
     <Compile Include="Dtos\CitaGeneralDto.cs" />
     <Compile Include="Dtos\ReporteDto.cs" />
+    <Compile Include="Dtos\ContrasDto.cs" />
     <Compile Include="Dtos\ServicioDto.cs" />
     <Compile Include="Dtos\DisponibDto.cs" />
     <Compile Include="Dtos\MascotaDto.cs" />
@@ -159,6 +160,7 @@
     <Compile Include="Utilities\DBContextUtility.cs" />
     <Compile Include="Utilities\EmailConfigUtility.cs" />
     <Compile Include="Utilities\FechaUtility.cs" />
+    <Compile Include="Utilities\ValidarRolUtility.cs" />
     <Compile Include="Utilities\ReportUtility.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -313,6 +315,8 @@
     <Content Include="Views\Asistente\CitasGenDispon.cshtml" />
     <Content Include="Views\Asistente\ServiciosGenerales.cshtml" />
     <Content Include="Views\Asistente\ElegirMascota.cshtml" />
+    <Content Include="Views\General\RestablecerContras.cshtml" />
+    <Content Include="Views\Home\AccesoDenegado.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -1,6 +1,7 @@
 ﻿using Clinipet.Dtos;
 using Clinipet.Repositories;
 using Clinipet.Services;
+using Clinipet.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -52,6 +53,8 @@ namespace Clinipet.Controllers
             UserDto user = new UserDto();
             return View(user);
         }
+
+        [ValidarRolUtility(3)]
         public ActionResult RegistroMascota()
         {
             if (Session["UsuLoguedo"] != null)
@@ -91,7 +94,7 @@ namespace Clinipet.Controllers
                         Session["Nombre"] = userResponse.nom_usu;
                         Session["Apellido"] = userResponse.apel_usu;
                         Session["Num_docu"] = userResponse.num_ident;
-                        Session["Rol"] = userResponse.id_rol;
+                        Session["RolUsu"] = userResponse.id_rol;
                         Session["Contras"] = userResponse.contras_usu;
                         Session["Correo"] = userResponse.correo_usu;
 
@@ -134,7 +137,7 @@ namespace Clinipet.Controllers
 
 
 
-        [HttpPost]
+        [HttpPost]        
         public ActionResult RegistroCliente(UserDto nuevoUsu)
         {
             try
@@ -177,7 +180,9 @@ namespace Clinipet.Controllers
             }
 
         }
+
         [HttpPost]
+        [ValidarRolUtility(3)]
         public ActionResult RegistroMascota(MascotaDto nuevaMasc)
         {
             try
@@ -216,13 +221,7 @@ namespace Clinipet.Controllers
 
         [HttpGet]
         public ActionResult CambiarContraseña()
-        {
-            // Validar que esté iniciada la sesión
-            if (Session["Num_docu"] == null || Session["Rol"] == null)
-            {
-                // Si no hay sesión, redirigir a Login
-                return RedirectToAction("Login", "General");
-            }
+        {           
 
             return View();
         }
@@ -268,6 +267,67 @@ namespace Clinipet.Controllers
                 return View();
             }
         }
+        [HttpPost]
+        public ActionResult OlvideContrasena(string num_ident)
+        {
+            GeneralService generalService = new GeneralService();
+
+            // Buscar el usuario por número de identidad
+            UserDto usuRespuesta = generalService.BuscarPorIdentidad(num_ident);
+
+            if (usuRespuesta != null)
+            {
+                string correoUsuario = usuRespuesta.correo_usu; // Obtener el correo del usuario
+
+                if (!string.IsNullOrEmpty(correoUsuario))
+                {
+                    // Llamar al servicio de envío de correo
+                    
+                    generalService.EnviarCorreoRestablecimiento(usuRespuesta);
+                    return Json(new { success = true });
+                    
+                }              
+                return Json(new { success = false, message = "El usuario no tiene un correo registrado." });
+                
+            }
+            return Json(new { success = false, message = "Número de identidad no encontrado." });
+            
+        }
+        [HttpGet]
+        public ActionResult RestablecerContras(string token)
+        {            
+            return View(new ContrasDto { Token = token });           
+        }
+
+        [HttpPost]
+        public ActionResult RestablecerContras(ContrasDto contras)
+        {
+            if (contras.NuevaContrasena != contras.ConfirmarContrasena)
+            {
+                return Json(new { exito = false, mensaje = "Las contraseñas no coinciden." });
+            }
+
+            var generalService = new GeneralService();
+            int? idUsuario = generalService.ObtenerIdUsuarioPorToken(contras.Token);
+
+            if (idUsuario == null)
+            {
+                return Json(new { exito = false, mensaje = "El enlace ha expirado o no es válido." });
+            }
+
+            bool resultado = generalService.RestablecerContrasena(idUsuario.Value, contras.NuevaContrasena);
+
+            if (resultado)
+            {
+                return Json(new { exito = true, mensaje = "Tu contraseña ha sido actualizada con éxito." });
+            }
+            else
+            {
+                return Json(new { exito = false, mensaje = "Error al actualizar la contraseña." });
+            }
+        }
+
+
     }
 
 }

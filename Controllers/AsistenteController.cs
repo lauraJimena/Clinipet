@@ -6,12 +6,14 @@ using System.Web.Mvc;
 using Clinipet.Dtos;
 using Clinipet.Services;
 using Clinipet.Repositories;
+using Clinipet.Utilities;
 
 namespace Clinipet.Controllers
 {
-    public class AsistenteController : Controller
+    public class AsistenteController : BaseController
     {
         // GET: Asistente
+        [ValidarRolUtility(2)] //Validación para que solo rol 2 (asistente) acceda a la vista
         public ActionResult IndexAsistente()
         {
             try
@@ -32,6 +34,7 @@ namespace Clinipet.Controllers
         }
 
         [HttpPost]
+        [ValidarRolUtility(2)] 
         public JsonResult RegistroUsuario(UserDto usuario)
         {
             var servicio = new AsistenteService(); 
@@ -45,11 +48,12 @@ namespace Clinipet.Controllers
         }
 
         [HttpGet]
+        [ValidarRolUtility(2)]
         public ActionResult RegistroUsuario()
         {
             return View(new UserDto());
         }
-
+        [ValidarRolUtility(2)]
         public ActionResult RegistroMascota()
         {
             try
@@ -77,6 +81,7 @@ namespace Clinipet.Controllers
         }
 
         [HttpPost]
+        [ValidarRolUtility(2)]
         public ActionResult RegistroMascota(MascotaDto mascota)
         {
             try
@@ -102,6 +107,7 @@ namespace Clinipet.Controllers
             }
         }
 
+        [ValidarRolUtility(2)]
         public ActionResult ConsultarCitas(int? idDia)
         {
             try
@@ -135,6 +141,7 @@ namespace Clinipet.Controllers
         }
 
         [HttpPost]
+        [ValidarRolUtility(2)]
         public ActionResult CambiarEstadoCita(int id_cita_esp, int nuevo_estado)
         {
             try
@@ -150,8 +157,9 @@ namespace Clinipet.Controllers
             }
         }
 
-
+        [ValidarRolUtility(2)]
         public ActionResult ServiciosGenerales()
+
         {
             if (Session["UsuLoguedo"] != null)
             {
@@ -165,6 +173,7 @@ namespace Clinipet.Controllers
             }
         }
 
+        [ValidarRolUtility(2)]
         public ActionResult CitasGenDispon()
         {
             try
@@ -185,6 +194,7 @@ namespace Clinipet.Controllers
             }
         }
 
+        [ValidarRolUtility(2)]
         public ActionResult ListadoMascotas()
         {
             try
@@ -205,6 +215,7 @@ namespace Clinipet.Controllers
             }
         }
 
+        [ValidarRolUtility(2)]
         public ActionResult ElegirMascota()
         {
             if (Session["UsuLoguedo"] != null)
@@ -218,6 +229,7 @@ namespace Clinipet.Controllers
         }
 
         [HttpPost]
+        [ValidarRolUtility(2)]
         public ActionResult CitasGenDispon(int? id_servicio)
         {
             if (Session["UsuLoguedo"] == null)
@@ -244,6 +256,7 @@ namespace Clinipet.Controllers
         }
 
         [HttpPost]
+        [ValidarRolUtility(2)]
         public ActionResult ListadoMascotas(int id_usu, int id_dispon)
         {
 
@@ -276,6 +289,7 @@ namespace Clinipet.Controllers
         }
 
         [HttpPost]
+        [ValidarRolUtility(2)]
         public ActionResult AgendarCita(int id_dispon, int id_mascota, int id_usu)
         {
             try
@@ -309,6 +323,7 @@ namespace Clinipet.Controllers
         }
 
         [HttpPost]
+        [ValidarRolUtility(2)]
         public ActionResult ConfirmarCitaGeneral(CitaGeneralDto nuevaCita)
         {
 
@@ -338,6 +353,7 @@ namespace Clinipet.Controllers
         }
 
         [HttpPost]
+        [ValidarRolUtility(2)]
         public ActionResult ElegirMascota(int id_usu, int id_dispon, int id_servicio, string nombreMascota = null, string cedulaDueno = null)
         {
             try
@@ -386,6 +402,7 @@ namespace Clinipet.Controllers
             }
         }
 
+        [ValidarRolUtility(2)]
         public ActionResult BuscarMascotas()
         {
             try
@@ -410,6 +427,7 @@ namespace Clinipet.Controllers
         }
 
         [HttpPost]
+        [ValidarRolUtility(2)]
         public ActionResult BuscarMascotas(string nombreMascota, string cedulaDueno)
         {
             try

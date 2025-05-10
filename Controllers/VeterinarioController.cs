@@ -1,5 +1,6 @@
 ﻿using Clinipet.Dtos;
 using Clinipet.Services;
+using Clinipet.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,7 @@ namespace Clinipet.Controllers
     public class VeterinarioController : BaseController
     {
         // GET: Veterinario
+        [ValidarRolUtility(4)] //Validación para que solo rol 4 (veterinario) acceda a la vista
         public ActionResult IndexVeterinario()
         {
             try
@@ -31,6 +33,8 @@ namespace Clinipet.Controllers
                 return View("Error");  // Muestra la vista Error en caso de que ocurra una excepción.
             }
         }
+
+        [ValidarRolUtility(4)]
         public ActionResult PubCitas()
         {
             try
@@ -54,8 +58,10 @@ namespace Clinipet.Controllers
                 string mensaje = ex.Message;
                 return View("Error");
             }
-    }
+        }
+
         [HttpPost]
+        [ValidarRolUtility(4)]
         public ActionResult PublicarDisponibilidad(DisponibDto disponib)
         {
             try
@@ -91,6 +97,8 @@ namespace Clinipet.Controllers
             }
 
         }
+
+        [ValidarRolUtility(4)]
         public ActionResult BuscarCliente()
         {
             try
@@ -112,7 +120,9 @@ namespace Clinipet.Controllers
                 return View("Error");
             }
         }
+
         [HttpPost]
+        [ValidarRolUtility(4)]
         public ActionResult BuscarCliente(string num_ident)
         {
             try
@@ -144,7 +154,8 @@ namespace Clinipet.Controllers
                 return View("Error");
             }
         }
-        
+
+        [ValidarRolUtility(4)]
         public ActionResult ElegirMascDescrip()
         {
             try
@@ -169,7 +180,9 @@ namespace Clinipet.Controllers
             }
 
         }
+
         [HttpPost]
+        [ValidarRolUtility(4)]
         public ActionResult ElegirCitaEspec(int id_mascota)
         {
             try
@@ -198,7 +211,8 @@ namespace Clinipet.Controllers
             }
 
         }
-        
+
+        [ValidarRolUtility(4)]
         public ActionResult HistorialCitas()
         {
             try
@@ -233,7 +247,8 @@ namespace Clinipet.Controllers
             }
 
         }
-        
+
+        [ValidarRolUtility(4)]
         public ActionResult HistorialMascota(string num_ident)
         {
             try
@@ -271,6 +286,8 @@ namespace Clinipet.Controllers
             }
 
         }
+
+        [ValidarRolUtility(4)]
         public ActionResult ObtenerMascotas()
         {
             try
@@ -298,6 +315,7 @@ namespace Clinipet.Controllers
 
         }
 
+        [ValidarRolUtility(4)]
         public ActionResult DescripConsulta()
         {
             try
@@ -329,6 +347,7 @@ namespace Clinipet.Controllers
         }
        
         [HttpPost]
+        [ValidarRolUtility(4)]
         public ActionResult DescripConsulta(CitaEspecDto citaEsp)
         {
             try
