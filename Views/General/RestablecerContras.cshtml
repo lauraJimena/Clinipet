@@ -1,0 +1,136 @@
+﻿
+@model Clinipet.Dtos.ContrasDto
+
+<link rel="stylesheet" href="@Url.Content("~/Estilos/estilos.css")">
+@if (Model.Token == null || Model.Token == "")
+{
+<div class="cajaError">
+    <h1>🚫 Error de Restablecimiento</h1>
+    <p class="textoEr">El enlace de restablecimiento es inválido o ha expirado.</p>
+    <a href="@Url.Action("CerrarSesionYVolver", "General")" class="boton botonError">Volver al inicio</a>
+</div>
+}
+else
+{
+    if (Model != null)
+    {
+        <input type="hidden" name="Token" value="@Model.Token" />
+    }
+<h2>Restablecer tu contraseña</h2>
+<div class="cajaForm">
+    <form id="formContras">
+        <input type="hidden" name="Token" value="@Model.Token" />
+
+        <div class="inputContras">
+            <label for="NuevaContrasena">Nueva Contraseña:</label><br />
+            <input id="actual" type="password" name="NuevaContrasena" required />
+            <span class="verContras" onclick="verContras('actual')">👁️</span>
+        </div>
+        <br />
+        <div class="inputContras">
+            <label for="ConfirmarContrasena">Confirmar Contraseña:</label><br />
+            <input id="nueva" type="password" name="ConfirmarContrasena" required />
+            <span class="verContras" onclick="verContras('nueva')">👁️</span>
+        </div>
+        <br />
+        <button type="submit" class="boton botonCam">Cambiar Contraseña</button>
+    </form>
+</div>
+}
+<script>
+    function verContras(idInput) {
+        const input = document.getElementById(idInput);
+        if (input.type === 'password') {
+            input.type = 'text';
+        } else {
+            input.type = 'password';
+        }
+    }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    document.getElementById("formContras").addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        const form = e.target;
+        const data = new FormData(form);
+
+        fetch('/General/RestablecerContras', {
+            method: 'POST',
+            body: data
+        })
+            .then(res => res.json())
+            .then(result => {
+                if (result.exito) {
+                    Swal.fire("¡Éxito!", result.mensaje, "success");
+                    form.reset(); // opcional
+                } else {
+                    Swal.fire("Error", result.mensaje, "error");
+                }
+            });
+    });
+</script>
+
+<style>
+    body {
+        background-image: url('/Imagenes/fondo_pub_citas.png');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-position: center;
+        height: 100vh; /* Asegura que el cuerpo cubra toda la altura de la ventana */
+        justify-content: center;
+        align-items: center; /* Centra todo el contenido de la página */
+    }
+    h2 {
+        margin-top: 50px;
+    }
+    .cajaError{
+        margin-top:70px;
+        text-align:center;
+        background-color:white;
+        border-radius:20px;
+        padding:20px;
+        height:250px;
+        margin:50px auto;
+        width:60%;
+        
+    }
+    h1{
+        margin-top:40px;
+    }
+
+    .boton {
+        font-size: 1em;
+        margin-top: 0;
+        color: #2f2f2f;
+        text-shadow: none;
+        background-color: #d9a86c;
+    }
+    .textoEr{
+        margin-bottom:30px;
+    }
+    .botonCam{
+        margin-top:15px;
+    }
+    .cajaForm {
+        text-align: center;
+        margin: auto;
+        background-color: rgba(224, 224, 224, 1);
+        width:38%;
+        border-radius:20px; 
+        padding:30px;
+    }
+    .inputContras {
+        position: relative;
+        display: inline-block;
+    }
+
+    .inputContras .verContras {
+        position: absolute;
+        top: 63%;
+        right: 10px;
+        transform: translateY(-50%);
+        cursor: pointer;
+    }   
+</style>

@@ -11,11 +11,12 @@ using Clinipet.Utilities;
 
 namespace Clinipet.Controllers
 {
-    public class AdminController : Controller
+    public class AdminController : BaseController
     {
         //GET: Administrador
 
         // Vista principal admin
+        [ValidarRolUtility(1)] //Validación para que solo rol 1 (administrador) acceda a la vista
         public ActionResult IndexAdmin()
         {
             try
@@ -35,6 +36,7 @@ namespace Clinipet.Controllers
             }
         }
         // Registro de asistentes
+        [ValidarRolUtility(1)]
         public ActionResult RegistroAsistente()
         {
             try
@@ -56,6 +58,7 @@ namespace Clinipet.Controllers
         }
 
         //Eliminar Usuarios
+        [ValidarRolUtility(1)]
         public ActionResult EliminarUsuarios()
         {
             try
@@ -77,6 +80,7 @@ namespace Clinipet.Controllers
         }
 
         // Guardar datos del formulario
+        [ValidarRolUtility(1)]
         public ActionResult RegistVet(UserDto nuevoVete)
         {
             try
@@ -107,6 +111,7 @@ namespace Clinipet.Controllers
         }
 
         //Mostrar lista de veterinarios
+        [ValidarRolUtility(1)]
         public ActionResult EliminarVeterinario()
         {
             try
@@ -130,6 +135,7 @@ namespace Clinipet.Controllers
         }
 
         //Buscar Veterinario
+        [ValidarRolUtility(1)]
         public ActionResult BuscarVeterinario(string num_ident)
         {
             try
@@ -160,8 +166,9 @@ namespace Clinipet.Controllers
                 return View("Error");
             }
         }
-        
+
         //Registrar Veterinario
+        [ValidarRolUtility(1)]
         public ActionResult RegistroVeterinario()
         {
             try
@@ -190,6 +197,7 @@ namespace Clinipet.Controllers
             }
         }
         //Mostrar lista de asistentes
+        [ValidarRolUtility(1)]
         public ActionResult EliminarAsistente()
         {
             try
@@ -212,6 +220,7 @@ namespace Clinipet.Controllers
             }
         }
         //Buscar Asistente
+        [ValidarRolUtility(1)]
         public ActionResult BuscarAsistente(string num_ident)
         {
             try
@@ -242,12 +251,24 @@ namespace Clinipet.Controllers
                 return View("Error");
             }
         }
+        //Generar reporte de servicios prestados 
+        [ValidarRolUtility(1)]
+        public ActionResult ReporteServicios()
+        {
+            ReporteService reporService = new ReporteService();
+
+            var modelo = reporService.ObtenerDatosReporteServicios();
+            //var reportData = _reportService.GetReportData();
+            return ReportUtility.GenerarPdf(this.ControllerContext, modelo);
+
+        }
 
 
         //POST: Administrador
 
         //Eliminar Veterinario
         [HttpPost]
+        [ValidarRolUtility(1)]
         public ActionResult EliminVete(int id_usu)
         {
             try
@@ -267,6 +288,7 @@ namespace Clinipet.Controllers
         }
         // Guardar datos del formulario
         [HttpPost]
+        [ValidarRolUtility(1)]
         public ActionResult RegistAsist(UserDto nuevoAsist)
         {
             try
@@ -291,6 +313,7 @@ namespace Clinipet.Controllers
         
         //Eliminar Asistente
         [HttpPost]
+        [ValidarRolUtility(1)]
         public ActionResult EliminAsis(int id_usu)
         {
             try
@@ -308,15 +331,8 @@ namespace Clinipet.Controllers
             // Recarga la lista después de eliminar
             return RedirectToAction("EliminarAsistente");
         }
-        public ActionResult ReporteServicios()
-        {
-           ReporteService reporService = new ReporteService();
-            
-            var modelo = reporService.ObtenerDatosReporteServicios();
-            //var reportData = _reportService.GetReportData();
-            return ReportUtility.GenerarPdf(this.ControllerContext, modelo);
 
-        }
+        
 
 
 

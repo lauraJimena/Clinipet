@@ -334,6 +334,107 @@ namespace Clinipet.Repositories
             Connection.Disconnect();
             return cambioExitoso;
         }
+        //Para obtener el correo del usuario
+        public UserDto ObtenerUsuarioPorIdentidad(string num_ident)
+        {
+            string sql = "SELECT id_usu, correo_usu " +
+                         "FROM usuario " +
+                         "WHERE num_ident = @num_ident";
+
+            DBContextUtility Connection = new DBContextUtility();
+            Connection.Connect();
+
+            using (SqlCommand command = new SqlCommand(sql, Connection.CONN()))
+            {
+                command.Parameters.AddWithValue("@num_ident", num_ident);
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        return new UserDto
+                        {
+                            id_usu = reader.GetInt32(0),
+                            correo_usu = reader.GetString(1)
+                        };
+                    }
+                }
+            }
+
+            return null; // Si no se encuentra el usuario
+        }
+        public int GuardarTokenRecuperacion(int idUsuario, string token, DateTime fechaExpiracion)
+        {
+            int comando = 0;
+            DBContextUtility Connection = new DBContextUtility();
+            Connection.Connect();
+
+            string SQL = "INSERT INTO [clinipet].[dbo].[recuperacion_contrasena] " +
+                         "(IdUsuario, Token, FechaCreacion, FechaExpiracion) " +
+                         "VALUES (@IdUsuario, @Token, @FechaCreacion, @FechaExpiracion)";
+
+            using (SqlCommand command = new SqlCommand(SQL, Connection.CONN()))
+            {
+                command.Parameters.AddWithValue("@IdUsuario", idUsuario);
+                command.Parameters.AddWithValue("@Token", token);
+                command.Parameters.AddWithValue("@FechaCreacion", DateTime.Now);
+                command.Parameters.AddWithValue("@FechaExpiracion", fechaExpiracion);
+
+                comando = command.ExecuteNonQuery();
+            }
+
+            Connection.Disconnect();
+            return comando;
+        }
+        public int RestablecerContrasena(int idUsuario, string nuevaContrasena)
+        {
+            int comando = 0;
+            DBContextUtility Connection = new DBContextUtility();
+            Connection.Connect();
+
+            string SQL = "UPDATE usuario SET contras_usu = @NuevaContrasena WHERE id_usu = @IdUsuario";
+
+            using (SqlCommand command = new SqlCommand(SQL, Connection.CONN()))
+            {
+                command.Parameters.AddWithValue("@NuevaContrasena", nuevaContrasena);
+                command.Parameters.AddWithValue("@IdUsuario", idUsuario);
+
+                comando = command.ExecuteNonQuery();
+            }
+
+            Connection.Disconnect();
+            return comando;
+        }
+        public int? ObtenerIdUsuarioPorToken(string token)
+        {
+            int? idUsuario = null;
+            DBContextUtility Connection = new DBContextUtility();
+            Connection.Connect();
+
+            string SQL = "SELECT IdUsuario FROM [clinipet].[dbo].[recuperacion_contrasena] " +
+                         "WHERE Token = @Token AND FechaExpiracion > GETDATE()";
+
+            using (SqlCommand command = new SqlCommand(SQL, Connection.CONN()))
+            {
+                command.Parameters.AddWithValue("@Token", token);
+                SqlDataReader reader = command.ExecuteReader();
+
+                if (reader.Read())
+                {
+                    idUsuario = reader.GetInt32(0);
+                }
+
+                reader.Close();
+            }
+
+            Connection.Disconnect();
+            return idUsuario;
+        }
+
+
+
+
+
+
 
 
     }

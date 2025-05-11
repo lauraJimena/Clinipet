@@ -1,5 +1,6 @@
 ﻿using Clinipet.Dtos;
 using Clinipet.Services;
+using Clinipet.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,7 @@ namespace Clinipet.Controllers
     public class ClienteController : BaseController
     {
         // GET: Cliente
-        
+        [ValidarRolUtility(3)] //Validación para que solo rol 3 (cliente) acceda a la vista
         public ActionResult IndexCliente()
         {
             try
@@ -33,6 +34,7 @@ namespace Clinipet.Controllers
                 return View("Error");  // Muestra la vista Error en caso de que ocurra una excepción.
             }
         }
+        [ValidarRolUtility(3)]
         public ActionResult CitasEspecDispon()
         {
             if (Session["UsuLoguedo"] != null)
@@ -47,8 +49,8 @@ namespace Clinipet.Controllers
                 return RedirectToAction("Login", "General");
             }
 
-        }   
-        
+        }
+        [ValidarRolUtility(3)]
         public ActionResult MascotasRegistradas()
         {
             if (Session["UsuLoguedo"] != null)
@@ -63,6 +65,7 @@ namespace Clinipet.Controllers
                 return RedirectToAction("Login", "General");
             }
         }
+        [ValidarRolUtility(3)]
         public ActionResult ServiciosGenerales()
         {
             if (Session["UsuLoguedo"] != null)
@@ -76,7 +79,7 @@ namespace Clinipet.Controllers
                 return RedirectToAction("Login", "General");
             }
         }
-        
+        [ValidarRolUtility(3)]
         public ActionResult CitasGenDispon()
         {
             try
@@ -96,7 +99,7 @@ namespace Clinipet.Controllers
                 return View("Error");
             }
         }
-        
+        [ValidarRolUtility(3)]
         public ActionResult ListadoMascotas()
         {
             try
@@ -116,7 +119,7 @@ namespace Clinipet.Controllers
                 return View("Error");  
             }
         }
-        
+        [ValidarRolUtility(3)]
         public ActionResult AgendarCita()
         {
             if (Session["UsuLoguedo"] != null)
@@ -127,8 +130,8 @@ namespace Clinipet.Controllers
             {
                 return RedirectToAction("Login", "General");
             }
-        }             
-               
+        }
+        [ValidarRolUtility(3)]
         public ActionResult ElegirMascota()
         {
             if (Session["UsuLoguedo"] != null)
@@ -140,10 +143,77 @@ namespace Clinipet.Controllers
                 return RedirectToAction("Login", "General");
             }
         }
+        [ValidarRolUtility(3)]
+        public ActionResult ElegirHistorialCitas()
+        {
+            try
+            {
+                if (Session["UsuLoguedo"] != null)
+                {
 
+                    return View();
+                }
+                else
+                {
+                    return RedirectToAction("Login", "General");
+                }
+            }
+            catch (Exception ex)
+            {
+                string mensaje = ex.Message;
+                return View("Error");
+            }
+        }
+        [ValidarRolUtility(3)]
+        public ActionResult HistorialCitasEspec()
+        {
+            try
+            {
+                if (Session["UsuLoguedo"] != null)
+                {
+                    int id_usu = (int)Session["Id"];
+                    ClienteService clienteService = new ClienteService();
+                    List<CitaEspecDto> citasGen = clienteService.HistorialCitasEspec(id_usu);
+                    return View(citasGen);
+                }
+                else
+                {
+                    return RedirectToAction("Login", "General");
+                }
+            }
+            catch (Exception ex)
+            {
+                string mensaje = ex.Message;
+                return View("Error");
+            }
+        }
+        [ValidarRolUtility(3)]
+        public ActionResult HistorialCitasGenerales()
+        {
+            try
+            {
+                if (Session["UsuLoguedo"] != null)
+                {
+                    int id_usu = (int)Session["Id"];
+                    ClienteService clienteService = new ClienteService();
+                    List<CitaGeneralDto> citasGen = clienteService.HistorialCitasGenerales(id_usu);
+                    return View(citasGen);
+                }
+                else
+                {
+                    return RedirectToAction("Login", "General");
+                }
+            }
+            catch (Exception ex)
+            {
+                string mensaje = ex.Message;
+                return View("Error");
+            }
+        }
 
         //POST: Cliente
         [HttpPost]
+        [ValidarRolUtility(3)]
         public ActionResult CitasGenDispon(int? id_servicio)
         {
             if (Session["UsuLoguedo"] == null)
@@ -168,73 +238,10 @@ namespace Clinipet.Controllers
                 return View("Error");  
             }
         }
-        
-        public ActionResult HistorialCitasGenerales()
-        {
-            try
-            {
-                if (Session["UsuLoguedo"] != null)
-                {
-                    int id_usu = (int)Session["Id"];
-                    ClienteService clienteService = new ClienteService();
-                    List<CitaGeneralDto> citasGen = clienteService.HistorialCitasGenerales(id_usu);
-                    return View(citasGen);
-                }
-                else
-                {
-                    return RedirectToAction("Login", "General");
-                }
-            }
-            catch (Exception ex)
-            {
-                string mensaje = ex.Message;
-                return View("Error");
-            }
-        }
-        public ActionResult ElegirHistorialCitas()
-        {
-            try
-            {
-                if (Session["UsuLoguedo"] != null)
-                {
-                    
-                    return View();
-                }
-                else
-                {
-                    return RedirectToAction("Login", "General");
-                }
-            }
-            catch (Exception ex)
-            {
-                string mensaje = ex.Message;
-                return View("Error");
-            }
-        }
-        public ActionResult HistorialCitasEspec()
-        {
-            try
-            {
-                if (Session["UsuLoguedo"] != null)
-                {
-                    int id_usu = (int)Session["Id"];
-                    ClienteService clienteService = new ClienteService();
-                    List<CitaEspecDto> citasGen = clienteService.HistorialCitasEspec(id_usu);
-                    return View(citasGen);
-                }
-                else
-                {
-                    return RedirectToAction("Login", "General");
-                }
-            }
-            catch (Exception ex)
-            {
-                string mensaje = ex.Message;
-                return View("Error");
-            }
-        }
 
+        
         [HttpPost]
+        [ValidarRolUtility(3)]
         public ActionResult ListadoMascotas(int id_usu, int id_dispon)
         {
             
@@ -269,6 +276,7 @@ namespace Clinipet.Controllers
         }
         
         [HttpPost]
+        [ValidarRolUtility(3)]
         public ActionResult AgendarCita(int id_dispon, int id_mascota, int id_usu)
         {
             try
@@ -302,6 +310,7 @@ namespace Clinipet.Controllers
         }
         
         [HttpPost]
+        [ValidarRolUtility(3)]
         public ActionResult ConfirmarCita(CitaEspecDto nuevaCita, int id_mascota)
         {
             try
@@ -337,6 +346,7 @@ namespace Clinipet.Controllers
         }
        
         [HttpPost]
+        [ValidarRolUtility(3)]
         public ActionResult ConfirmarCitaGeneral(CitaGeneralDto nuevaCita)
         {
 
@@ -366,6 +376,7 @@ namespace Clinipet.Controllers
         }
         
         [HttpPost]
+        [ValidarRolUtility(3)]
         public ActionResult ElegirMascota(int id_usu, int id_dispon, int id_servicio)
         {
             //id_dispon = 0; //error intencional 

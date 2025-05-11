@@ -7,16 +7,23 @@
 <div class="contenedor">
     <div class="cont">
         <h2 class="titulo">Iniciar Sesión</h2>
-
+        
         <form id="loginForm">
             <label for="numeroIdentidad">Número de Identidad:</label><br />
             <input type="text" id="documento" name="num_ident" required pattern="\d+" title="Solo se permiten números" /><br />
 
             <label for="contraseña">Contraseña:</label><br />
             <input type="password" id="contraseña" name="contras_usu" required /><br />
-            <div class="contBoton">
+            <div class="cajaEnlace">
+                <button type="button" onclick="solicitarCambioContrasena()" class="botonOlv">¿Olvidaste tu contraseña?</button>
+            </div>
+            <div class="cajaBoton">
                 <button type="submit" class="botonForm">Ingresar</button>
             </div>
+            <div class="cajaEnlace arriba">
+                <a href="@Url.Action("RegistroCliente", "General")" class="enlace enlaceReg">Registrar</a>
+            </div>
+
         </form>
 
         <!-- Aquí se mostrarán los errores -->
@@ -46,10 +53,84 @@
         }
     });
 </script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<!-- Mostra mensaje de envio de correo para recuperación de contraseña -->
+
+<script>
+       function solicitarCambioContrasena() {
+        let numIdentidad = document.getElementById("documento").value; // Obtiene el número de identidad
+
+        if (!numIdentidad) {
+            Swal.fire({
+                title: "Error",
+                text: "Ingresa tu número de identidad antes de solicitar la recuperación.",
+                icon: "error",
+                customClass: {
+                    popup: 'swal2-popup',
+                    title: 'swal2-title',
+                    content: 'swal2-content',
+                    confirmButton: 'boton'
+                }
+            });
+            return;
+        }
+
+        fetch("@Url.Action("OlvideContrasena", "General")", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ num_ident: numIdentidad }) // Envía el número de identidad al backend
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                Swal.fire({
+                    title: "Correo enviado 📩",
+                    text: "A tu correo fue enviado un mensaje para restablecer tu contraseña.",
+                    icon: "success",
+                    customClass: {
+                        popup: 'swal2-popup',
+                        title: 'swal2-title',
+                        content: 'swal2-content',
+                        confirmButton: 'boton'
+                    }
+                });
+            } else {
+                Swal.fire({
+                    title: "Error",
+                    text: data.message,
+                    icon: "error",
+                    customClass: {
+                        popup: 'swal2-popup',
+                        title: 'swal2-title',
+                        content: 'swal2-content',
+                        confirmButton: 'boton'
+                    }
+                });
+            }
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            Swal.fire({
+                title: "Error",
+                text: "Hubo un problema en el envío.",
+                icon: "error",
+                customClass: {
+                    popup: 'swal2-popup',
+                    title: 'swal2-title',
+                    content: 'swal2-content',
+                    confirmButton: 'boton'
+                }
+            });
+        });
+    }
+</script>
+
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-<!-- Script para manejar el envío del formulario con fetch -->
+<!-- Script para manejar el envío del formulario con fetch y mostrar popups -->
 <script>
 document.getElementById('loginForm').addEventListener('submit', function (e) {
     e.preventDefault(); // Evita envío tradicional
@@ -85,7 +166,6 @@ document.getElementById('loginForm').addEventListener('submit', function (e) {
                     text: data.message,
                     showConfirmButton: false,
                     timer: 1500, // 1.5 segundos
-
                     customClass: {
                         popup: 'swal2-popup',
                         title: 'swal2-title',
@@ -125,7 +205,8 @@ document.getElementById('loginForm').addEventListener('submit', function (e) {
                 popup: 'swal2-popup',
                 title: 'swal2-title',
                 content: 'swal2-content',
-                icon: 'swal2-icon'
+                icon: 'swal2-icon',
+                 confirmButton: 'boton'
             }
         });
     });
@@ -142,8 +223,8 @@ document.getElementById('loginForm').addEventListener('submit', function (e) {
     }
 
     .titulo {
-        margin-top: 0px;
-        margin-bottom: 50px;
+        margin-top: -20px;
+        margin-bottom: 40px;
         font-size: 2.1em;
     }
 
@@ -159,6 +240,9 @@ document.getElementById('loginForm').addEventListener('submit', function (e) {
         justify-content: center;
         gap: 110px;
         margin: auto;
+    }
+
+    .loginForm {
     }
 
     .cont {
@@ -200,6 +284,39 @@ document.getElementById('loginForm').addEventListener('submit', function (e) {
         color: #2f2f2f;
         text-shadow: none;
         background-color: #d9a86c;
+    }
+    .botonOlv {
+        margin-top: -20px;
+        background: none;
+        border: none;
+        box-shadow: none;
+        font-weight: 500;
+    }
+    .botonOlv:hover{
+        color:white;       
+        box-shadow:none;
+        background:none;
+    }
+    .cajaEnlace {
+        margin-top: 15px;
+        text-align: center;
+    }
+
+    .enlace {
+        text-align: center;
+    }
+
+        .enlace:hover {
+            color: white;
+        }
+
+    .enlaceReg {
+        text-decoration: underline;
+    }
+
+    .cajaBoton {
+        margin-top: 5px;
+        text-align:center;
     }
 </style>
 

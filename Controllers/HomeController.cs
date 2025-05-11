@@ -30,5 +30,14 @@ namespace Clinipet.Controllers
         {
             return View(); // Muestra Views/Home/Error.cshtml
         }
+        public ActionResult AccesoDenegado()
+        {
+            if (Session["RolUsu"] != null) // Si el usuario tiene un rol, significa que intentó entrar a una vista sin permiso
+            {
+                return View();
+            }
+
+            return RedirectToAction("Index", "Home"); // Si intenta acceder manualmente, lo redirige al inicio
+        }
     }
 }
