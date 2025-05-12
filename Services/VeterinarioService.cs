@@ -6,6 +6,7 @@ using Clinipet.Dtos;
 using Clinipet.Services;
 using Clinipet.Repositories;
 using System.Web.Mvc;
+using Clinipet.Utilities;
 
 namespace Clinipet.Services
 {
@@ -26,7 +27,10 @@ namespace Clinipet.Services
                 nuevoVete.id_nivel = 1;      // Nivel básico
                 nuevoVete.id_estado = 1;     // Activo
                 nuevoVete.cambio_contras = true; // Requiere cambiar contraseña al iniciar
-                //nuevoVete.id_espec = 10;     
+                                                 //nuevoVete.id_espec = 10;     
+
+                // Hashear la contraseña antes de registrar
+                nuevoVete.contras_usu = EncriptContrasUtility.EncripContras(nuevoVete.contras_usu);
 
                 // Validaciones
                 if (VeteRepo.ExisteCorreo(nuevoVete.correo_usu))
