@@ -159,6 +159,7 @@
     <Compile Include="Services\VeterinarioService.cs" />
     <Compile Include="Utilities\DBContextUtility.cs" />
     <Compile Include="Utilities\EmailConfigUtility.cs" />
+    <Compile Include="Utilities\EncriptContrasUtility.cs" />
     <Compile Include="Utilities\FechaUtility.cs" />
     <Compile Include="Utilities\ValidarRolUtility.cs" />
     <Compile Include="Utilities\ReportUtility.cs" />

@@ -31,50 +31,47 @@ namespace Clinipet.Services
 
                 if (userRepository.ExisteCorreo(userModel.correo_usu))
                 {
-                    responseUserDto.Response = -1;                   
+                    responseUserDto.Response = -1;
                     responseUserDto.Mensaje = "El correo ya existe. Intente nuevamente.";
-                  
+                }
+                else if (userRepository.ExisteDocumento(userModel.num_ident))
+                {
+                    responseUserDto.Response = -2;
+                    responseUserDto.Mensaje = "El número de documento ya existe. Intente nuevamente.";
                 }
                 else
                 {
-                    if (userRepository.ExisteDocumento(userModel.num_ident))
+                    // Se encripta la contraseña
+                    userModel.contras_usu = EncriptContrasUtility.EncripContras(userModel.contras_usu);
+
+                    if (userRepository.RegistrarUsuario(userModel) != 0)
                     {
-                        responseUserDto.Response = -2;
-                        responseUserDto.Mensaje = "El numero de documento ya existe. Intente nuevamente.";
-                       
+                        responseUserDto.Response = 1;
+
+                        // Enviar correo en segundo plano
+                        Task.Run(() =>
+                        {
+                            try
+                            {
+                                EmailConfigUtility gestorCorreo = new EmailConfigUtility();
+                                String destinatario = userModel.correo_usu;
+                                String asunto = "Bienvenido al sistema de CliniPet!";
+                                gestorCorreo.EnviarCorreoBienv(destinatario, asunto, userModel);
+                            }
+                            catch (Exception ex)
+                            {
+                                // Aquí puedes loguear el error o tomar acciones, pero no debe afectar el registro
+                                Console.WriteLine("Error al enviar el correo: " + ex.Message);
+                            }
+                        });
                     }
                     else
                     {
-                        if (userRepository.RegistrarUsuario(userModel) != 0)
-                        {
-                            responseUserDto.Response = 1;
-
-                            // Enviar correo en segundo plano
-                            Task.Run(() =>
-                            {
-                                try
-                                {
-                                    EmailConfigUtility gestorCorreo = new EmailConfigUtility();
-                                    String destinatario = userModel.correo_usu;
-                                    String asunto = "Bienvenido al sistema de CliniPet!";
-                                    gestorCorreo.EnviarCorreoBienv(destinatario, asunto, userModel);
-                                }
-                                catch (Exception ex)
-                                {
-                                    // Aquí puedes loguear el error o tomar acciones, pero no debe afectar el registro
-                                    Console.WriteLine("Error al enviar el correo: " + ex.Message);
-                                }
-                            });
-                        }
-                        else
-                        {
-                            responseUserDto.Response = 0;
-                            responseUserDto.Mensaje = "Algo pasó";
-                        }
+                        responseUserDto.Response = 0;
+                        responseUserDto.Mensaje = "Algo pasó";
                     }
-                    
                 }
-                
+
                 return responseUserDto;
             }
             catch (Exception e)
@@ -88,16 +85,26 @@ namespace Clinipet.Services
         public UserDto Login(UserDto userModel)
         {
             GeneralRepository userRepository = new GeneralRepository();
-            UserDto userResponse = userRepository.Login(userModel);
+            UserDto userResponse = userRepository.Login(userModel.num_ident);
             System.Diagnostics.Debug.WriteLine("Llegué al servicio");
+
             // Si se encontro el usuuaro entonces 1
             if (userResponse.Response == 1)
             {
-                userResponse.Mensaje = "Inicio de sesión exitoso";
+                // Verificar la contraseña ingresada contra la guardada
+                if (EncriptContrasUtility.VerificaContras(userModel.contras_usu, userResponse.contras_usu))
+                {
+                    userResponse.Mensaje = "Inicio de sesión exitoso";
+                }
+                else
+                {
+                    userResponse.Response = 0;
+                    userResponse.Mensaje = "Contraseña incorrecta";
+                }
             }
             else
             {
-                userResponse.Mensaje = "Error en el inicio de sesión, nombre de usuario o contraseña incorrectos";
+                userResponse.Mensaje = "Error en el inicio de sesión, número de documento no encontrado";
             }
             return userResponse;
         }
@@ -191,7 +198,17 @@ namespace Clinipet.Services
             GeneralRepository contrasRepository = new GeneralRepository();
             try
             {
-                return contrasRepository.CambiarContraseña(numIdent, contrasenaActual, nuevaContrasena);
+                // Validación prevenir que la nueva contraseña sea igual a la actual
+                if (contrasenaActual == nuevaContrasena)
+                {
+                    throw new Exception("La nueva contraseña no puede ser igual a la anterior.");
+                }
+
+                // Ejecutar el cambio de contraseña (incluye la validación dentro del repositorio)
+                bool cambioExitoso = contrasRepository.CambiarContraseña(numIdent, contrasenaActual, nuevaContrasena);
+
+                return cambioExitoso;
+
             }
             catch (Exception ex)
             {
@@ -236,8 +253,8 @@ namespace Clinipet.Services
         public bool RestablecerContrasena(int idUsuario, string nuevaContrasena)
         {
             GeneralRepository repo = new GeneralRepository();
-            //string hashContrasena = SeguridadService.HashearSHA256(nuevaContrasena); //Aca la encriptación
-            int resultado = repo.RestablecerContrasena(idUsuario, nuevaContrasena);
+            string hashContrasena = EncriptContrasUtility.EncripContras(nuevaContrasena); // 🔐 PBKDF2
+            int resultado = repo.RestablecerContrasena(idUsuario, hashContrasena);
             return resultado > 0;
         }
         public int? ObtenerIdUsuarioPorToken(string token)

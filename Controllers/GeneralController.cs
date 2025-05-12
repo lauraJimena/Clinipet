@@ -221,9 +221,18 @@ namespace Clinipet.Controllers
 
         [HttpGet]
         public ActionResult CambiarContraseña()
-        {           
+        {
 
-            return View();
+            // Verificar si el usuario está logueado
+            if (Session["UsuLoguedo"] != null)
+            {
+                return View();
+            }
+            else
+            {
+                // Si no está logueado, redirigir al login
+                return RedirectToAction("Login", "General");
+            }
         }
 
 

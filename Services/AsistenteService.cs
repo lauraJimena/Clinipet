@@ -26,6 +26,9 @@ namespace Clinipet.Services
                 nuevoAsist.id_espec = 1;     // No aplica
                 nuevoAsist.cambio_contras = true; // Requiere cambiar contraseña al iniciar
 
+                // Encriptar la contraseña antes de registrar
+                nuevoAsist.contras_usu = EncriptContrasUtility.EncripContras(nuevoAsist.contras_usu);
+
                 // Validaciones
                 if (AsistRepo.ExisteCorreo(nuevoAsist.correo_usu))
                 {
@@ -82,6 +85,9 @@ namespace Clinipet.Services
                 userModel.id_nivel = 1;
                 userModel.id_estado = 1;
                 userModel.cambio_contras = false;
+
+                // Se encripta la contraseña
+                userModel.contras_usu = EncriptContrasUtility.EncripContras(userModel.contras_usu);
 
                 int resultado = userRepository.RegistrarUsuario(userModel);
 
