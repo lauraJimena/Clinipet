@@ -5,7 +5,6 @@
 }
 <link rel="stylesheet" href="@Url.Content("~/Estilos/estilos.css")">
 
-
 <body class="bodyForm">
     <div class="contenedor">
         <div class="cont">
@@ -38,37 +37,54 @@
                 <input type="email" id="correo_usu" asp-for="correo_usu" name="correo_usu" required /><br />
                 @Html.ValidationMessageFor(model => model.correo_usu, "", new { @class = "text-danger" })
 
-                <label for="tel_usu">Teléfono:</label><br />
+
+                <label for="tel_usu">Numéro de Teléfono:</label><br />
                 <input type="tel" id="tel_usu" asp-for="tel_usu" name="tel_usu" required pattern="\d+" title="Solo se permiten números" /><br />
                 @Html.ValidationMessageFor(model => model.tel_usu, "", new { @class = "text-danger" })
 
                 <label for="contras_usu">Contraseña:</label><br />
-                <input type="password" id="contras_usu" asp-for="contras_usu" name="contras_usu" required /><br />
+
+                <div class="input-contras-container">
+                    <input type="password" id="contras_usu" asp-for="contras_usu" name="contras_usu" required />
+                    <span class="verContras" onclick="verContras('contras_usu')">👁️</span>
+                </div><br />
                 @Html.ValidationMessageFor(model => model.contras_usu, "", new { @class = "text-danger" })
 
-                <div class="contBoton">
-                    <button type="submit" class="botonForm">Registrar</button>
-                </div>
+            <div class="contBoton">
+
+                <button type="button" class="botonVol" onclick="cancelarFormulario()">Cancelar</button>
+                <button type="submit" class="botonForm">Registrar</button>
+
+            </div>
             </form>
+
         </div>
         <img class="imagenFondo" src="~/Imagenes/registro.jpg" alt="">
     </div>
 
 </body>
-
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="@Url.Content("~/Scripts/popup.js")"></script>
-<!-- Validar solo números-->
+<script src="@Url.Content("~/Scripts/validaciones.js")"></script>
+<!-- Mostrar Contraseña -->
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const input = document.getElementById('num_ident');
-        if (input) {
-            input.addEventListener('input', function () {
-                this.value = this.value.replace(/\D/g, '');
-            });
+    function verContras(idInput) {
+        const input = document.getElementById(idInput);
+        if (input.type === 'password') {
+            input.type = 'text';
+        } else {
+            input.type = 'password';
         }
-    });
+    }
 </script>
+
+<!-- Cancelar registro-->
+<script>
+    function cancelarFormulario() {
+        document.getElementById("guardarForm").reset(); // Limpia todos los inputs
+        window.location.href = "@Url.Action("IndexCliente", "Cliente")"; // Redirige al home
+    }
+</script>
+
 <style>
     .cajaTitulo {
         justify-items: center; /* Alinea horizontalmente */
@@ -95,5 +111,27 @@
         margin-top: 0;
         margin-left: 40px;
         flex-direction: column; /* Elementos en columna */
+    }
+
+    .input-contras-container {
+        position: relative;
+        display: inline-block;
+        width: 100%;
+    }
+
+        .input-contras-container input {
+            width: 100%;
+            padding-right: 40px; /* espacio para el icono */
+            box-sizing: border-box;
+        }
+
+    .verContras {
+        position: absolute;
+        top: 45%;
+        right: 10px;
+        transform: translateY(-50%);
+        cursor: pointer;
+        font-size: 18px;
+        user-select: none;
     }
 </style>

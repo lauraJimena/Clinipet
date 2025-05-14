@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using Clinipet.Dtos;
 using Clinipet.Repositories;
@@ -17,7 +18,6 @@ namespace Clinipet.Services
 
             try
             {
-                Console.WriteLine("Estoy en registro de asistente");
 
                 // Seteo de datos por defecto
                 nuevoAsist.id_rol = 2;        // Asistente
@@ -47,12 +47,23 @@ namespace Clinipet.Services
                         if (AsistRepo.RegistrarUsuario(nuevoAsist) != 0)
                         {
                             userResponse.Response = 1;
-                            //Enviar Correo Bienvenida
-                            EmailConfigUtility gestorCorreo = new EmailConfigUtility();
-                            String destinatario = nuevoAsist.correo_usu;
-                            String asunto = "Bienvenido al sistema de CliniPet!";
-                            gestorCorreo.EnviarCorreoBienv(destinatario, asunto, nuevoAsist);
                             userResponse.Mensaje = "Asistente registrado exitosamente.";
+                            // Enviar correo en segundo plano
+                            Task.Run(() =>
+                            {
+                                try
+                                {
+                                    EmailConfigUtility gestorCorreo = new EmailConfigUtility();
+                                    String destinatario = nuevoAsist.correo_usu;
+                                    String asunto = "Bienvenido al sistema de CliniPet!";
+                                    gestorCorreo.EnviarCorreoBienv(destinatario, asunto, nuevoAsist);
+                                }
+                                catch (Exception ex)
+                                {
+                                    // Aquí puedes loguear el error o tomar acciones, pero no debe afectar el registro
+                                    Console.WriteLine("Error al enviar el correo: " + ex.Message);
+                                }
+                            });
 
                         }
                         else
@@ -326,6 +337,45 @@ namespace Clinipet.Services
             AsistenteRepository asisRepository = new AsistenteRepository();
             List<MascotaDto> mascotas = asisRepository.BuscarMascotas(nombreMascota, cedulaDueno);
             return mascotas;
+        }
+        public DisponibDto PublicarDisponGen(DisponibDto dispon)
+        {
+
+            AsistenteRepository asistenteRepository = new AsistenteRepository();
+            DisponibDto disponibRespuesta = new DisponibDto();
+
+
+            dispon.id_estado = 1; //Disponibilidad Activa
+                                  // Esto puede lanzar una excepción (por ejemplo, por trigger), se deja para que el controlador muestre el mensaje específico
+            disponibRespuesta = asistenteRepository.PublicarDisponGen(dispon);
+
+            if (disponibRespuesta != null)
+            {
+                ServicioDto servicio = new ServicioDto();
+                servicio.id_dispon = disponibRespuesta.id_dispon;
+                servicio.id_servicio = disponibRespuesta.id_servicio;
+
+                int resultado = asistenteRepository.RegistrarServicio_Dispon(servicio);
+
+                if (resultado != 0)
+                {
+                    return new DisponibDto
+                    {
+                        Response = 1,
+                        Mensaje = "Cita publicada correctamente",
+                        id_dispon = disponibRespuesta.id_dispon
+                };
+                }
+                else
+                {
+                    throw new Exception("No se pudo registrar el servicio.");
+                }
+            }
+
+            // Si no se generó el ID de disponibilidad
+            throw new Exception("No se pudo registrar la disponibilidad.");
+
+
         }
 
     }

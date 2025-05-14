@@ -334,7 +334,9 @@ namespace Clinipet.Controllers
                     }
                     else
                     {
-                    return Json(new { success = false, message = "No se pudo guardar correctamente" });
+                    // Aquí se devuelve el mensaje del trigger
+                    return Json(new { success = false, message = citaRespuesta.Mensaje ?? "No se pudo guardar correctamente" });
+                   
                     }
                                      
             }
@@ -347,7 +349,7 @@ namespace Clinipet.Controllers
        
         [HttpPost]
         [ValidarRolUtility(3)]
-        public ActionResult ConfirmarCitaGeneral(CitaGeneralDto nuevaCita)
+        /*public ActionResult ConfirmarCitaGeneral(CitaGeneralDto nuevaCita)
         {
 
             try
@@ -373,8 +375,48 @@ namespace Clinipet.Controllers
                 string mensaje = ex.Message;
                 return View("Error");
             }
+        }*/
+       
+        public ActionResult ConfirmarCitaGeneral(CitaGeneralDto nuevaCita)
+        {
+            try
+            {
+                ClienteService clienteService = new ClienteService();
+                int citasRegistradas = 0;
+
+                foreach (var idMascota in nuevaCita.id_mascotas)
+                {
+                    var citaPorMascota = new CitaGeneralDto
+                    {
+                        id_dispon = nuevaCita.id_dispon,
+                        id_estado = 3,
+                        id_servicio = nuevaCita.id_servicio,
+                        id_mascota = idMascota
+                    };
+
+                    var result = clienteService.AgendarCitaGeneral(citaPorMascota);
+                    if (result.Response == 1)
+                    {
+                        citasRegistradas++;
+                    }
+                }
+
+                if (citasRegistradas == nuevaCita.id_mascotas.Count)
+                {
+                    return Json(new { success = true, redirectUrl = Url.Action("IndexCliente") });
+                }
+                else
+                {
+                    return Json(new { success = false, message = "No se pudo registrar alguna de las citas." });
+                }
+            }
+            catch (Exception ex)
+            {
+                return View("Error");
+            }
         }
-        
+
+
         [HttpPost]
         [ValidarRolUtility(3)]
         public ActionResult ElegirMascota(int id_usu, int id_dispon, int id_servicio)

@@ -85,7 +85,7 @@
                         title: "Cita confirmada",
                         text: data.message || "Tu cita ha sido agendada exitosamente.",
                         showConfirmButton: false,
-                        timer: 3000,
+                        timer: 3000,    
                         customClass: {
                             popup: 'swal2-popup',
                             title: 'swal2-title',
@@ -100,7 +100,13 @@
                         icon: "error",
                         title: "Error",
                         text: data.message || "Ocurrió un error al confirmar la cita.",
-                        confirmButtonText: "OK"
+                        confirmButtonText: "OK",
+                        customClass: {
+                            popup: 'swal2-popup',
+                            title: 'swal2-title',
+                            content: 'swal2-content',
+                            confirmButton: 'botonConfir'
+                        }
                     });
                 }
             })
@@ -110,7 +116,13 @@
                     icon: "error",
                     title: "Error",
                     text: "Error inesperado. Intenta de nuevo más tarde.",
-                    confirmButtonText: "OK"
+                    confirmButtonText: "OK",
+                    customClass: {
+                        popup: 'swal2-popup',
+                        title: 'swal2-title',
+                        content: 'swal2-content',
+                        confirmButton: 'botonConfir'
+                    }
                 });
             });
     }

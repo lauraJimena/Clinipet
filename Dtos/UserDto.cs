@@ -47,7 +47,8 @@ namespace Clinipet.Dtos
 
         public bool cambio_contras { get; set; }
 
-        public string contras_nueva { get; set; } 
+        public string contras_nueva { get; set; }
+        public string confirmar_contras { get; set; }
 
         public int Response{ get; set; }
 

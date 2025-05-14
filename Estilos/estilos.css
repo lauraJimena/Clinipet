@@ -47,6 +47,7 @@ button {
 }
 .botonForm {
     background-color: #d9a86c;
+    text-shadow: 1px 1px 3px white;
 }
 .boton {
     margin-top: 18px;

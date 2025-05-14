@@ -11,7 +11,13 @@
             <div class="cajaTitulo"><h2 class="titulo">Registro de Asistente</h2></div>
 
             <!-- FORMULARIO con id unificado -->
-            @using (Html.BeginForm("RegistAsist", "Admin", FormMethod.Post, new { id = "registroForm" }))
+            @using (Html.BeginForm("RegistAsist", "Administrador", FormMethod.Post, new
+            {
+                id = "registroForm",
+                data_url = Url.Action("RegistAsist", "Administrador"),
+                data_redirect = Url.Action("IndexAdmin", "Administrador")
+            }))
+
             {
                 @Html.AntiForgeryToken()
                 <label for="nom_usu">Nombres:</label><br />
@@ -27,7 +33,6 @@
                     <option value="">Seleccione...</option>
                     <option value="1">Cédula</option>
                     <option value="2">Pasaporte</option>
-                    <option value="3">Otro</option>
                 </select>
                 @Html.ValidationMessageFor(model => model.id_tipo_ident, "", new { @class = "text-danger" })
                 <br />
@@ -49,6 +54,7 @@
                 @Html.ValidationMessageFor(model => model.contras_usu, "", new { @class = "text-danger" })
 
                 <div class="contBoton">
+                    <button type="button" class="botonVol" onclick="cancelarFormulario()">Cancelar</button>
                     <button type="submit" class="botonForm">Registrar</button>
                 </div>
             }
@@ -65,84 +71,19 @@
     </div>
 
 </body>
-<!-- Validar solo números-->
-<script>
-  
-   
-        document.addEventListener('DOMContentLoaded', function () {
-        const numIdentInput = document.getElementById('num_ident');
-        const telInput = document.getElementById('tel_usu'); // Campo del teléfono
-
-        if (numIdentInput) {
-            numIdentInput.addEventListener('input', function () {
-                this.value = this.value.replace(/\D/g, ''); // Elimina cualquier letra
-            });
-        }
-
-        if (telInput) {
-            telInput.addEventListener('input', function () {
-                this.value = this.value.replace(/\D/g, ''); // Aplica la misma validación al teléfono
-            });
-        }
-    });
-</script>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="@Url.Content("~/Scripts/Registros.js")"></script>
 
+<!-- Cancelar registro-->
 <script>
-    document.getElementById("registroForm").addEventListener("submit", function (event) {
-        event.preventDefault(); // Evita la recarga de la página
-
-        var formData = new FormData(this);
-
-        fetch('@Url.Action("RegistAsist", "Admin")', {
-            method: "POST",
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Registro exitoso',
-                    text: data.message,
-                    showConfirmButton: false,
-                    timer: 1800,
-                    customClass: {
-                        popup: 'swal2-popup',
-                        title: 'swal2-title',
-                        content: 'swal2-content'
-                    }
-                }).then(() => {
-                    window.location.href = '@Url.Action("IndexAdmin", "Admin")';
-                });
-            } else {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: data.message,
-                    confirmButtonText: 'Intentar de nuevo',
-                    customClass: {
-                        popup: 'swal2-popup',
-                        title: 'swal2-title',
-                        text: 'swal2-text',
-                        content: 'swal2-content',
-                        confirmButton: 'boton'
-                    }
-                });
-            }
-        })
-        .catch(error => {
-            console.error("Error:", error);
-            Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: 'Ocurrió un error inesperado. Intenta de nuevo más tarde.',
-                confirmButtonText: 'Aceptar'
-            });
-        });
-    });
+    function cancelarFormulario() {
+        document.getElementById("registroForm").reset(); // Limpia todos los inputs
+        window.location.href = "@Url.Action("IndexAdmin", "Administrador")"; // Redirige al home
+    }
 </script>
+
+
 <style>
     .modal {
         display: none;

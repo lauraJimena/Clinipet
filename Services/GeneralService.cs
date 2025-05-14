@@ -193,7 +193,7 @@ namespace Clinipet.Services
         }
 
 
-        public bool CambiarContraseña(string numIdent, string contrasenaActual, string nuevaContrasena)
+        public bool CambiarContraseña(string numIdent, string contrasenaActual, string nuevaContrasena, string confirmar_contras)
         {
             GeneralRepository contrasRepository = new GeneralRepository();
             try
@@ -203,7 +203,10 @@ namespace Clinipet.Services
                 {
                     throw new Exception("La nueva contraseña no puede ser igual a la anterior.");
                 }
-
+                if(confirmar_contras != nuevaContrasena)
+                {
+                    throw new Exception("Las contraseñas no coinciden");
+                }
                 // Ejecutar el cambio de contraseña (incluye la validación dentro del repositorio)
                 bool cambioExitoso = contrasRepository.CambiarContraseña(numIdent, contrasenaActual, nuevaContrasena);
 
@@ -253,7 +256,7 @@ namespace Clinipet.Services
         public bool RestablecerContrasena(int idUsuario, string nuevaContrasena)
         {
             GeneralRepository repo = new GeneralRepository();
-            string hashContrasena = EncriptContrasUtility.EncripContras(nuevaContrasena); // 🔐 PBKDF2
+            string hashContrasena = EncriptContrasUtility.EncripContras(nuevaContrasena); //PBKDF2
             int resultado = repo.RestablecerContrasena(idUsuario, hashContrasena);
             return resultado > 0;
         }

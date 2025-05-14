@@ -450,6 +450,81 @@ namespace Clinipet.Controllers
                 return View(new List<MascotaDto>());
             }
         }
+        [ValidarRolUtility(2)]
+        public ActionResult PublicarDisponGen()
+        {
+            try
+            {
+                if (Session["UsuLoguedo"] != null)
+                {
+                    VeterinarioService veterinarioService = new VeterinarioService(); // instancia el UserService.
+
+                    ViewBag.Dias = veterinarioService.ObtenerDiasSelect(); //Envia lista de dias a la vista
+                    ViewBag.Horas = veterinarioService.ObtenerHorasSelect(); //Envia lista de horas a la vista
+                    ViewBag.Servicios = veterinarioService.ObtenerServiciosGenSelect(); //Envia lista de horas a la vista
+                    return View();
+                }
+                else
+                {
+                    return RedirectToAction("Login", "General");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                string mensaje = ex.Message;
+                return View("Error");
+            }
+        }
+        [HttpPost]
+        [ValidarRolUtility(2)]
+        public ActionResult PublicarDisponGen(DisponibDto disponib)
+        {
+            try
+            {
+                if (Session["UsuLoguedo"] != null)
+                {
+                    disponib.id_usu = Convert.ToInt32(Session["Id"]); // Asigna el ID del usuario logueado
+
+                    AsistenteService asistService = new AsistenteService();
+                    DisponibDto disponibRespuesta = asistService.PublicarDisponGen(disponib); // Llama al método de publicación de disponibilidad.            
+
+                    if (disponibRespuesta.Response == 1)
+                    {
+                        return Json(new
+                        {
+                            success = true,
+                            redirectUrl = Url.Action("IndexAsistente", "Asistente"),
+                            message = "Guardado exitosamente"
+                        });
+                    }
+                    else
+                    {
+                        return Json(new
+                        {
+                            success = false,
+                            message = "No se pudo guardar la disponibilidad. Inténtalo nuevamente."
+                        });
+
+                    }
+                }
+                else
+                {
+                    return RedirectToAction("Login", "General");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                // Captura cualquier excepción y la devuelve al cliente
+                return Json(new
+                {
+                    success = false,
+                    message = ex.Message
+                });
+            }
+
+        }
 
     }
 }

@@ -17,27 +17,65 @@ namespace Clinipet.Repositories
             int id_disponGenerado = 0;
             DBContextUtility Connection = new DBContextUtility();
             Connection.Connect();
-
+            //Este insert usa un trigger para evitar disponibilidades duplicadas
             string SQL = @"
                         INSERT INTO disponibilidad (id_dia, id_hora, id_usu, id_estado) VALUES (@id_dia, @id_hora, @id_usu, @id_estado); 
                         SELECT SCOPE_IDENTITY();"; // Devuelve el ID recién creado
-
-            using (SqlCommand command = new SqlCommand(SQL, Connection.CONN()))
+            try
             {
+                using (SqlCommand command = new SqlCommand(SQL, Connection.CONN()))
+                {
                 command.Parameters.AddWithValue("@id_dia", dispo.id_dia);
                 command.Parameters.AddWithValue("@id_hora", dispo.id_hora);
                 command.Parameters.AddWithValue("@id_usu", dispo.id_usu);
                 command.Parameters.AddWithValue("@id_estado", dispo.id_estado);
 
                 var result = command.ExecuteScalar(); // Obtiene el id de la disponibilidad
-                if (result != null)
+                    if (result != null && result != DBNull.Value)
+                    {
+                        id_disponGenerado = Convert.ToInt32(result);
+                    }
+                    else
+                    {
+                        // No se insertó, pero pudo haberse reactivado entonces busca el ID
+                        string SQLBuscar = @"
+                        SELECT id_dispon FROM disponibilidad 
+                        WHERE id_dia = @id_dia AND id_hora = @id_hora AND id_usu = @id_usu AND id_estado = 1";
+
+                        using (SqlCommand buscar = new SqlCommand(SQLBuscar, Connection.CONN()))
+                        {
+                            buscar.Parameters.AddWithValue("@id_dia", dispo.id_dia);
+                            buscar.Parameters.AddWithValue("@id_hora", dispo.id_hora);
+                            buscar.Parameters.AddWithValue("@id_usu", dispo.id_usu);
+
+                            var idExistente = buscar.ExecuteScalar();
+                            if (idExistente != null && idExistente != DBNull.Value)
+                            {
+                                id_disponGenerado = Convert.ToInt32(idExistente);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (SqlException ex)
+            {
+                // Si el trigger lanza un error se atrapa aquí
+                if (ex.Message.Contains("Ya existe una disponibilidad activa"))
                 {
-                    id_disponGenerado = Convert.ToInt32(result);
+                    
+                    throw new Exception("Ya publicaste una disponibilidad para ese día y hora.");
+                }
+                else
+                {
+                    // Otros errores de base de datos
+                    throw new Exception("Error al publicar la disponibilidad: " + ex.Message);
                 }
             }
 
             return id_disponGenerado;
         }
+
+
         public int RegistrarServicio_Dispon(ServicioDto servicio)
         {
             int comando = 0;
@@ -370,6 +408,29 @@ namespace Clinipet.Repositories
                 }
             }
             return listaHoras;
+        }
+        public List<DisponibDto> ObtenerServiciosGen()
+        {
+            List<DisponibDto> listaServ = new List<DisponibDto>();
+            string sql = "SELECT id_servicio, nombre FROM servicio WHERE tipo_servicio=0";
+            DBContextUtility Connection = new DBContextUtility();
+            Connection.Connect();
+            using (SqlCommand command = new SqlCommand(sql, Connection.CONN()))
+            {
+
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        listaServ.Add(new DisponibDto
+                        {
+                            id_servicio = reader.GetInt32(0), 
+                            nom_serv = reader.GetString(1) 
+                        });
+                    }
+                }
+            }
+            return listaServ;
         }
         public List<CitaEspecDto> ObtenerMotivo()
         {

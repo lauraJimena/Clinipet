@@ -11,7 +11,7 @@ using Clinipet.Utilities;
 
 namespace Clinipet.Controllers
 {
-    public class AdminController : BaseController
+    public class AdministradorController : BaseController
     {
         //GET: Administrador
 

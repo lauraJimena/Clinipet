@@ -108,7 +108,7 @@ namespace Clinipet.Controllers
                             // Si no necesita cambiar la contraseña, redirige al índice de cada usuario
                             if (userResponse.id_rol == 1) //Administrador
                             {
-                                return Json(new { success = true, redirectUrl = Url.Action("IndexAdmin", "Admin"), message = "Inicio de sesión exitoso" });
+                                return Json(new { success = true, redirectUrl = Url.Action("IndexAdmin", "Administrador"), message = "Inicio de sesión exitoso" });
                             }
                             if (userResponse.id_rol == 2) //Asistente
                             {
@@ -244,23 +244,13 @@ namespace Clinipet.Controllers
                 // Instanciamos el servicio.
                 GeneralService contrasService = new GeneralService();
 
-                // Llamamos al método CambiarContraseña, pasando la contraseña actual y la nueva contraseña.
-                bool cambioExitoso = contrasService.CambiarContraseña(user.num_ident, user.contras_usu, user.contras_nueva);
+                // Llamar al método CambiarContraseña, pasando la contraseña actual y la nueva contraseña.
+                bool cambioExitoso = contrasService.CambiarContraseña(user.num_ident, user.contras_usu, user.contras_nueva, user.confirmar_contras);
 
                 if (cambioExitoso)
                 {
-                    if (user.id_rol == 2) // Asistente
-                    {
-                        ViewBag.MensajeExito = "Contraseña actualizada correctamente.";
-                        return RedirectToAction("IndexAsistente", "Asistente");
-                    }
-                    else if (user.id_rol == 4) // Veterinario
-                    {
-                        ViewBag.MensajeExito = "Contraseña actualizada correctamente.";
-                        return RedirectToAction("IndexVeterinario", "Veterinario");
-                    }
-
-                    return RedirectToAction("Login", "General");
+                    ViewBag.MensajeExito = "Contraseña actualizada correctamente.";
+                    return View(); 
                 }
                 else
                 {
@@ -272,7 +262,7 @@ namespace Clinipet.Controllers
             catch (Exception ex)
             {
                 // Si hay una excepción, la capturamos y mostramos un mensaje de error.
-                ViewBag.Error = "Error: " + ex.Message;
+                ViewBag.Error = ex.Message;
                 return View();
             }
         }
@@ -328,7 +318,7 @@ namespace Clinipet.Controllers
 
             if (resultado)
             {
-                return Json(new { exito = true, mensaje = "Tu contraseña ha sido actualizada con éxito." });
+                return Json(new { exito = true, mensaje = "Tu contraseña ha sido actualizada con éxito.", redirectUrl = Url.Action("Login", "General") });
             }
             else
             {

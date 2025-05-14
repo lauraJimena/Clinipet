@@ -132,6 +132,7 @@
     <Compile Include="Controllers\VeterinarioController.cs" />
     <Compile Include="Dtos\CitaEspecDto.cs" />
     <Compile Include="Dtos\CitaEspecVistaDto.cs" />
+    <Compile Include="Dtos\DisponibilidadAgrupadaDto.cs" />
     <Compile Include="Dtos\HistorialCitasDto.cs" />
     <Compile Include="Dtos\MascotaCitaDto.cs" />
     <Compile Include="Dtos\CitaGeneralDto.cs" />
@@ -191,7 +192,7 @@
     <Content Include="Imagenes\fondo_agenda_espec.png" />
     <Content Include="Imagenes\fondo_buscar_masc.png" />
     <Content Include="Imagenes\fondo_caja_serv.png" />
-    <Content Include="Imagenes\fondo_cambio_contras.jpg" />
+    <Content Include="Imagenes\fondo_cambio_contras.png" />
     <Content Include="Imagenes\fondo_dispon.png" />
     <Content Include="Imagenes\fondo_dispon_gen.png" />
     <Content Include="Imagenes\fondo_elegir_masc.png" />
@@ -248,6 +249,9 @@
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="App_Browsers\qt.browser" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
+    <Content Include="Scripts\login.js" />
+    <Content Include="Scripts\Registros.js" />
+    <Content Include="Scripts\validaciones.js" />
     <Content Include="Scripts\popup.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -280,17 +284,17 @@
     <Content Include="Views\General\RegistroMascota.cshtml" />
     <Content Include="Views\Cliente\IndexCliente.cshtml" />
     <Content Include="Views\Veterinario\PubCitas.cshtml" />
-    <Content Include="Views\Admin\RegistroAsistente.cshtml" />
-    <Content Include="Views\Admin\RegistroVeterinario.cshtml" />
-    <Content Include="Views\Admin\IndexAdmin.cshtml" />
+    <Content Include="Views\Administrador\RegistroAsistente.cshtml" />
+    <Content Include="Views\Administrador\RegistroVeterinario.cshtml" />
+    <Content Include="Views\Administrador\IndexAdmin.cshtml" />
     <Content Include="Views\Cliente\CitasEspecDispon.cshtml" />
     <Content Include="Views\Cliente\AgendarCita.cshtml" />
     <Content Include="Views\Shared\_ModalConfirm.cshtml" />
     <Content Include="Views\Cliente\ListadoMascotas.cshtml" />
     <Content Include="Views\Cliente\MascotasRegistradas.cshtml" />
-    <Content Include="Views\Admin\EliminarVeterinario.cshtml" />
-    <Content Include="Views\Admin\EliminarAsistente.cshtml" />
-    <Content Include="Views\Admin\EliminarUsuarios.cshtml" />
+    <Content Include="Views\Administrador\EliminarVeterinario.cshtml" />
+    <Content Include="Views\Administrador\EliminarAsistente.cshtml" />
+    <Content Include="Views\Administrador\EliminarUsuarios.cshtml" />
     <Content Include="Views\Cliente\ServiciosGenerales.cshtml" />
     <Content Include="Views\Cliente\CitasGenDispon.cshtml" />
     <Content Include="Views\Cliente\ElegirMascota.cshtml" />
@@ -312,12 +316,13 @@
     <Content Include="Views\Asistente\RegistroMascota.cshtml" />
     <Content Include="Views\Asistente\ConsultarCitas.cshtml" />
     <Content Include="Views\Asistente\AgendarCitas.cshtml" />
-    <Content Include="Views\Admin\ReporteServicios.cshtml" />
+    <Content Include="Views\Administrador\ReporteServicios.cshtml" />
     <Content Include="Views\Asistente\CitasGenDispon.cshtml" />
     <Content Include="Views\Asistente\ServiciosGenerales.cshtml" />
     <Content Include="Views\Asistente\ElegirMascota.cshtml" />
     <Content Include="Views\General\RestablecerContras.cshtml" />
     <Content Include="Views\Home\AccesoDenegado.cshtml" />
+    <Content Include="Views\Asistente\PublicarDisponGen.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

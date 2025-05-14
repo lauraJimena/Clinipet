@@ -1,15 +1,16 @@
-﻿@{
-    ViewBag.Title = "Eliminar Veterinarios";
+﻿
+@{
+    ViewBag.Title = "EliminarAsistente";
 }
 
 @model List<Clinipet.Dtos.UserDto>
 <link rel="stylesheet" href="@Url.Content("~/Estilos/estilos.css")">
 
-<h2>Eliminar Veterinarios</h2>
+<h2>Eliminar Asistentes</h2>
 
 <!-- Formulario de búsqueda -->
 <div class="contenedorBusqueda">
-    <form action="@Url.Action("BuscarVeterinario", "Admin")" method="get" class="formularioBusqueda">
+    <form action="@Url.Action("BuscarAsistente", "Administrador")" method="get" class="formularioBusqueda">
         <input type="text" id="num_ident" name="num_ident" placeholder="Número de identificación" class="inputBusqueda" />
         <button type="submit" class="botonSec botonForm">Buscar</button>
     </form>
@@ -25,7 +26,6 @@
 }
 
 
-
 <!-- div class="cajaImg">
     <img class="mascotas_encab" src="~/Imagenes/mascotas_encab2.png" alt="Veterinarios" />
 </!-->
@@ -36,22 +36,20 @@
             <th>Nombre</th>
             <th>Apellido</th>
             <th>Documento</th>
-            <th>Especialidad</th>
             <th>Acción</th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var vet in Model)
+        @foreach (var asis in Model)
         {
             <tr>
-                <td>@vet.nom_usu</td>
-                <td>@vet.apel_usu</td>
-                <td>@vet.num_ident</td>
-                <td>@vet.nom_espec</td>
+                <td>@asis.nom_usu</td>
+                <td>@asis.apel_usu</td>
+                <td>@asis.num_ident</td>
                 <td>
-                    <form action="@Url.Action("EliminVete", "Admin")" method="post" onsubmit="return confirm('¿Estás seguro de que deseas eliminar este veterinario? Esta acción no se puede deshacer.');">
+                    <form action="@Url.Action("EliminAsis", "Administrador")" method="post" onsubmit="return confirm('¿Estás seguro de que deseas eliminar este asistente? Esta acción no se puede deshacer.');">
 
-                        <input type="hidden" name="id_usu" value="@vet.id_usu" />
+                        <input type="hidden" name="id_usu" value="@asis.id_usu" />
                         <button type="submit" class="botonSec botonForm">Eliminar &raquo;</button>
                     </form>
                 </td>
@@ -60,7 +58,7 @@
     </tbody>
 </table>
 <div class="cajaBoton">
-    <form method="get" action="/Admin/IndexAdmin">
+    <form method="get" action="/Administrador/IndexAdmin">
         <button class="btnSalir boton">Volver</button>
     </form>
 </div>
@@ -156,3 +154,5 @@
         }
     }, 5000);
 </script>
+
+
