@@ -10,7 +10,7 @@ namespace Clinipet.Dtos
         
             public List<CitaEspecDto> Citas { get; set; }
             public List<DisponibDto> Disponib { get; set; }
-       
+        public List<DisponibilidadAgrupadaDto> DisponibAgrupada { get; set; } // para la vista agrupada
 
     }
 }

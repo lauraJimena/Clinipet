@@ -17,7 +17,10 @@ namespace Clinipet.Dtos
         public string nom_estado{ get; set; }
         public string nom_masc { get; set; }
         public string nom_serv { get; set; }
+        public int id_usu{ get; set; }
         public int Response { get; set; }
         public string Mensaje { get; set; } = string.Empty;
+        public List<int> id_mascotas { get; set; } // AGREGADO
+       
     }
 }

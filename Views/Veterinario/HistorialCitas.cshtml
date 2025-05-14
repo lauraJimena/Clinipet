@@ -1,6 +1,6 @@
 ﻿
 @{
-    ViewBag.Title = "HistorialCitas";
+    ViewBag.Title = "Agenda de Citas";
 }
 <link rel="stylesheet" href="@Url.Content("~/Estilos/estilos.css")">
 <h2>Agenda de Citas</h2>
@@ -45,15 +45,20 @@
         <button type="button" class="botonForm" onclick="toggleDisponibilidad()">Ver disponibilidad</button>
         <button type="button" class="botonForm botonVol" onclick="window.history.back();">Volver</button>
     </div>
-    
+
 }
 else
 {
     <div class="cajaMensaje">
-        <p class="mensaje">No tienes citas registradas. </p>
+        <p class="mensaje">Aún no tienes citas registradas.</p>
         <div class="cajaBoton2">
             <button type="button" class="botonForm botonVol" onclick="window.history.back();">Volver</button>
         </div>
+    </div>
+    <div class="cajaBoton cajaBoton2">
+
+        <button type="button" class="botonForm" onclick="toggleDisponibilidad()">Ver disponibilidad</button>
+        
     </div>
 }
 <div id="disponibilidad" style="display: none;">
@@ -64,17 +69,15 @@ else
             <thead>
                 <tr>
                     <th>Día</th>
-                    <th>Hora</th>
+                    <th>Horas</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach (var dispon in Model.Disponib)
+                @foreach (var dispon in Model.DisponibAgrupada)
                 {
                     <tr>
-
-                        <td>@dispon.nom_dia</td>
-                        <td>@dispon.nom_hora</td>
-
+                        <td><strong>@dispon.Dia</strong></td>
+                        <td>@string.Join(", ", dispon.Horas)</td>
                     </tr>
                 }
             </tbody>
@@ -85,7 +88,7 @@ else
                 <button type="button" class="botonForm botonVol" onclick="window.history.back();">Volver</button>
                 <button type="button" class="botonForm" onclick="window.location.href='/Veterinario/PubCitas'">Publicar</button>
             </div>
-        </div>      
+        </div>
 
     }
 
@@ -132,10 +135,9 @@ else
     .cajaBoton2 {
         text-align: center;
     }
-
+    
     .botonVol {
         border: 0.3px solid #545454;
-       
     }
 
     .cajaMensaje {
@@ -148,8 +150,9 @@ else
     }
 
     .tabla2 {
-        width: 40%;
+        width: 55%;
     }
+
     .botonForm {
         border: 0.3px solid #545454;
     }

@@ -62,8 +62,21 @@ else
             .then(res => res.json())
             .then(result => {
                 if (result.exito) {
-                    Swal.fire("¡Éxito!", result.mensaje, "success");
-                    form.reset(); // opcional
+                    Swal.fire({
+                        title: "¡Éxito!",
+                        text: result.mensaje,
+                        icon: "success",
+                        customClass: {
+                            popup: 'swal2-popup',
+                            title: 'swal2-title',
+                            content: 'swal2-content',
+                            confirmButton: 'boton'
+                        }
+                    }).then(() => {
+                        if (result.redirectUrl) {
+                            window.location.href = result.redirectUrl;
+                        }
+                    });
                 } else {
                     Swal.fire("Error", result.mensaje, "error");
                 }

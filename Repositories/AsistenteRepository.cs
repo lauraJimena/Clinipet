@@ -591,6 +591,80 @@ namespace Clinipet.Repositories
             Connection.Disconnect();
             return lista;
         }
+        public DisponibDto PublicarDisponGen(DisponibDto dispo)
+        {
+            //int comando = 0;
+            int id_disponGenerado = 0;
+            int id_serv = 0;
+            DBContextUtility Connection = new DBContextUtility();
+            Connection.Connect();
+            //Este insert usa un trigger para evitar disponibilidades duplicadas
+            string SQL = @"
+                         INSERT INTO disponibilidad (id_dia, id_hora, id_usu, id_estado) VALUES (@id_dia, @id_hora, @id_usu, @id_estado);
+
+SELECT id_dispon FROM disponibilidad 
+WHERE id_dia = @id_dia AND id_hora = @id_hora AND id_usu = @id_usu AND id_estado = 1;"; // Devuelve el ID recién creado
+            try
+            {
+                using (SqlCommand command = new SqlCommand(SQL, Connection.CONN()))
+                {
+                    command.Parameters.AddWithValue("@id_dia", dispo.id_dia);
+                    command.Parameters.AddWithValue("@id_hora", dispo.id_hora);
+                    command.Parameters.AddWithValue("@id_usu", dispo.id_usu);
+                    command.Parameters.AddWithValue("@id_estado", dispo.id_estado);
+
+                    var result = command.ExecuteScalar(); // Obtiene el id de la disponibilidad
+                    if (result != null && result != DBNull.Value)
+                    {
+                        dispo.id_dispon = Convert.ToInt32(result);
+                    
+                    
+
+                            
+                                //DisponibDto dispon = new DisponibDto();
+                                return dispo;
+                            
+                        
+                    }
+                }
+            }
+            catch (SqlException ex)
+            {
+                // Si el trigger lanza un error se atrapa aquí
+                if (ex.Message.Contains("Ya existe una disponibilidad activa"))
+                {
+
+                    throw new Exception("Ya publicaste una disponibilidad para ese día y hora.");
+                }
+                else
+                {
+                    // Otros errores de base de datos
+                    throw new Exception("Error al publicar la disponibilidad: " + ex.Message);
+                }
+            }
+
+            return null;
+        }
+        public int RegistrarServicio_Dispon(ServicioDto servicio)
+        {
+            int comando = 0;
+            DBContextUtility Connection = new DBContextUtility();
+            Connection.Connect();
+
+           
+            
+                string SQL = "INSERT INTO [clinipet].[dbo].[serv_dispon] (id_servicio, id_dispon) " +
+                    "VALUES (@id_servicio, @id_dispon)";
+                using (SqlCommand command = new SqlCommand(SQL, Connection.CONN()))
+                {
+                    command.Parameters.AddWithValue("@id_servicio", servicio.id_servicio );
+                    command.Parameters.AddWithValue("@id_dispon", servicio.id_dispon);
+                    comando = command.ExecuteNonQuery();
+                }
+            
+
+            return comando;
+        }
 
 
     }

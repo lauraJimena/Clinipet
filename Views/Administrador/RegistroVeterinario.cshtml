@@ -9,10 +9,13 @@
     <div class="contenedor">
         <div class="cont">
             <div class="cajaTitulo"><h2 class="titulo">Registro de Veterinario</h2></div>
-
-            @using (Html.BeginForm("RegistVet", "Admin", FormMethod.Post, new { id = "registroVetForm" }))
+            @using (Html.BeginForm("RegistVet", "Administrador", FormMethod.Post, new
             {
-
+                id = "registroForm",
+                data_url = Url.Action("RegistVet", "Administrador"),
+                data_redirect = Url.Action("IndexAdmin", "Administrador")
+            }))
+            {
 
                 <label for="nom_usu">Nombres:</label><br />
                 <input type="text" id="nom_usu" asp-for="nom_usu" name="nom_usu" required /><br />
@@ -24,7 +27,7 @@
 
                 <label for="id_tipo_ident">Tipo de Documento:</label><br />
                 <select id="id_tipo_ident" asp-for="id_tipo_ident" name="id_tipo_ident" required>
-                    <option value="">Seleccione...</option>
+                    <option value="">Selecciona...</option>
                     <option value="1">Cédula</option>
                     <option value="2">Pasaporte</option>
                     <option value="3">Otro</option>
@@ -63,8 +66,15 @@
                 @Html.ValidationMessageFor(model => model.contras_usu, "", new { @class = "text-danger" })
 
                 <div class="contBoton">
+                    <button type="button" class="botonVol" onclick="cancelarFormulario()">Cancelar</button>
                     <button type="submit" class="botonForm">Registrar</button>
                 </div>
+
+
+
+
+
+
             }
         </div>
 
@@ -78,10 +88,15 @@
         </div>
     </div>
 </body>
+<!-- Cancelar registro-->
+<script>
+    function cancelarFormulario() {
+        document.getElementById("registroForm").reset(); // Limpia todos los inputs
+        window.location.href = "@Url.Action("IndexAdmin", "Administrador")"; // Redirige al home
+    }
+</script>
 <!-- Validar solo números-->
 <script>
-
-
     document.addEventListener('DOMContentLoaded', function () {
         const numIdentInput = document.getElementById('num_ident');
         const telInput = document.getElementById('tel_usu'); // Campo del teléfono
@@ -101,61 +116,8 @@
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="@Url.Content("~/Scripts/Registros.js")"></script>
 
-<script>
-    document.getElementById("registroVetForm").addEventListener("submit", function (event) {
-        event.preventDefault(); // Evita la recarga de la página
-
-        var formData = new FormData(this);
-
-        fetch('@Url.Action("RegistVet", "Admin")', {
-            method: "POST",
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Registro exitoso',
-                    text: data.message,
-                    showConfirmButton: false,
-                    timer: 1800,
-                    customClass: {
-                        popup: 'swal2-popup',
-                        title: 'swal2-title',
-                        content: 'swal2-content'
-                    }
-                }).then(() => {
-                    window.location.href = '@Url.Action("IndexAdmin", "Admin")';
-                });
-            } else {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: data.message,
-                    confirmButtonText: 'Intentar de nuevo',
-                    customClass: {
-                        popup: 'swal2-popup',
-                        title: 'swal2-title',
-                        text: 'swal2-text',
-                        content: 'swal2-content',
-                        confirmButton: 'boton'
-                    }
-                });
-            }
-        })
-        .catch(error => {
-            console.error("Error:", error);
-            Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: 'Ocurrió un error inesperado. Intenta de nuevo más tarde.',
-                confirmButtonText: 'Aceptar'
-            });
-        });
-    });
-</script>
 
 <style>
     .modal {
@@ -188,10 +150,11 @@
 
     .cajaTitulo {
         justify-items: center;
+        text-align: center;
     }
 
     .titulo {
-        width: 150%;
+        width: 180%;
         margin-top: 0px;
         margin-bottom: 30px;
         margin-left: 0px;

@@ -75,11 +75,20 @@ namespace Clinipet.Controllers
 
                     if (disponibRespuesta.Response == 1)
                     {
-                        return Json(new { success = true, redirectUrl = Url.Action("IndexVeterinario", "Veterinario"), message = "Guardado exitosamente" });
+                        return Json(new
+                        {
+                            success = true,
+                            redirectUrl = Url.Action("IndexVeterinario", "Veterinario"),
+                            message = "Guardado exitosamente"
+                        });
                     }
                     else
                     {
-                        return RedirectToAction("About", "Home");
+                        return Json(new
+                        {
+                            success = false,
+                            message = "No se pudo guardar la disponibilidad. Inténtalo nuevamente."
+                        });
 
                     }
                 }
@@ -91,9 +100,12 @@ namespace Clinipet.Controllers
             }
             catch (Exception ex)
             {
-                string mensaje = ex.Message;
-
-                return View("Error"); 
+                // Captura cualquier excepción y la devuelve al cliente
+                return Json(new
+                {
+                    success = false,
+                    message = ex.Message
+                });
             }
 
         }
@@ -225,13 +237,24 @@ namespace Clinipet.Controllers
                     List<CitaEspecDto> citas = veterinarioService.ObtenerHistorialCitas(id_usu);
                     List<DisponibDto> disponib = veterinarioService.ObtenerDisponib(id_usu);
 
-                    var viewModel = new HistorialCitasDto
+                    // Agrupar la disponibilidad por día
+                    var disponibilidadAgrupada = disponib
+                        .GroupBy(d => d.nom_dia)
+                        .Select(g => new DisponibilidadAgrupadaDto
+                        {
+                            Dia = g.Key,
+                            Horas = g.Select(x => x.nom_hora).ToList()
+                        })
+                        .ToList();
+
+                    var modelo = new HistorialCitasDto
                     {
                         Citas = citas,
-                        Disponib = disponib
+                        Disponib = disponib,
+                        DisponibAgrupada = disponibilidadAgrupada
                     };
 
-                    return View(viewModel);
+                    return View(modelo);
 
                 }
                 else
@@ -390,6 +413,7 @@ namespace Clinipet.Controllers
             }
 
         }
+
 
     }
     
