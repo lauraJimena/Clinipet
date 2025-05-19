@@ -70,7 +70,7 @@ namespace Clinipet.Services
             catch (Exception ex)
             {
                 citaEspecDto.Response = 0;
-
+              
                 // Verificar si el mensaje contiene el error del trigger
                 if (ex.Message.Contains("La mascota ya tiene una cita activa"))
                 {
@@ -78,6 +78,8 @@ namespace Clinipet.Services
                 }
                 else
                 {
+                 
+
                     // Mensaje genérico en caso de otro tipo de error
                     citaEspecDto.Mensaje = "Ocurrió un error inesperado. Intenta de nuevo más tarde.";
                 }

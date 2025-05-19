@@ -140,6 +140,7 @@ namespace Clinipet.Repositories
         }       
             public int RegistrarCitaEspecializada(CitaEspecDto cita)
             {
+            
                 int comando = 0;
                 DBContextUtility Connection = new DBContextUtility();
                 Connection.Connect();
@@ -165,7 +166,9 @@ namespace Clinipet.Repositories
 
                 Connection.Disconnect();
                 return comando;
-            }
+       
+}
+
         public int RegistrarCitaGeneral(CitaGeneralDto citaGeneral)
         {
             int comando = 0;

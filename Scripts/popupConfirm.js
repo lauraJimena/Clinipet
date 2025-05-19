@@ -1,5 +1,29 @@
-﻿document.addEventListener("DOMContentLoaded", function () {
-    document.getElementById("confirmButton").addEventListener("click", function () {
+﻿
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const confirmButton = document.getElementById("confirmButton");
+
+    confirmButton.addEventListener("click", function (event) {
+        event.preventDefault(); // Evita envío automático
+
+        const checkboxes = document.querySelectorAll('input[name="id_mascotas"]:checked');
+
+        if (checkboxes.length === 0) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Debe seleccionar una mascota',
+                text: 'Por favor seleccione al menos una mascota para continuar.',
+                customClass: {
+                    popup: 'swal2-popup',
+                    title: 'swal2-title',
+                    content: 'swal2-content',
+                    confirmButton: 'boton botonConfir',
+                    cancelButton: 'boton botonCancel'
+                }
+            });
+            return;
+        }
         Swal.fire({
             title: "¿Estás seguro?",
             text: "Confirma que deseas agendar la cita.",
@@ -11,9 +35,8 @@
                 popup: 'swal2-popup',
                 title: 'swal2-title',
                 content: 'swal2-content',
-                confirmButton: 'botonConfir',
-                cancelButton: 'botonCancel',
-
+                confirmButton: 'boton botonConfir',
+                cancelButton: 'boton botonCancel'
             }
         }).then((result) => {
             if (result.isConfirmed) {
@@ -76,7 +99,7 @@ function enviarFormulario() {
                     title: 'swal2-title',
                     content: 'swal2-content',
                     confirmButton: 'botonConfir',
-                    cancelButton: 'botonCancel',
+                    cancelButton: 'botonCancel'
 
                 }
             });

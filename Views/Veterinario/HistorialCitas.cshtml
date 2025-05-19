@@ -1,4 +1,4 @@
-﻿
+﻿x
 @{
     ViewBag.Title = "Agenda de Citas";
 }
@@ -55,10 +55,8 @@ else
             <button type="button" class="botonForm botonVol" onclick="window.history.back();">Volver</button>
         </div>
     </div>
-    <div class="cajaBoton cajaBoton2">
-
-        <button type="button" class="botonForm" onclick="toggleDisponibilidad()">Ver disponibilidad</button>
-        
+    <div class="cajaBoton2">
+        <button type="button" class="botonForm" onclick="toggleDisponibilidad()">Ver disponibilidad</button>       
     </div>
 }
 <div id="disponibilidad" style="display: none;">
@@ -134,6 +132,7 @@ else
 
     .cajaBoton2 {
         text-align: center;
+        
     }
     
     .botonVol {

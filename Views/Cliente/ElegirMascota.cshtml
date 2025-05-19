@@ -23,7 +23,7 @@
         {
             var mascota = Model.Mascotas[i];
             <div class="mascotaItem">
-                <!-- No ocultes el checkbox, hazlo visible para que el usuario lo seleccione -->
+
                 <input type="checkbox"
                        name="id_mascotas"
                        id="mascota_@mascota.id_mascota"
@@ -41,16 +41,15 @@
 
     <div class="cajaBoton">
         <a href="@Url.Content("~/Cliente/ServiciosGenerales")" class="boton">Volver</a>
-        
+
         <button type="button" class="boton botonConfirm" id="confirmButton">Confirmar</button>
 
     </div>
 </form>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script src="@Url.Content("~/Scripts/popupConfirm.js")"></script>
-
-
 
 <style>
     body {
@@ -96,13 +95,15 @@
         box-shadow: -1px -1px 8px #545454;
         transition: all 0.3s ease;
     }
+
     input[type="checkbox"] {
         display: none; /* Oculta el checkbox */
     }
-    input[type="checkbox"]:checked + .cajaMascota {
-        background-color: #4f7768;
-        color: white;
-    }
+
+        input[type="checkbox"]:checked + .cajaMascota {
+            background-color: #4f7768;
+            color: white;
+        }
 
     .cajaMascota:hover {
         background-color: #9fb2a9;
@@ -112,13 +113,17 @@
         font-size: 1.1em;
         text-align: center;
     }
+
     .botonCancel {
         background-color: #948e8e;
         border-radius: 20px;
     }
+
     .botonConfirm {
         background-color: #d9a86c;
     }
+    
+
     .botonConfir {
         font-size: 1em;
         color: #2f2f2f;
@@ -126,7 +131,9 @@
         background-color: #d9a86c;
         border-radius: 20px;
     }
-    
+    .botonConfir:hover {
+        background-color: bisque;
+    }
 </style>
 
 

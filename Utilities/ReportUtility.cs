@@ -17,7 +17,8 @@ namespace Clinipet.Utilities
                 {
                     FileName = "ReporteServicios.pdf",
                     PageSize = Rotativa.Options.Size.A4,
-                    CustomSwitches = "--print-media-type"
+                    //CustomSwitches = "--print-media-type"
+                    CustomSwitches = "--print-media-type --enable-smart-shrinking" //para aplicar correctamente los estilos de impresión y ajustar automáticamente el contenido al tamaño de página.
                 };
            
         }

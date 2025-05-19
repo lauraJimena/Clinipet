@@ -59,15 +59,23 @@
                 </select>
                 @Html.ValidationMessageFor(model => model.id_raza, "", new { @class = "text-danger" })
 
-                <div class="contBoton">
-                    <button type="submit" class="botonForm">Registrar</button>
-                </div>
+            <div class="contBoton">
+                <button type="button" class="botonVol" onclick="cancelarFormulario()">Cancelar</button>
+                <button type="submit" class="botonForm">Registrar</button>
+            </div>
             </form>
         </div>
         <img class="imagenFondo" src="~/Imagenes/fondo_RegistroMascot.jpeg" alt="">
     </div>
 
 </body>
+<!-- Cancelar registro-->
+<script>
+    function cancelarFormulario() {
+        document.getElementById("registroForm").reset(); // Limpia todos los inputs
+        window.location.href = "@Url.Action("IndexAsistente", "Asistente")"; // Redirige al home
+    }
+</script>
 <!-- Validar solo números-->
 <script>
     document.addEventListener('DOMContentLoaded', function () {
