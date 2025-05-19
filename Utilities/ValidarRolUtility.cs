@@ -20,13 +20,22 @@ namespace Clinipet.Utilities
         {
             var rolUsuario = (int?)filtroContexto.HttpContext.Session["RolUsu"];
 
-            if (rolUsuario == null || !rolesPermitidos.Contains(rolUsuario.Value))
+            if (rolUsuario == null)
             {
                 filtroContexto.Result = new RedirectToRouteResult(
                     new RouteValueDictionary
                     {
-                    { "controller", "Home" },
-                    { "action", "AccesoDenegado" }
+                        { "controller", "General" },
+                        { "action", "Login" }
+                    });
+            }
+            else if (!rolesPermitidos.Contains(rolUsuario.Value))
+            {
+                filtroContexto.Result = new RedirectToRouteResult(
+                    new RouteValueDictionary
+                    {
+                        { "controller", "Home" },
+                        { "action", "AccesoDenegado" }
                     });
             }
 

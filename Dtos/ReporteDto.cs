@@ -9,6 +9,6 @@ namespace Clinipet.Dtos
     {
         public List<ServicioDto> Generales { get; set; }
         public List<ServicioDto> Especializados { get; set; }
-        
+        public List<VeterinarioCitasDto> CitasPorVeterinario { get; set; }
     }
 }

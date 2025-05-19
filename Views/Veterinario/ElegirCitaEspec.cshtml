@@ -43,7 +43,8 @@
         </tbody>
     </table>
     <div class="cajaBoton">
-        <button type="button" class="botonForm botonVol" onclick="window.history.back();">Volver</button>
+        <a href="@Url.Content("~/Veterinario/BuscarCliente")" class="boton botonVol">Volver</a>
+       
     </div>
     
 }
@@ -88,8 +89,11 @@ else
     .botonForm {
         border: 1px solid #2f2f2f;
     }
-
+    table{
+        margin-bottom:25px;
+    }
     .botonVol {
         background-color: #4f7768;
+        
     }
 </style>

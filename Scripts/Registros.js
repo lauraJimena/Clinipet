@@ -82,6 +82,25 @@
                 telefonoInput.focus();
                 return;
             }
+            //Validación de número de documento (10 dígitos exactos)
+            const identInput = document.getElementById('num_ident');
+            const numeroDocumento = identInput.value.trim();
+            if (!/^\d{10}$/.test(numeroDocumento)) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Número de documento inválido',
+                    text: 'El número de documento no es válido. Intenta nuevamente.',
+                    customClass: {
+                        popup: 'swal2-popup',
+                        title: 'swal2-title',
+                        content: 'swal2-content',
+                        confirmButton: 'botonConfir',
+                        cancelButton: 'botonCancel',
+                    }
+                });
+                identInput.focus();
+                return;
+            }
 
             // Si pasa todas las validaciones, envía con fetch
             const formData = new FormData(form);

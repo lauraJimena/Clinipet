@@ -593,17 +593,14 @@ namespace Clinipet.Repositories
         }
         public DisponibDto PublicarDisponGen(DisponibDto dispo)
         {
-            //int comando = 0;
-            int id_disponGenerado = 0;
-            int id_serv = 0;
+            
             DBContextUtility Connection = new DBContextUtility();
             Connection.Connect();
             //Este insert usa un trigger para evitar disponibilidades duplicadas
             string SQL = @"
                          INSERT INTO disponibilidad (id_dia, id_hora, id_usu, id_estado) VALUES (@id_dia, @id_hora, @id_usu, @id_estado);
-
-SELECT id_dispon FROM disponibilidad 
-WHERE id_dia = @id_dia AND id_hora = @id_hora AND id_usu = @id_usu AND id_estado = 1;"; // Devuelve el ID recién creado
+                         SELECT id_dispon FROM disponibilidad 
+                         WHERE id_dia = @id_dia AND id_hora = @id_hora AND id_usu = @id_usu AND id_estado = 1;"; // Devuelve el ID recién creado
             try
             {
                 using (SqlCommand command = new SqlCommand(SQL, Connection.CONN()))

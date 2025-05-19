@@ -1,22 +1,17 @@
 ﻿
 @import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;700;800;900&family=Quicksand:wght@300..700&display=swap');
+
 html, body {
     height: 100%;
     margin: 0;
     padding: 0;
-}
-body {
     font-family: "Quicksand", sans-serif;
-    background-image: url('/Imagenes/fondo_reporte.jpg');
-    background-size: cover; /* o cover si quieres estirarlo */
-    background-position: center;
-    background-repeat: no-repeat;
+    -webkit-print-color-adjust: exact;
 }
-
 
 .contenedor {
-    width: 90%;
-    margin: 0px auto;
+    background: transparent; /* para que no tape el fondo del body */   
+
     padding: 20px;
     border-radius: 10px;
 }
@@ -57,11 +52,16 @@ body {
 }
 
 table {
-    width: 80%;
+    page-break-inside: auto;
+    width: 100%;
     margin: 0 auto 30px auto;
     border-collapse: collapse;
 }
 
+tr {
+    page-break-inside: avoid;
+    page-break-after: auto;
+}
 th, td {
     border: 1px solid #555;
     padding: 10px;

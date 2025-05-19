@@ -16,12 +16,8 @@ namespace Clinipet.Repositories
             List<ServicioDto> listaServicios = new List<ServicioDto>();
 
             string sql = @"
-            SELECT s.nombre, COUNT(c.id_cita_esp) AS total_citas
-            FROM cita_espec c
-            JOIN servicio s ON c.id_servicio = s.id_servicio
-            WHERE c.id_estado IN (3,4,5) AND s.tipo_servicio = 1
-            GROUP BY s.nombre
-            ORDER BY total_citas DESC;";
+           SELECT * FROM dbo.Fn_CitasPorServicioEspecializado()
+           ORDER BY total_citas DESC";
 
             DBContextUtility Connection = new DBContextUtility();
             Connection.Connect();
@@ -48,13 +44,9 @@ namespace Clinipet.Repositories
         {
             List<ServicioDto> listaServicios = new List<ServicioDto>();
 
-            string sql = @"
-            SELECT s.nombre, COUNT(c.id_cita_gen) AS total_citas
-            FROM cita_general c
-            JOIN servicio s ON c.id_servicio = s.id_servicio
-            WHERE c.id_estado IN (3,4,5) AND s.tipo_servicio = 0
-            GROUP BY s.nombre
-            ORDER BY total_citas DESC;";
+            string sql = @"SELECT * FROM dbo.Fn_CitasPorServicioGeneral()
+                        ORDER BY total_citas DESC";
+
 
             DBContextUtility Connection = new DBContextUtility();
             Connection.Connect();
@@ -75,6 +67,37 @@ namespace Clinipet.Repositories
                 }
             }
             return listaServicios;
+        }
+
+        //Obtiene numero de citas por veterinario con función Fn_CitasPorVeterinario()
+        public List<VeterinarioCitasDto> ObtenerCitasVet()
+        {
+            string sql = "SELECT * FROM dbo.Fn_CitasPorVeterinario()";
+
+            List<VeterinarioCitasDto> lista = new List<VeterinarioCitasDto>();
+
+            DBContextUtility Connection = new DBContextUtility();
+            Connection.Connect();
+
+            using (SqlCommand command = new SqlCommand(sql, Connection.CONN()))
+            {
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        lista.Add(new VeterinarioCitasDto
+                        {
+                            IdVeterinario = reader.GetInt32(0),
+                            NombreVeterinario = reader.GetString(1),
+                            Espec = reader.GetString(2),
+                            TotalCitas = reader.GetInt32(3)
+                            
+                        });
+                    }
+                }
+            }
+
+            return lista;
         }
 
 

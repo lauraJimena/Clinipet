@@ -57,8 +57,8 @@
                     popup: 'swal2-popup',
                     title: 'swal2-title',
                     content: 'swal2-content',
-                    confirmButton: 'botonConfir',
-                    cancelButton: 'botonCancel',
+                    confirmButton: 'boton botonConfir',
+                    cancelButton: 'boton botonCancel',
 
                 }
             }).then((result) => {
@@ -90,7 +90,7 @@
                             popup: 'swal2-popup',
                             title: 'swal2-title',
                             content: 'swal2-content',
-                            confirmButton: 'botonConfir'
+                            confirmButton: 'boton botonConfir'
                         }
                     }).then(() => {
                         window.location.href = data.redirectUrl;
@@ -105,7 +105,7 @@
                             popup: 'swal2-popup',
                             title: 'swal2-title',
                             content: 'swal2-content',
-                            confirmButton: 'botonConfir'
+                            confirmButton: 'boton botonConfir'
                         }
                     });
                 }
@@ -121,7 +121,7 @@
                         popup: 'swal2-popup',
                         title: 'swal2-title',
                         content: 'swal2-content',
-                        confirmButton: 'botonConfir'
+                        confirmButton: 'boton botonConfir'
                     }
                 });
             });
@@ -196,6 +196,9 @@
         background-color: #d9a86c;
         border-radius:20px;
     }
+        .botonConfir:hover {
+            background-color: bisque;
+        }
 
     .boton2 {
         background-color: #4f7768;

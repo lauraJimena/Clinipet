@@ -286,7 +286,7 @@ namespace Clinipet.Controllers
                     {
                         citas = citas.Where(c => c.num_ident == num_ident).ToList(); // Filtrar por documento
                                                                                      // Si no hay resultados, enviar una bandera a la vista
-                                                                                     // Si no hay resultados, enviamos NULL en lugar de una lista vacía
+                                                                                    
                         if (!citas.Any())
                         {
                             ViewBag.DocumentoNoEncontrado = true;

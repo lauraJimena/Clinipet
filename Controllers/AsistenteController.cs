@@ -37,21 +37,29 @@ namespace Clinipet.Controllers
         [ValidarRolUtility(2)] 
         public JsonResult RegistroUsuario(UserDto usuario)
         {
-            var servicio = new AsistenteService(); 
-            var resultado = servicio.RegistrarUsuario(usuario);
 
-            return Json(new
-            {
-                success = resultado.Response == 1,
-                message = resultado.Mensaje
-            });
+                var servicio = new AsistenteService(); 
+                var resultado = servicio.RegistrarUsuario(usuario);
+
+                return Json(new
+                {
+                    success = resultado.Response == 1,
+                    message = resultado.Mensaje
+                });
         }
 
         [HttpGet]
         [ValidarRolUtility(2)]
         public ActionResult RegistroUsuario()
         {
-            return View(new UserDto());
+            try
+            {
+                return View(new UserDto());
+            }
+            catch (Exception ex)
+            {
+                return View("Error");
+            }
         }
         [ValidarRolUtility(2)]
         public ActionResult RegistroMascota()
@@ -159,17 +167,24 @@ namespace Clinipet.Controllers
 
         [ValidarRolUtility(2)]
         public ActionResult ServiciosGenerales()
-
         {
-            if (Session["UsuLoguedo"] != null)
+            try
             {
-                AsistenteService asisService = new AsistenteService();
-                List<ServicioDto> servicioGeneral = asisService.ListadoServiciosGenerales();
-                return View(servicioGeneral);
+
+                if (Session["UsuLoguedo"] != null)
+                {
+                    AsistenteService asisService = new AsistenteService();
+                    List<ServicioDto> servicioGeneral = asisService.ListadoServiciosGenerales();
+                    return View(servicioGeneral);
+                }
+                else
+                {
+                    return RedirectToAction("Login", "General");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                return RedirectToAction("Login", "General");
+                return View("Error");
             }
         }
 
@@ -218,13 +233,21 @@ namespace Clinipet.Controllers
         [ValidarRolUtility(2)]
         public ActionResult ElegirMascota()
         {
-            if (Session["UsuLoguedo"] != null)
+            try
             {
-                return RedirectToAction("IndexAsistente", "Asistente");
+                if (Session["UsuLoguedo"] != null)
+                {
+                    return RedirectToAction("IndexAsistente", "Asistente");
+                }
+                else
+                {
+                    return RedirectToAction("Login", "General");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                return RedirectToAction("Login", "General");
+                string mensaje = ex.Message;
+                return View("Error");
             }
         }
 

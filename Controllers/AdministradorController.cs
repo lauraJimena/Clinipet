@@ -255,15 +255,19 @@ namespace Clinipet.Controllers
         [ValidarRolUtility(1)]
         public ActionResult ReporteServicios()
         {
-            ReporteService reporService = new ReporteService();
+            try
+            {
 
-            var modelo = reporService.ObtenerDatosReporteServicios();
-            //var reportData = _reportService.GetReportData();
-            return ReportUtility.GenerarPdf(this.ControllerContext, modelo);
-
+                ReporteService reporService = new ReporteService();
+                var modelo = reporService.ObtenerDatosReporteServicios();            
+                return ReportUtility.GenerarPdf(this.ControllerContext, modelo);
+            }
+            catch (Exception ex)
+            {
+                return View("Error");
+            }
         }
-
-
+       
         //POST: Administrador
 
         //Eliminar Veterinario
@@ -331,10 +335,5 @@ namespace Clinipet.Controllers
             // Recarga la lista después de eliminar
             return RedirectToAction("EliminarAsistente");
         }
-
-        
-
-
-
     }
 }

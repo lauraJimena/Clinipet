@@ -7,27 +7,29 @@
 
 <link rel="stylesheet" href="@Url.Content("~/Estilos/estilos.css")">
 
-<!-- Mensaje superpuesto cuando no se encuentra el documento -->
+<!-- Mensaje superpuesto cuando no se encuentran resultados -->
 @if (ViewBag.DocumentoNoEncontrado != null && ViewBag.DocumentoNoEncontrado == true)
 {
     <div id="mensajeSuperpuesto" class="mensaje-superpuesto">
-        <p>Documento no encontrado.</p>
+        <p>No se encontraron resultados.</p>
         <button type="button" class="botonForm" onclick="cerrarMensaje()">Cerrar</button>
     </div>
+    <h2>Historial Clínico de Mascota</h2>
+    <div class="cajaBoton">
+        <button type="button" class="botonForm botonVol" onclick="window.history.back();">Volver</button>
+    </div>
 }
-
-<h2>Historial Mascotas</h2>
-
-<!-- Campo de filtrado que siempre permanece visible -->
-<form method="get" action="@Url.Action("HistorialMascota", "Veterinario")" class="formBuscar">
-    <label for="numDocumento">Filtrar por número de documento:</label>
-    <input type="text" id="documento" name="num_ident" required />
-    <button type="submit" class="botonForm botonBuscar">Buscar</button>
-</form>
 
 <!-- Si hay datos, muestra la tabla -->
 @if (Model != null && Model.Any())
 {
+    <h2>Historial Clínico de Mascota</h2>
+    <!-- Campo de filtrado que siempre permanece visible -->
+    <form method="get" action="@Url.Action("HistorialMascota", "Veterinario")" class="formBuscar">
+        <label for="numDocumento">Filtrar por número de documento:</label>
+        <input type="text" id="documento" name="num_ident" required />
+        <button type="submit" class="botonForm botonBuscar">Buscar</button>
+    </form>
     <table>
         <thead>
             <tr>
@@ -63,6 +65,7 @@
 }
 else if (ViewBag.DocumentoNoEncontrado == null)
 {
+    
     <div class="cajaMensaje">
         <p class="mensaje">No hay historial registrado.</p>
         <div class="cajaBoton">
@@ -81,6 +84,11 @@ else if (ViewBag.DocumentoNoEncontrado == null)
             });
         }
     });
+</script>
+<script>
+    function cerrarMensaje() {
+        document.getElementById("mensajeSuperpuesto").style.display = "none";
+    }
 </script>
 
 <style>
@@ -111,12 +119,17 @@ else if (ViewBag.DocumentoNoEncontrado == null)
         z-index: 1000;
     }
 
+    table {
+        width: 100%;
+    }
+
     .formBuscar {
         margin-left: 20%;
         border: none;
     }
 
     .botonForm {
+        color: #545454;
         border: 0.3px solid #545454;
     }
 
@@ -135,8 +148,4 @@ else if (ViewBag.DocumentoNoEncontrado == null)
     }
 </style>
 
-<script>
-    function cerrarMensaje() {
-        document.getElementById("mensajeSuperpuesto").style.display = "none";
-    }
-</script>
+

@@ -16,8 +16,17 @@ namespace Clinipet.Services
             return new ReporteDto
             {
                 Generales = repo.ObtenerServGeneralesMasPrestados(),
-                Especializados = repo.ObtenerServEspecMasPrestados()
+                Especializados = repo.ObtenerServEspecMasPrestados(),
+                CitasPorVeterinario = repo.ObtenerCitasVet()
             };
+        }
+        public List<VeterinarioCitasDto> ObtenerCitasVet()
+        {
+            ReporteRepository repo = new ReporteRepository();
+            List<VeterinarioCitasDto> mascotas = repo.ObtenerCitasVet();
+
+            return mascotas;
+
         }
 
     }
