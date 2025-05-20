@@ -76,20 +76,49 @@
                         popup: 'swal2-popup',
                         title: 'swal2-title',
                         content: 'swal2-content',
-                        confirmButton: 'botonConfir'
+                        confirmButton: 'boton botonConfir'
                     }
                 });
                 telefonoInput.focus();
                 return;
             }
-            //Validación de número de documento (10 dígitos exactos)
+            //Validación de número de documento 
+            const tipoDoc = document.getElementById('id_tipo_ident').value;
             const identInput = document.getElementById('num_ident');
             const numeroDocumento = identInput.value.trim();
-            if (!/^\d{10}$/.test(numeroDocumento)) {
+
+            let regex;
+            let mensajeError;
+
+            if (tipoDoc === "1") {
+                // Cédula: entre 7 y 10 dígitos numéricos
+                regex = /^\d{7,10}$/;
+                mensajeError = 'La cédula debe tener entre 7 y 10 dígitos numéricos.';
+            } else if (tipoDoc === "2") {
+                // Pasaporte: alfanumérico entre 7 y 15 caracteres
+                regex = /^[a-zA-Z0-9]{7,15}$/;
+                mensajeError = 'La cédula de extrajeria debe tener entre 7 y 15 caracteres alfanuméricos.';
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Tipo de documento no seleccionado',
+                    text: 'Por favor, seleccione el tipo de documento.',
+                    customClass: {
+                        popup: 'swal2-popup',
+                        title: 'swal2-title',
+                        content: 'swal2-content',
+                        confirmButton: 'botonConfir',
+                        cancelButton: 'botonCancel',
+                    }
+                });
+                return;
+            }
+
+            if (!regex.test(numeroDocumento)) {
                 Swal.fire({
                     icon: 'error',
                     title: 'Número de documento inválido',
-                    text: 'El número de documento no es válido. Intenta nuevamente.',
+                    text: mensajeError,
                     customClass: {
                         popup: 'swal2-popup',
                         title: 'swal2-title',
@@ -101,6 +130,7 @@
                 identInput.focus();
                 return;
             }
+
 
             // Si pasa todas las validaciones, envía con fetch
             const formData = new FormData(form);
@@ -137,7 +167,7 @@
                                 popup: 'swal2-popup',
                                 title: 'swal2-title',
                                 content: 'swal2-content',
-                                confirmButton: 'botonConfir'
+                                confirmButton: 'boton botonConfir'
                             }
                         });
                     }

@@ -23,13 +23,13 @@
                 <select id="id_tipo_ident" asp-for="id_tipo_ident" name="id_tipo_ident" required>
                     <option value="">Seleccione...</option>
                     <option value="1">Cédula</option>
-                    <option value="2">Pasaporte</option>
+                    <option value="2">Cédula de extranjería</option>
 
                 </select>
                 @Html.ValidationMessageFor(model => model.id_tipo_ident, "", new { @class = "text-danger" })
                 <br />
 
-                <label for="num_iden">Número de Documento:</label><br />
+                <label for="num_ident">Número de Documento:</label><br />
                 <input type="text" id="num_ident" asp-for="num_ident" name="num_ident" required pattern="\d+" title="Solo se permiten números" /><br />
                 @Html.ValidationMessageFor(model => model.num_ident, "", new { @class = "text-danger" })
 

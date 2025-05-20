@@ -29,8 +29,8 @@
                 <select id="id_tipo_ident" asp-for="id_tipo_ident" name="id_tipo_ident" required>
                     <option value="">Selecciona...</option>
                     <option value="1">Cédula</option>
-                    <option value="2">Pasaporte</option>
-                    <option value="3">Otro</option>
+                    <option value="2">Cédula de extranjería</option>
+
                 </select>
                 @Html.ValidationMessageFor(model => model.id_tipo_ident, "", new { @class = "text-danger" })
                 <br />
@@ -60,20 +60,21 @@
                 </select>
                 @Html.ValidationMessageFor(model => model.id_espec, "", new { @class = "text-danger" })
 
+                <div class="input-contras-container">
+                    <label for="contras_usu">Contraseña:</label><br />
+                    <input type="password" id="contras_usu" asp-for="contras_usu" name="contras_usu" required /><br />
+                    <span class="verContras" onclick="verContras('contras_usu')">👁️</span>
+                    @Html.ValidationMessageFor(model => model.contras_usu, "", new { @class = "text-danger" })
+                </div><br />
 
-                <label for="contras_usu">Contraseña:</label><br />
-                <input type="password" id="contras_usu" asp-for="contras_usu" name="contras_usu" required /><br />
-                @Html.ValidationMessageFor(model => model.contras_usu, "", new { @class = "text-danger" })
+
+
+
 
                 <div class="contBoton">
                     <button type="button" class="botonVol" onclick="cancelarFormulario()">Cancelar</button>
                     <button type="submit" class="botonForm">Registrar</button>
                 </div>
-
-
-
-
-
 
             }
         </div>
@@ -88,6 +89,10 @@
         </div>
     </div>
 </body>
+
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="@Url.Content("~/Scripts/Registros.js")"></script>
 <!-- Cancelar registro-->
 <script>
     function cancelarFormulario() {
@@ -95,29 +100,17 @@
         window.location.href = "@Url.Action("IndexAdmin", "Administrador")"; // Redirige al home
     }
 </script>
-<!-- Validar solo números-->
+<!-- Mostrar Contraseña -->
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const numIdentInput = document.getElementById('num_ident');
-        const telInput = document.getElementById('tel_usu'); // Campo del teléfono
-
-        if (numIdentInput) {
-            numIdentInput.addEventListener('input', function () {
-                this.value = this.value.replace(/\D/g, ''); // Elimina cualquier letra
-            });
+    function verContras(idInput) {
+        const input = document.getElementById(idInput);
+        if (input.type === 'password') {
+            input.type = 'text';
+        } else {
+            input.type = 'password';
         }
-
-        if (telInput) {
-            telInput.addEventListener('input', function () {
-                this.value = this.value.replace(/\D/g, ''); // Aplica la misma validación al teléfono
-            });
-        }
-    });
+    }
 </script>
-
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="@Url.Content("~/Scripts/Registros.js")"></script>
-
 
 <style>
     .modal {
@@ -184,5 +177,27 @@
     .text-danger {
         color: red;
         font-size: 0.9em;
+    }
+
+    .input-contras-container {
+        position: relative;
+        display: inline-block;
+        width: 100%;
+    }
+
+        .input-contras-container input {
+            width: 100%;
+            padding-right: 40px; /* espacio para el icono */
+            box-sizing: border-box;
+        }
+
+    .verContras {
+        position: absolute;
+        top: 60%;
+        right: 10px;
+        transform: translateY(-50%);
+        cursor: pointer;
+        font-size: 18px;
+        user-select: none;
     }
 </style>

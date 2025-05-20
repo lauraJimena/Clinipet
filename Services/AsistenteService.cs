@@ -107,6 +107,22 @@ namespace Clinipet.Services
                     case 1:
                         responseUserDto.Response = 1;
                         responseUserDto.Mensaje = "Creación exitosa";
+                        // Enviar correo en segundo plano
+                        Task.Run(() =>
+                        {
+                            try
+                            {
+                                EmailConfigUtility gestorCorreo = new EmailConfigUtility();
+                                String destinatario = userModel.correo_usu;
+                                String asunto = "Bienvenido al sistema de CliniPet!";
+                                gestorCorreo.EnviarCorreoBienv(destinatario, asunto, userModel);
+                            }
+                            catch (Exception ex)
+                            {
+                                // Aquí puedes loguear el error o tomar acciones, pero no debe afectar el registro
+                                Console.WriteLine("Error al enviar el correo: " + ex.Message);
+                            }
+                        });
                         break;
                     case -1:
                         responseUserDto.Response = -1;
