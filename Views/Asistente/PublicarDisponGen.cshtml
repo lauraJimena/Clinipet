@@ -1,0 +1,154 @@
+﻿
+@{
+    ViewBag.Title = "PublicarDisponGen";
+}
+
+@model Clinipet.Dtos.DisponibDto
+@{
+    ViewBag.Title = "Publicar Citas";
+}
+<link rel="stylesheet" href="@Url.Content("~/Estilos/estilos.css")">
+
+<h2 class="titulo">@ViewBag.Title</h2>
+<div class="contenedor">
+    <p class="texto">Selecciona para publicar tu disponibilidad de citas generales:</p>
+
+
+    <div class="cont">
+        <form id="guardarForm">
+            <label for="id_dia">Día:</label><br />
+
+            <select id="id_dia" name="id_dia">
+                <option value="">Seleccione un día</option>
+                @foreach (var dia in ViewBag.Dias)
+                {
+                    <option value="@dia.Value">@dia.Text</option>
+                }
+            </select><br />
+            <label for="id_hora">Hora:</label><br />
+            <select id="id_hora" name="id_hora">
+                <option value="">Seleccione una hora</option>
+                @foreach (var hora in ViewBag.Horas)
+                {
+                    <option value="@hora.Value">@hora.Text</option>
+
+                }
+            </select><br />
+            <label for="id_servicio">Servicio:</label><br />
+            <select id="id_servicio" name="id_servicio">
+                <option value="">Seleccione un servicio</option>
+                @foreach (var serv in ViewBag.Servicios)
+                {
+                    <option value="@serv.Value">@serv.Text</option>
+
+                }
+            </select><br />
+            <div class="contBoton">
+                <button type="button" class="botonForm botonVol" onclick="window.history.back();">Volver</button>
+                <button type="submit" class="botonForm">Publicar</button>
+            </div>
+
+        </form>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+document.getElementById('guardarForm').addEventListener('submit', function (e) {
+    e.preventDefault(); // Evita envío tradicional
+
+    const formData = new FormData(this);
+
+    fetch('@Url.Action("PublicarDisponGen", "Asistente")', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success && data.redirectUrl) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Guardado exitoso',
+                text: data.message || 'La información fue guardada correctamente.',
+                showConfirmButton: false,
+                timer: 3000,
+                customClass: {
+                    popup: 'swal2-popup',
+                    title: 'swal2-title',
+                    content: 'swal2-content'
+                }
+            }).then(() => {
+                window.location.href = data.redirectUrl;
+            });
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: data.message || 'Ocurrió un error al guardar.',
+                confirmButtonText: 'Aceptar',
+                customClass: {
+                    confirmButton: 'boton'
+
+                }
+            });
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Error inesperado. Intente de nuevo más tarde.',
+            confirmButtonText: 'Aceptar',
+            customClass: {
+                confirmButton: 'boton'
+
+            }
+        });
+    });
+});
+</script>
+
+<style>
+    body {
+        background-image: url('/Imagenes/fondo_pub_citas.png');
+        background-size: cover; /* para cubrir toda la pantalla */
+        background-repeat: no-repeat;
+        background-attachment: fixed; /* para que no se mueva al hacer scroll */
+        background-position: center;
+    }
+
+    .texto {
+        text-align: center;
+        margin-bottom: 15px;
+        font-size: 1.1em;
+    }
+
+    .titulo {
+        margin-top: 50px;
+        margin-bottom: 30px;
+    }
+
+    .contenedor {
+        background-color: #c7cbca;
+        border-radius: 40px;
+        justify-content: center;
+        padding: 35px;
+        width: 45%;
+        margin: 0 auto;
+        border: 4px solid white;
+    }
+
+    .cont {
+        display: flex;
+        justify-content: center;
+    }
+
+    .boton {
+        font-size: 1em;
+        margin-top: 0;
+        color: #2f2f2f;
+        text-shadow: none;
+        background-color: #d9a86c;
+    }
+</style>
+

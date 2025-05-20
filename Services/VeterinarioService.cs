@@ -6,6 +6,8 @@ using Clinipet.Dtos;
 using Clinipet.Services;
 using Clinipet.Repositories;
 using System.Web.Mvc;
+using Clinipet.Utilities;
+using System.Threading.Tasks;
 
 namespace Clinipet.Services
 {
@@ -26,7 +28,10 @@ namespace Clinipet.Services
                 nuevoVete.id_nivel = 1;      // Nivel básico
                 nuevoVete.id_estado = 1;     // Activo
                 nuevoVete.cambio_contras = true; // Requiere cambiar contraseña al iniciar
-                //nuevoVete.id_espec = 10;     
+                                                 //nuevoVete.id_espec = 10;     
+
+                // Hashear la contraseña antes de registrar
+                nuevoVete.contras_usu = EncriptContrasUtility.EncripContras(nuevoVete.contras_usu);
 
                 // Validaciones
                 if (VeteRepo.ExisteCorreo(nuevoVete.correo_usu))
@@ -48,6 +53,22 @@ namespace Clinipet.Services
                         {
                             userResponse.Response = 1;
                             userResponse.Mensaje = "Veterinario registrado exitosamente.";
+                            // Enviar correo en segundo plano
+                            Task.Run(() =>
+                            {
+                                try
+                                {
+                                    EmailConfigUtility gestorCorreo = new EmailConfigUtility();
+                                    String destinatario = nuevoVete.correo_usu;
+                                    String asunto = "Bienvenido al sistema de CliniPet!";
+                                    gestorCorreo.EnviarCorreoBienv(destinatario, asunto, nuevoVete);
+                                }
+                                catch (Exception ex)
+                                {
+                                    // Aquí puedes loguear el error o tomar acciones, pero no debe afectar el registro
+                                    Console.WriteLine("Error al enviar el correo: " + ex.Message);
+                                }
+                            });
 
                         }
                         else
@@ -80,30 +101,35 @@ namespace Clinipet.Services
             VeterinarioRepository veterinarioRepository = new VeterinarioRepository();
             DisponibDto disponibRespuesta = new DisponibDto();
             
-            try
-            {
+            
                 dispon.id_estado = 1; //Disponibilidad Activa
-                int id_dispon = veterinarioRepository.PublicarDispon(dispon);
+             // Esto puede lanzar una excepción (por ejemplo, por trigger), se deja para que el controlador muestre el mensaje específico
+             int id_dispon = veterinarioRepository.PublicarDispon(dispon);
                 
                 if (id_dispon != 0)
                 {                                     
                     ServicioDto servicio = new ServicioDto();                    
-                    servicio.id_dispon = id_dispon;                   
-                    if (veterinarioRepository.RegistrarServicio_Dispon(servicio) != 0){
-                        disponibRespuesta.Response = 1;
-                        disponibRespuesta.Mensaje = "Cita publicada correctamente";
-                       
-                    }                                      
+                    servicio.id_dispon = id_dispon;
+                    int resultado = veterinarioRepository.RegistrarServicio_Dispon(servicio);
 
+                if (resultado != 0)
+                {
+                    return new DisponibDto
+                    {
+                        Response = 1,
+                        Mensaje = "Cita publicada correctamente",
+                        id_dispon = id_dispon
+                    };
+                }
+                else
+                {
+                    throw new Exception("No se pudo registrar el servicio.");
                 }
             }
-            catch (Exception e)
-            {
-                disponibRespuesta.Response = 0;
-                disponibRespuesta.Mensaje = e.InnerException?.ToString() ?? e.Message;
-                return disponibRespuesta;
-            }
-            return disponibRespuesta;
+
+            // Si no se generó el ID de disponibilidad
+            throw new Exception("No se pudo registrar la disponibilidad.");
+
 
         }
         
@@ -131,6 +157,20 @@ namespace Clinipet.Services
             }).ToList();
 
             
+        }
+        public List<SelectListItem> ObtenerServiciosGenSelect()
+        {
+            VeterinarioRepository veterinarioRepository = new VeterinarioRepository();
+            List<DisponibDto> serv = veterinarioRepository.ObtenerServiciosGen();
+
+            return serv.Select(h => new SelectListItem // Convertir la lista raza en SelectList para pasar a la vista
+            {
+                Value = h.id_servicio.ToString(),
+                Text = h.nom_serv,
+
+            }).ToList();
+
+
         }
         public List<SelectListItem> ObtenerMotivoSelect()
         {
@@ -232,6 +272,7 @@ namespace Clinipet.Services
             return mascotas;
 
         }
+
 
 
 

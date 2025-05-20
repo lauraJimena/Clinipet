@@ -12,15 +12,23 @@
             <label for="numeroIdentidad">Número de Identidad:</label><br />
             <input type="text" id="documento" name="num_ident" required pattern="\d+" title="Solo se permiten números" /><br />
 
-            <label for="contraseña">Contraseña:</label><br />
-            <input type="password" id="contraseña" name="contras_usu" required /><br />
-            <div class="contBoton">
+            <div class="input-contras-container">
+                <label for="contraseña">Contraseña:</label><br />
+                <input type="password" id="contraseña" name="contras_usu" required /><br />
+                <span class="verContras" onclick="verContras('contraseña')">👁️</span>
+            </div><br />
+
+            <div class="cajaEnlace">
+                <button type="button" onclick="solicitarCambioContrasena()" class="botonOlv">¿Olvidaste tu contraseña?</button>
+            </div>
+            <div class="cajaBoton">
                 <button type="submit" class="botonForm">Ingresar</button>
             </div>
-        </form>
+            <div class="cajaEnlace arriba">
+                <a href="@Url.Action("RegistroCliente", "General")" class="enlace enlaceReg">Registrar</a>
+            </div>
 
-        <!-- Aquí se mostrarán los errores -->
-        <div id="errorMessage" style="color: red; text-align: center; margin-top: 10px;"></div>
+        </form>
 
     </div>
 
@@ -35,102 +43,8 @@
         </div>
     }
 </div>
-<!-- Restringir la entrada de caracteres, permitiendo solo numeros -->
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const input = document.getElementById('documento');
-        if (input) {
-            input.addEventListener('input', function () {
-                this.value = this.value.replace(/\D/g, '');
-            });
-        }
-    });
-</script>
 
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-<!-- Script para manejar el envío del formulario con fetch -->
-<script>
-document.getElementById('loginForm').addEventListener('submit', function (e) {
-    e.preventDefault(); // Evita envío tradicional
-
-    const formData = new FormData(this);
-
-    fetch('@Url.Action("Login", "General")', {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            if (data.changePassword) {
-                Swal.fire({
-                    icon: 'info',
-                    title: 'Actualizar contraseña',
-                    text: data.message,
-                    confirmButtonText: 'Continuar',
-                    customClass: {
-                        popup: 'swal2-popup',
-                        title: 'swal2-title',
-                        content: 'swal2-content',
-                        confirmButton: 'boton'
-                    }
-                }).then(() => {
-                    window.location.href = '@Url.Action("CambiarContraseña", "General")';
-                });
-            } else if (data.redirectUrl) {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Inicio de sesión exitoso',
-                    text: data.message,
-                    showConfirmButton: false,
-                    timer: 3000, // 3 segundos
-
-                    customClass: {
-                        popup: 'swal2-popup',
-                        title: 'swal2-title',
-                        content: 'swal2-content',
-                        confirmButton: 'boton'
-                    }
-                }).then(() => {
-                    window.location.href = data.redirectUrl;
-                });
-            }
-        } else {
-            // Mostrar error con SweetAlert
-            Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: data.message,
-                confirmButtonText: 'Intentar de nuevo',
-                customClass: {
-                    popup: 'swal2-popup',
-                    title: 'swal2-title',
-                    text: 'swal2-text',
-                    content: 'swal2-content',
-                    confirmButton: 'boton'
-
-                }
-            });
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'Ocurrió un error inesperado. Intenta de nuevo más tarde.',
-            confirmButtonText: 'Aceptar',
-            customClass: {
-                popup: 'swal2-popup',
-                title: 'swal2-title',
-                content: 'swal2-content',
-                icon: 'swal2-icon'
-            }
-        });
-    });
-});
-</script>
+<script src="@Url.Content("~/Scripts/InicioSesion.js")"></script>
 
 <style>
     body {
@@ -142,8 +56,8 @@ document.getElementById('loginForm').addEventListener('submit', function (e) {
     }
 
     .titulo {
-        margin-top: 0px;
-        margin-bottom: 50px;
+        margin-top: -20px;
+        margin-bottom: 40px;
         font-size: 2.1em;
     }
 
@@ -159,6 +73,9 @@ document.getElementById('loginForm').addEventListener('submit', function (e) {
         justify-content: center;
         gap: 110px;
         margin: auto;
+    }
+
+    .loginForm {
     }
 
     .cont {
@@ -200,6 +117,64 @@ document.getElementById('loginForm').addEventListener('submit', function (e) {
         color: #2f2f2f;
         text-shadow: none;
         background-color: #d9a86c;
+    }
+
+    .botonOlv {
+        margin-top: -20px;
+        background: none;
+        border: none;
+        box-shadow: none;
+        font-weight: 500;
+    }
+
+        .botonOlv:hover {
+            color: white;
+            box-shadow: none;
+            background: none;
+        }
+
+    .cajaEnlace {
+        margin-top: 15px;
+        text-align: center;
+    }
+
+    .enlace {
+        text-align: center;
+    }
+
+        .enlace:hover {
+            color: white;
+        }
+
+    .enlaceReg {
+        text-decoration: underline;
+    }
+
+    .cajaBoton {
+        margin-top: 5px;
+        text-align: center;
+    }
+
+    .input-contras-container {
+        position: relative;
+        display: inline-block;
+        width: 100%;
+    }
+
+        .input-contras-container input {
+            width: 100%;
+            padding-right: 40px; /* espacio para el icono */
+            box-sizing: border-box;
+        }
+
+    .verContras {
+        position: absolute;
+        top: 65%;
+        right: 10px;
+        transform: translateY(-50%);
+        cursor: pointer;
+        font-size: 18px;
+        user-select: none;
     }
 </style>
 

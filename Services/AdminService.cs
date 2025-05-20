@@ -39,5 +39,6 @@ namespace Clinipet.Services
             AdminRepository repo = new AdminRepository();
             repo.EliminAsis(id_usu);
         }
+
     }
 }

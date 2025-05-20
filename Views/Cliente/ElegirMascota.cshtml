@@ -19,10 +19,16 @@
     <input type="hidden" name="id_usu" value="@Model.IdUsu" />
     <input type="hidden" name="id_servicio" value="@Model.IdServicio" />
     <div class="contenedorMascotasGrid">
-        @foreach (var mascota in Model.Mascotas)
+        @for (int i = 0; i < Model.Mascotas.Count; i++)
         {
+            var mascota = Model.Mascotas[i];
             <div class="mascotaItem">
-                <input type="radio" name="id_mascota" id="mascota_@mascota.id_mascota" value="@mascota.id_mascota" hidden />
+
+                <input type="checkbox"
+                       name="id_mascotas"
+                       id="mascota_@mascota.id_mascota"
+                       value="@mascota.id_mascota" />
+
                 <label for="mascota_@mascota.id_mascota" class="cajaMascota">
                     <strong>@mascota.nom_masc</strong><br />
                     Edad: @mascota.edad_masc años<br />
@@ -35,16 +41,15 @@
 
     <div class="cajaBoton">
         <a href="@Url.Content("~/Cliente/ServiciosGenerales")" class="boton">Volver</a>
-        
+
         <button type="button" class="boton botonConfirm" id="confirmButton">Confirmar</button>
 
     </div>
 </form>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script src="@Url.Content("~/Scripts/popupConfirm.js")"></script>
-
-
 
 <style>
     body {
@@ -91,10 +96,14 @@
         transition: all 0.3s ease;
     }
 
-    input[type="radio"]:checked + .cajaMascota {
-        background-color: #4f7768;
-        color: white;
+    input[type="checkbox"] {
+        display: none; /* Oculta el checkbox */
     }
+
+        input[type="checkbox"]:checked + .cajaMascota {
+            background-color: #4f7768;
+            color: white;
+        }
 
     .cajaMascota:hover {
         background-color: #9fb2a9;
@@ -104,13 +113,17 @@
         font-size: 1.1em;
         text-align: center;
     }
+
     .botonCancel {
         background-color: #948e8e;
         border-radius: 20px;
     }
+
     .botonConfirm {
         background-color: #d9a86c;
     }
+    
+
     .botonConfir {
         font-size: 1em;
         color: #2f2f2f;
@@ -118,7 +131,9 @@
         background-color: #d9a86c;
         border-radius: 20px;
     }
-    
+    .botonConfir:hover {
+        background-color: bisque;
+    }
 </style>
 
 

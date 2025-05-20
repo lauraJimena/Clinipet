@@ -138,34 +138,37 @@ namespace Clinipet.Repositories
             }
             return mascotas;
         }       
-        public int RegistrarCitaEspecializada(CitaEspecDto cita)
-        {
-            int comando = 0;
-            DBContextUtility Connection = new DBContextUtility();
-            Connection.Connect();
-
-            string SQL = "INSERT INTO [clinipet].[dbo].[cita_espec] " +
-                         "(id_servicio, id_motivo, diagnost, id_mascota, id_dispon, id_estado, recomen, fecha_cita) " +
-                         "VALUES (@id_servicio, @id_motivo, @diagnost, @id_mascota, @id_dispon, @id_estado, @recomen, @fecha_cita)";
-
-            using (SqlCommand command = new SqlCommand(SQL, Connection.CONN()))
+            public int RegistrarCitaEspecializada(CitaEspecDto cita)
             {
-                command.Parameters.AddWithValue("@id_servicio", cita.id_servicio);
-                command.Parameters.AddWithValue("@id_motivo", cita.id_motivo);
-                command.Parameters.AddWithValue("@diagnost", cita.diagnost);
-                command.Parameters.AddWithValue("@id_mascota", cita.id_mascota);
-                command.Parameters.AddWithValue("@id_dispon", cita.id_dispon);
-                command.Parameters.AddWithValue("@id_estado", cita.id_estado);
-                command.Parameters.AddWithValue("@recomen", cita.recomen);
-                command.Parameters.AddWithValue("@fecha_cita", cita.fecha_cita);
+            
+                int comando = 0;
+                DBContextUtility Connection = new DBContextUtility();
+                Connection.Connect();
+
+                string SQL = "INSERT INTO [clinipet].[dbo].[cita_espec] " +
+                             "(id_servicio, id_motivo, diagnost, id_mascota, id_dispon, id_estado, recomen, fecha_cita) " +
+                             "VALUES (@id_servicio, @id_motivo, @diagnost, @id_mascota, @id_dispon, @id_estado, @recomen, @fecha_cita)";
+
+                using (SqlCommand command = new SqlCommand(SQL, Connection.CONN()))
+                {
+                    command.Parameters.AddWithValue("@id_servicio", cita.id_servicio);
+                    command.Parameters.AddWithValue("@id_motivo", cita.id_motivo);
+                    command.Parameters.AddWithValue("@diagnost", cita.diagnost);
+                    command.Parameters.AddWithValue("@id_mascota", cita.id_mascota);
+                    command.Parameters.AddWithValue("@id_dispon", cita.id_dispon);
+                    command.Parameters.AddWithValue("@id_estado", cita.id_estado);
+                    command.Parameters.AddWithValue("@recomen", cita.recomen);
+                    command.Parameters.AddWithValue("@fecha_cita", cita.fecha_cita);
 
 
-                comando = command.ExecuteNonQuery();
-            }
+                    comando = command.ExecuteNonQuery();
+                }
 
-            Connection.Disconnect();
-            return comando;
-        }
+                Connection.Disconnect();
+                return comando;
+       
+}
+
         public int RegistrarCitaGeneral(CitaGeneralDto citaGeneral)
         {
             int comando = 0;
@@ -368,11 +371,12 @@ namespace Clinipet.Repositories
             DBContextUtility Connection = new DBContextUtility();
             Connection.Connect();
 
-            string sql = "SELECT ce.id_cita_esp, mo.nombre, s.nombre, ce.diagnost, di.nombre, " +
-               "h.nom_hora, e.nom_estado, m.nom_masc, ce.recomen " +
+            string sql = "SELECT ce.id_cita_esp, mo.nombre, s.nombre, ce.diagnost, ce.fecha_cita, " +
+               "h.nom_hora, e.nom_estado, m.nom_masc, ce.recomen,  u.nom_usu + ' ' + u.apel_usu " +
                "FROM cita_espec ce " +
                "JOIN disponibilidad d ON ce.id_dispon = d.id_dispon " +
                "JOIN mascota m ON ce.id_mascota = m.id_mascota " +
+                "JOIN usuario u ON d.id_usu = u.id_usu " +
                "JOIN servicio s ON ce.id_servicio = s.id_servicio " +
                "JOIN dia di ON d.id_dia = di.id_dia " +
                "JOIN hora h ON d.id_hora = h.id_hora " +
@@ -393,11 +397,12 @@ namespace Clinipet.Repositories
                             nom_motivo = reader.GetString(1),
                             nom_serv = reader.GetString(2),
                             diagnost = reader.GetString(3),
-                            nom_dia = reader.GetString(4),
+                            fecha_cita = reader.GetDateTime(4),
                             nom_hora = reader.GetString(5),
                             nom_estado = reader.GetString(6),
                             nom_masc = reader.GetString(7),
                             recomen = reader.GetString(8),
+                            nom_usu = reader.GetString(9),
 
                         };
                         citasGenerales.Add(citaGeneral);

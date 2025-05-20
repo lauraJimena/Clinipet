@@ -12,7 +12,13 @@
         <div class="cont">
             <div class="cajaTitulo"><h2 class="titulo">Registro de Usuario</h2></div>
 
-            <form id="registroForm" method="post" asp-action="RegistroUsuario" asp-controller="Asistente">
+            <form id="registroForm"
+                  method="post"
+                  asp-action="RegistroUsuario"
+                  asp-controller="Asistente"
+                  data-url="@Url.Action("RegistroUsuario", "Asistente")"
+                  data-redirect="@Url.Action("IndexAsistente", "Asistente")">
+
                 <label for="nom_usu">Nombres:</label><br />
                 <input type="text" asp-for="nom_usu" id="nom_usu" name="nom_usu" required /><br />
                 @Html.ValidationMessageFor(model => model.nom_usu, "", new { @class = "text-danger" })
@@ -26,7 +32,6 @@
                     <option value="">Seleccione...</option>
                     <option value="1">Cédula</option>
                     <option value="2">Pasaporte</option>
-
                 </select>
                 @Html.ValidationMessageFor(model => model.id_tipo_ident, "", new { @class = "text-danger" })
                 <br />
@@ -43,11 +48,16 @@
                 <input type="tel" id="tel_usu" asp-for="tel_usu" name="tel_usu" required pattern="\d+" title="Solo se permiten números" /><br />
                 @Html.ValidationMessageFor(model => model.tel_usu, "", new { @class = "text-danger" })
 
-                <label for="contras_usu">Contraseña:</label><br />
-                <input type="password" id="contras_usu" asp-for="contras_usu" name="contras_usu" required /><br />
-                @Html.ValidationMessageFor(model => model.contras_usu, "", new { @class = "text-danger" })
+                <div class="input-contras-container">
+                    <label for="contras_usu">Contraseña:</label><br />
+                    <input type="password" id="contras_usu" asp-for="contras_usu" name="contras_usu" required /><br />
+                    <span class="verContras" onclick="verContras('contras_usu')">👁️</span>
+                    @Html.ValidationMessageFor(model => model.contras_usu, "", new { @class = "text-danger" })
+                </div><br />
+
 
                 <div class="contBoton">
+                    <button type="button" class="botonVol" onclick="cancelarFormulario()">Cancelar</button>
                     <button type="submit" class="botonForm">Registrar</button>
                 </div>
             </form>
@@ -56,30 +66,28 @@
     </div>
 
 </body>
+
+<!-- Cancelar registro-->
 <script>
-    document.getElementById("registroForm").addEventListener("submit", function (event) {
-        event.preventDefault(); // Evita la recarga de la página
-
-        var formData = new FormData(this);
-
-        fetch('@Url.Action("RegistroUsuario", "Asistente")', {
-            method: "POST",
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                // Redirige si el registro fue exitoso
-                alert("Registro exitoso");
-                window.location.href = "/Home/Index";
-            } else {
-                // Muestra el modal si hay error
-                mostrarModal("Error", data.message);
-            }
-        })
-        .catch(error => console.error("Error:", error));
-    });
+    function cancelarFormulario() {
+        document.getElementById("registroForm").reset(); // Limpia todos los inputs
+        window.location.href = "@Url.Action("IndexAsistente", "Asistente")"; // Redirige al home
+    }
 </script>
+<!-- Mostrar Contraseña -->
+<script>
+    function verContras(idInput) {
+        const input = document.getElementById(idInput);
+        if (input.type === 'password') {
+            input.type = 'text';
+        } else {
+            input.type = 'password';
+        }
+    }
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="@Url.Content("~/Scripts/Registros.js")"></script>
 <style>
     .cajaTitulo {
         justify-items: center; /* Alinea horizontalmente */
@@ -106,6 +114,28 @@
         margin-top: 0;
         margin-left: 40px;
         flex-direction: column; /* Elementos en columna */
+    }
+
+    .input-contras-container {
+        position: relative;
+        display: inline-block;
+        width: 100%;
+    }
+
+        .input-contras-container input {
+            width: 100%;
+            padding-right: 40px; /* espacio para el icono */
+            box-sizing: border-box;
+        }
+
+    .verContras {
+        position: absolute;
+        top: 62%;
+        right: 10px;
+        transform: translateY(-50%);
+        cursor: pointer;
+        font-size: 18px;
+        user-select: none;
     }
 </style>
 

@@ -17,72 +17,91 @@
                 </div>
             }
 
-        <form id="registroForm" method="post" asp-action="RegistroMascota" asp-controller="Asistente">
-            <label for="nom_masc">Nombre:</label><br />
-            <input type="text" id="nom_masc" asp-for="nom_masc" name="nom_masc" required /><br />
-            @Html.ValidationMessageFor(model => model.nom_masc, "", new { @class = "text-danger" })
+            <form id="registroForm" method="post" asp-action="RegistroMascota" asp-controller="Asistente">
+                <label for="nom_masc">Nombre:</label><br />
+                <input type="text" id="nom_masc" asp-for="nom_masc" name="nom_masc" required /><br />
+                @Html.ValidationMessageFor(model => model.nom_masc, "", new { @class = "text-danger" })
 
-            <label for="edad_masc">Edad:</label><br />
-            <input type="text" id="edad_masc" asp-for="edad_masc" name="edad_masc" required /><br />
-            @Html.ValidationMessageFor(model => model.edad_masc, "", new { @class = "text-danger" })
+                <label for="edad_masc">Edad(Años):</label><br />
+                <input type="text" id="edad_masc" asp-for="edad_masc" name="edad_masc" required /><br />
+                @Html.ValidationMessageFor(model => model.edad_masc, "", new { @class = "text-danger" })
 
-            <!-- Selección de Cliente -->
-            <label for="id_usu">Cliente:</label><br />
-            <select id="id_usu" name="id_usu" asp-for="id_usu" required>
-                <option value="">-- Selecciona un cliente --</option>
-                @foreach (var cliente in ViewBag.Clientes)
-                {
-                    <option value="@cliente.Value">@cliente.Text</option>
-                }
-            </select>
-            @Html.ValidationMessageFor(model => model.id_usu, "", new { @class = "text-danger" })
-            <br />
+                <!-- Selección de Cliente -->
+                <label for="id_usu">Cliente:</label><br />
+                <select id="id_usu" name="id_usu" asp-for="id_usu" required>
+                    <option value="">-- Selecciona un cliente --</option>
+                    @foreach (var cliente in ViewBag.Clientes)
+                    {
+                        <option value="@cliente.Value">@cliente.Text</option>
+                    }
+                </select>
+                @Html.ValidationMessageFor(model => model.id_usu, "", new { @class = "text-danger" })
+                <br />
 
-            <label for="id_tipo">Tipo de mascota: </label><br />
-            <select id="id_tipo" name="id_tipo" asp-for="id_tipo" required>
-                <option value="">-- Selecciona un tipo --</option>
-                @foreach (var tipo in ViewBag.Tipos)
-                {
-                    <option value="@tipo.Value">@tipo.Text</option>
-                }
-            </select>
-            @Html.ValidationMessageFor(model => model.id_tipo, "", new { @class = "text-danger" })
-            <br />
+                <label for="id_tipo">Tipo de mascota: </label><br />
+                <select id="id_tipo" name="id_tipo" asp-for="id_tipo" required>
+                    <option value="">-- Selecciona un tipo --</option>
+                    @foreach (var tipo in ViewBag.Tipos)
+                    {
+                        <option value="@tipo.Value">@tipo.Text</option>
+                    }
+                </select>
+                @Html.ValidationMessageFor(model => model.id_tipo, "", new { @class = "text-danger" })
+                <br />
 
-            <label for="id_raza">Raza:</label><br />
-            <select id="id_raza" name="id_raza" asp-for="id_raza" required>
-                <option value="">-- Selecciona una raza --</option>
-                @foreach (var raza in ViewBag.Razas)
-                {
-                    <option value="@raza.Value" data-tipo="@raza.Group.Name">@raza.Text</option>
-                }
-            </select>
-            @Html.ValidationMessageFor(model => model.id_raza, "", new { @class = "text-danger" })
+                <label for="id_raza">Raza:</label><br />
+                <select id="id_raza" name="id_raza" asp-for="id_raza" required>
+                    <option value="">-- Selecciona una raza --</option>
+                    @foreach (var raza in ViewBag.Razas)
+                    {
+                        <option value="@raza.Value" data-tipo="@raza.Group.Name">@raza.Text</option>
+                    }
+                </select>
+                @Html.ValidationMessageFor(model => model.id_raza, "", new { @class = "text-danger" })
 
             <div class="contBoton">
+                <button type="button" class="botonVol" onclick="cancelarFormulario()">Cancelar</button>
                 <button type="submit" class="botonForm">Registrar</button>
             </div>
-        </form>
+            </form>
         </div>
         <img class="imagenFondo" src="~/Imagenes/fondo_RegistroMascot.jpeg" alt="">
     </div>
 
 </body>
+<!-- Cancelar registro-->
+<script>
+    function cancelarFormulario() {
+        document.getElementById("registroForm").reset(); // Limpia todos los inputs
+        window.location.href = "@Url.Action("IndexAsistente", "Asistente")"; // Redirige al home
+    }
+</script>
+<!-- Validar solo números-->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const input = document.getElementById('edad_masc');
+        if (input) {
+            input.addEventListener('input', function () {
+                this.value = this.value.replace(/\D/g, '');
+            });
+        }
+    });
+</script>
 <script>
 
-        document.getElementById('id_tipo').addEventListener('change', function () {
+    document.getElementById('id_tipo').addEventListener('change', function () {
         var tipoSeleccionado = this.options[this.selectedIndex].text;
         var razaSelect = document.getElementById('id_raza');
         var opciones = razaSelect.options;
 
         for (var i = 0; i < opciones.length; i++) {
             var opcion = opciones[i];
-        var tipo = opcion.getAttribute('data-tipo');
+            var tipo = opcion.getAttribute('data-tipo');
 
-        if (!tipo || tipo === tipoSeleccionado) {
-            opcion.style.display = '';
+            if (!tipo || tipo === tipoSeleccionado) {
+                opcion.style.display = '';
             } else {
-            opcion.style.display = 'none';
+                opcion.style.display = 'none';
             }
         }
 

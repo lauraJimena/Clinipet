@@ -46,6 +46,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Rotativa, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\Rotativa.1.7.3\lib\net461\Rotativa.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -120,7 +123,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\AdministradorController.cs" />
     <Compile Include="Controllers\AsistenteController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\ClienteController.cs" />
@@ -129,13 +132,17 @@
     <Compile Include="Controllers\VeterinarioController.cs" />
     <Compile Include="Dtos\CitaEspecDto.cs" />
     <Compile Include="Dtos\CitaEspecVistaDto.cs" />
+    <Compile Include="Dtos\DisponibilidadAgrupadaDto.cs" />
     <Compile Include="Dtos\HistorialCitasDto.cs" />
     <Compile Include="Dtos\MascotaCitaDto.cs" />
     <Compile Include="Dtos\CitaGeneralDto.cs" />
+    <Compile Include="Dtos\ReporteDto.cs" />
+    <Compile Include="Dtos\ContrasDto.cs" />
     <Compile Include="Dtos\ServicioDto.cs" />
     <Compile Include="Dtos\DisponibDto.cs" />
     <Compile Include="Dtos\MascotaDto.cs" />
     <Compile Include="Dtos\UserDto.cs" />
+    <Compile Include="Dtos\VeterinarioCitasDto.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -144,14 +151,20 @@
     <Compile Include="Repositories\AsistenteRepository.cs" />
     <Compile Include="Repositories\ClienteRepository.cs" />
     <Compile Include="Repositories\GeneralRepository.cs" />
+    <Compile Include="Repositories\ReporteRepository.cs" />
     <Compile Include="Repositories\VeterinarioRepository.cs" />
     <Compile Include="Services\AdminService.cs" />
     <Compile Include="Services\AsistenteService.cs" />
     <Compile Include="Services\ClienteService.cs" />
     <Compile Include="Services\GeneralService.cs" />
+    <Compile Include="Services\ReporteService.cs" />
     <Compile Include="Services\VeterinarioService.cs" />
     <Compile Include="Utilities\DBContextUtility.cs" />
+    <Compile Include="Utilities\EmailConfigUtility.cs" />
+    <Compile Include="Utilities\EncriptContrasUtility.cs" />
     <Compile Include="Utilities\FechaUtility.cs" />
+    <Compile Include="Utilities\ValidarRolUtility.cs" />
+    <Compile Include="Utilities\ReportUtility.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-theme.css" />
@@ -159,7 +172,7 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Estilos\estilos.css" />
-    <Content Include="Estilos\estilosTablas.css" />
+    <Content Include="Estilos\estilosReporte.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -172,14 +185,16 @@
     <Content Include="Imagenes\consultar_agenda.png" />
     <Content Include="Imagenes\consult_hist.png" />
     <Content Include="Imagenes\contacto.png" />
+    <Content Include="Imagenes\correo_bienv.jpg" />
     <Content Include="Imagenes\descrip_consult.png" />
+    <Content Include="Imagenes\elegir_cita.png" />
     <Content Include="Imagenes\encab_citas_gen.png" />
     <Content Include="Imagenes\especial.jpg" />
     <Content Include="Imagenes\facebook.png" />
     <Content Include="Imagenes\fondo_agenda_espec.png" />
     <Content Include="Imagenes\fondo_buscar_masc.png" />
     <Content Include="Imagenes\fondo_caja_serv.png" />
-    <Content Include="Imagenes\fondo_cambio_contras.jpg" />
+    <Content Include="Imagenes\fondo_cambio_contras.png" />
     <Content Include="Imagenes\fondo_dispon.png" />
     <Content Include="Imagenes\fondo_dispon_gen.png" />
     <Content Include="Imagenes\fondo_elegir_masc.png" />
@@ -189,6 +204,7 @@
     <Content Include="Imagenes\fondo_index2.png" />
     <Content Include="Imagenes\fondo_login.png" />
     <Content Include="Imagenes\fondo_mascotas.png" />
+    <Content Include="Imagenes\fondo_reporte.jpg" />
     <Content Include="Imagenes\fondo_servicios.png" />
     <Content Include="Imagenes\fondo_masc_regis.png" />
     <Content Include="Imagenes\fondo_mascota.png" />
@@ -198,6 +214,7 @@
     <Content Include="Imagenes\huella.png" />
     <Content Include="Imagenes\icono_gato.png" />
     <Content Include="Imagenes\icono_perro.png" />
+    <Content Include="Imagenes\logo_clinipet_sin_fondo.png" />
     <Content Include="Imagenes\logo_gato.png" />
     <Content Include="Imagenes\logo_perro.png" />
     <Content Include="Imagenes\mascotas_encab2.png" />
@@ -226,9 +243,18 @@
     <Content Include="Imagenes\valores.png" />
     <Content Include="Imagenes\veterinario_perro.jpg" />
     <Content Include="Imagenes\vision.png" />
+    <Content Include="Rotativa\help-wkhtmltoimage.txt" />
+    <Content Include="Rotativa\help-wkhtmltopdf.txt" />
+    <Content Include="Rotativa\wkhtmltoimage.exe" />
+    <Content Include="Rotativa\wkhtmltopdf.exe" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="App_Browsers\qt.browser" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
+    <Content Include="Scripts\InicioSesion.js" />
+    <Content Include="Scripts\login.js" />
+    <Content Include="Scripts\Registros.js" />
+    <Content Include="Scripts\validaciones.js" />
     <Content Include="Scripts\popup.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -261,17 +287,17 @@
     <Content Include="Views\General\RegistroMascota.cshtml" />
     <Content Include="Views\Cliente\IndexCliente.cshtml" />
     <Content Include="Views\Veterinario\PubCitas.cshtml" />
-    <Content Include="Views\Admin\RegistroAsistente.cshtml" />
-    <Content Include="Views\Admin\RegistroVeterinario.cshtml" />
-    <Content Include="Views\Admin\IndexAdmin.cshtml" />
+    <Content Include="Views\Administrador\RegistroAsistente.cshtml" />
+    <Content Include="Views\Administrador\RegistroVeterinario.cshtml" />
+    <Content Include="Views\Administrador\IndexAdmin.cshtml" />
     <Content Include="Views\Cliente\CitasEspecDispon.cshtml" />
     <Content Include="Views\Cliente\AgendarCita.cshtml" />
     <Content Include="Views\Shared\_ModalConfirm.cshtml" />
     <Content Include="Views\Cliente\ListadoMascotas.cshtml" />
     <Content Include="Views\Cliente\MascotasRegistradas.cshtml" />
-    <Content Include="Views\Admin\EliminarVeterinario.cshtml" />
-    <Content Include="Views\Admin\EliminarAsistente.cshtml" />
-    <Content Include="Views\Admin\EliminarUsuarios.cshtml" />
+    <Content Include="Views\Administrador\EliminarVeterinario.cshtml" />
+    <Content Include="Views\Administrador\EliminarAsistente.cshtml" />
+    <Content Include="Views\Administrador\EliminarUsuarios.cshtml" />
     <Content Include="Views\Cliente\ServiciosGenerales.cshtml" />
     <Content Include="Views\Cliente\CitasGenDispon.cshtml" />
     <Content Include="Views\Cliente\ElegirMascota.cshtml" />
@@ -293,6 +319,13 @@
     <Content Include="Views\Asistente\RegistroMascota.cshtml" />
     <Content Include="Views\Asistente\ConsultarCitas.cshtml" />
     <Content Include="Views\Asistente\AgendarCitas.cshtml" />
+    <Content Include="Views\Administrador\ReporteServicios.cshtml" />
+    <Content Include="Views\Asistente\CitasGenDispon.cshtml" />
+    <Content Include="Views\Asistente\ServiciosGenerales.cshtml" />
+    <Content Include="Views\Asistente\ElegirMascota.cshtml" />
+    <Content Include="Views\General\RestablecerContras.cshtml" />
+    <Content Include="Views\Home\AccesoDenegado.cshtml" />
+    <Content Include="Views\Asistente\PublicarDisponGen.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

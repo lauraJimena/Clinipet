@@ -11,10 +11,10 @@
 
             <form id="guardarForm" method="post" asp-action="RegistroMascota" asp-controller="General" data-url="@Url.Action("RegistroMascota", "General")">
                 <label for="nom_masc">Nombre:</label><br />
-                <input type="text" id="nom_masc" asp-for="nom_masc" name="nom_masc" required /><br />
+                <input type="text" id="nom_masc" asp-for="nom_masc" name="nom_masc" placeholder="Ingresa nombre" required /><br />
                 @Html.ValidationMessageFor(model => model.nom_masc, "", new { @class = "text-danger" })
 
-                <label for="edad_masc">Edad:</label><br />
+                <label for="edad_masc">Edad(Años):</label><br />
                 <input type="text" id="edad_masc" asp-for="edad_masc" name="edad_masc" required pattern="\d*" title="Solo se permiten números" placeholder="Ingresa número" /><br />
 
                 @Html.ValidationMessageFor(model => model.edad_masc, "", new { @class = "text-danger" })
@@ -44,7 +44,7 @@
 
                 <div class="contBoton">
 
-                    <button type="button" class="botonForm botonVol" onclick="window.location.href='@Url.Action("IndexVeterinario", "Veterinario")'">Volver</button>
+                    <button type="button" class="botonForm botonVol" onclick="window.location.href='@Url.Action("IndexCliente", "Cliente")'">Cancelar</button>
                     <button type="submit" class="botonForm">Registrar</button>
                 </div>
             </form>
@@ -55,7 +55,7 @@
 </body>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="@Url.Content("~/Scripts/popup.js")"></script>
-<!-- Este script SIEMPRE se ejecuta -->
+<!-- Este script SIEMPRE se ejecuta (solo números) -->
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const input = document.getElementById('edad_masc');

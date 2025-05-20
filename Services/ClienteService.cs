@@ -26,7 +26,7 @@ namespace Clinipet.Services
             return clienteRepository.ObtenerMascotaPorId(id_mascota);
 
         }
-        public CitaEspecDto RegistrarCitaEspec(CitaEspecDto citaModel)
+        public CitaEspecDto RegistrarCitaEspec(CitaEspecDto citaModel, UserDto usuModel, MascotaDto mascotaModel)
 
         {
             CitaEspecDto citaEspecDto = new CitaEspecDto();
@@ -45,13 +45,18 @@ namespace Clinipet.Services
                 DateTime fecha_cita = fechaUtility.ObtenerProximaFecha(nom_dia);
                 citaModel.fecha_cita = fecha_cita;
 
-                clienteRepository.ActualizarEstadoDispon(citaModel);
+                
                
                 int respuesta= clienteRepository.RegistrarCitaEspecializada(citaModel);
                 if (respuesta != 0)
                 {
                     citaEspecDto.Response = 1;
-                    citaEspecDto.Mensaje = "Creación exitosa";
+                    clienteRepository.ActualizarEstadoDispon(citaModel);
+                    EmailConfigUtility gestorCorreo = new EmailConfigUtility();
+                    String destinatario = usuModel.correo_usu;
+                    String asunto = "Cita confirmada exitosamente!";
+                    gestorCorreo.EnviarCorreoCita(destinatario, asunto, usuModel, citaModel, mascotaModel);
+                    citaEspecDto.Mensaje = "Cita confirmada exitosamente";
 
                 }
                 else
@@ -62,15 +67,28 @@ namespace Clinipet.Services
 
                 return citaEspecDto;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
                 citaEspecDto.Response = 0;
-                citaEspecDto.Mensaje = e.InnerException?.ToString();
-                return citaEspecDto;
+              
+                // Verificar si el mensaje contiene el error del trigger
+                if (ex.Message.Contains("La mascota ya tiene una cita activa"))
+                {
+                    citaEspecDto.Mensaje = "La mascota ya tiene una cita activa en esa fecha y hora. Por favor selecciona otra disponibilidad.";
+                }
+                else
+                {
+                 
+
+                    // Mensaje genérico en caso de otro tipo de error
+                    citaEspecDto.Mensaje = "Ocurrió un error inesperado. Intenta de nuevo más tarde.";
+                }
+
             }
+            return citaEspecDto;
 
         }
-        public CitaGeneralDto AgendarCitaGeneral(CitaGeneralDto citaModel)
+        /*public CitaGeneralDto AgendarCitaGeneral(CitaGeneralDto citaModel)
 
         {
             CitaGeneralDto responseCitaGenDto = new CitaGeneralDto();
@@ -102,7 +120,41 @@ namespace Clinipet.Services
                 return responseCitaGenDto;
             }
 
+        }*/
+        public CitaGeneralDto AgendarCitaGeneral(CitaGeneralDto citaModel)
+        {
+
+            CitaGeneralDto responseCitaGenDto = new CitaGeneralDto();
+            ClienteRepository clienteRepository = new ClienteRepository();
+
+            try
+            {
+                // Siempre usamos estado 3 (pendiente)
+                citaModel.id_estado = 3;
+
+                // Registramos la cita general con los datos que vienen
+                int resultado = clienteRepository.RegistrarCitaGeneral(citaModel);
+
+                if (resultado != 0)
+                {
+                    responseCitaGenDto.Response = 1;
+                    responseCitaGenDto.Mensaje = "Cita registrada con éxito.";
+                }
+                else
+                {
+                    responseCitaGenDto.Response = 0;
+                    responseCitaGenDto.Mensaje = "No se pudo registrar la cita.";
+                }
+            }
+            catch (Exception e)
+            {
+                responseCitaGenDto.Response = 0;
+                responseCitaGenDto.Mensaje = e.InnerException?.Message ?? e.Message;
+            }
+
+            return responseCitaGenDto;
         }
+
         public List<MascotaDto> ListadoMascotas(int id_usu)
 
         {

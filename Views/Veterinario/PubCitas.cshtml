@@ -1,6 +1,6 @@
 ﻿@model Clinipet.Dtos.DisponibDto
 @{
-    ViewBag.Title = "Publicar Citas";
+    ViewBag.Title = "Publicar Disponibilidad";
 }
 <link rel="stylesheet" href="@Url.Content("~/Estilos/estilos.css")">
 
@@ -11,7 +11,7 @@
 
     <div class="cont">
         <form id="guardarForm">
-            <label for="id_dia">Fecha:</label><br />
+            <label for="id_dia">Día:</label><br />
 
             <select id="id_dia" name="id_dia">
                 <option value="">Seleccione un día</option>
@@ -96,7 +96,7 @@ document.getElementById('guardarForm').addEventListener('submit', function (e) {
 
 <style>
     body {
-        background-image: url('/Imagenes/fondo_pub_citas.png');
+        background-image: url('/Imagenes/fondo_servicios.png');
         background-size: cover; /* para cubrir toda la pantalla */
         background-repeat: no-repeat;
         background-attachment: fixed; /* para que no se mueva al hacer scroll */

@@ -1,19 +1,20 @@
 ﻿@{
-    ViewBag.Title = "Cambio Constraseña";
+    ViewBag.Title = "Cambio Contraseña";
 }
 
 <link rel="stylesheet" href="@Url.Content("~/Estilos/estilos.css")">
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <div class="contenedor">
     <div class="cont">
         <h2 class="titulo">Cambiar Contraseña</h2>
+
         <form method="post" action="@Url.Action("CambiarContraseña", "General")">
             <input type="hidden" id="num_ident" name="num_ident" value="@Session["Num_docu"]" />
             <input type="hidden" id="id_rol" name="id_rol" value="@Session["Rol"]" />
 
             <div class="inputContras">
                 <label for="ContraseñaActual">Contraseña Actual:</label><br />
-                <input type="password" id="actual" name="contras_usu" required value="@Session["Contras"]" /><br />
+                <input type="password" id="actual" name="contras_usu" required /><br />
                 <span class="verContras" onclick="verContras('actual')">👁️</span>
             </div>
             <div class="inputContras">
@@ -23,7 +24,7 @@
             </div>
             <div class="inputContras">
                 <label for="ConfirmarContraseña">Confirmar Nueva Contraseña:</label><br />
-                <input type="password" id="confirmar" name="ConfirmarContraseña" required /><br />
+                <input type="password" id="confirmar" name="confirmar_contras" required /><br />
                 <span class="verContras" onclick="verContras('confirmar')">👁️</span>
             </div>
             <div class="contBoton">
@@ -32,6 +33,48 @@
         </form>
     </div>
 </div>
+@if (ViewBag.MensajeExito != null)
+{
+    <script>
+        Swal.fire({
+            title: 'Éxito',
+            text: decodeURIComponent('@HttpUtility.UrlEncode(ViewBag.MensajeExito)').replace(/\+/g, ' '),
+            icon: 'success',
+            confirmButtonText: 'Aceptar',
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            customClass: {
+                popup: 'swal2-popup',
+                title: 'swal2-title',
+                content: 'swal2-content',
+                confirmButton: 'boton'
+            }
+        }).then(() => {
+            // Redirigir al login después de mostrar el mensaje
+            window.location.href = '/General/Login';
+        });
+    </script>
+}
+@if (ViewBag.Error != null)
+{
+    <script>
+        Swal.fire({
+            title: 'Error',
+            text: decodeURIComponent('@HttpUtility.UrlEncode(ViewBag.Error)').replace(/\+/g, ' '),
+            icon: 'error',
+            confirmButtonText: 'Cerrar',
+            customClass: {
+                popup: 'swal2-popup',
+                title: 'swal2-title',
+                content: 'swal2-content',
+                confirmButton: 'boton'
+            }
+        });
+    </script>
+}
+
+
+
 <script>
     function verContras(idInput) {
         const input = document.getElementById(idInput);
@@ -44,12 +87,12 @@
 </script>
 <style>
     body {
-        background-image: url('/Imagenes/fondo_cambio_contras.jpg');
+        background-image: url('/Imagenes/fondo_cambio_contras.png');
         background-size: cover;
         background-repeat: no-repeat;
         background-attachment: fixed;
-        background-position: center;   
-        height: 100vh; /* Asegura que el cuerpo cubra toda la altura de la ventana */     
+        background-position: center;
+        height: 100vh; /* Asegura que el cuerpo cubra toda la altura de la ventana */
         justify-content: center;
         align-items: center; /* Centra todo el contenido de la página */
     }
@@ -69,7 +112,7 @@
     .contenedor {
         display: flex;
         align-items: center;
-        justify-content: center;      
+        justify-content: center;
         padding: 20px;
         margin-top: 0px;
     }
@@ -77,9 +120,9 @@
     .cont {
         margin-top: 50px;
         padding: 20px;
-        height:500px;
+        height: 500px;
         border-radius: 10px;
-        background-color:red;
+        background-color: red;
         background-color: rgba(90, 126, 111, 0.6);
         box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2);
         width: 500px;
@@ -94,21 +137,45 @@
         margin-top: 10px;
     }
 
-    .botonForm {   
-        background-color: #d9a86c;          
+    .botonForm {
+        background-color: #d9a86c;
         cursor: pointer;
         font-size: 1.1em;
     }
+
     .inputContras {
         position: relative;
         display: inline-block;
     }
 
-    .inputContras .verContras {
-        position: absolute;
-        top: 63%;
-        right: 10px;
-        transform: translateY(-50%);
-        cursor: pointer;
-    }   
+        .inputContras .verContras {
+            position: absolute;
+            top: 63%;
+            right: 10px;
+            transform: translateY(-50%);
+            cursor: pointer;
+        }
+
+    .mensajeExito {
+        color: #155724;
+        background-color: #d4edda;
+        padding: 10px;
+        border-radius: 5px;
+        text-align: center;
+    }
+
+    .mensajeError {
+        color: #721c24;
+        background-color: #f8d7da;
+        padding: 10px;
+        border-radius: 5px;
+        text-align: center;
+    }
+    .boton {
+        font-size: 1em;
+        margin-top: 0;
+        color: #2f2f2f;
+        text-shadow: none;
+        background-color: #d9a86c;
+    }
 </style>

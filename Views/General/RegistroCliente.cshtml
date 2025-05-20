@@ -5,13 +5,12 @@
 }
 <link rel="stylesheet" href="@Url.Content("~/Estilos/estilos.css")">
 
-
 <body class="bodyForm">
     <div class="contenedor">
         <div class="cont">
             <div class="cajaTitulo"><h2 class="titulo">Registro de Cliente</h2></div>
 
-            <form id="registroForm" method="post" asp-action="RegistroCliente" asp-controller="General">
+            <form id="guardarForm" method="post" asp-action="RegistroCliente" asp-controller="General" data-url="@Url.Action("RegistroCliente", "General")">
                 <label for="nom_usu">Nombres:</label><br />
                 <input type="text" asp-for="nom_usu" id="nom_usu" name="nom_usu" required /><br />
                 @Html.ValidationMessageFor(model => model.nom_usu, "", new { @class = "text-danger" })
@@ -24,13 +23,13 @@
                 <select id="id_tipo_ident" asp-for="id_tipo_ident" name="id_tipo_ident" required>
                     <option value="">Seleccione...</option>
                     <option value="1">Cédula</option>
-                    <option value="2">Pasaporte</option>
+                    <option value="2">Cédula de extranjería</option>
 
                 </select>
                 @Html.ValidationMessageFor(model => model.id_tipo_ident, "", new { @class = "text-danger" })
                 <br />
 
-                <label for="num_iden">Número de Documento:</label><br />
+                <label for="num_ident">Número de Documento:</label><br />
                 <input type="text" id="num_ident" asp-for="num_ident" name="num_ident" required pattern="\d+" title="Solo se permiten números" /><br />
                 @Html.ValidationMessageFor(model => model.num_ident, "", new { @class = "text-danger" })
 
@@ -38,46 +37,54 @@
                 <input type="email" id="correo_usu" asp-for="correo_usu" name="correo_usu" required /><br />
                 @Html.ValidationMessageFor(model => model.correo_usu, "", new { @class = "text-danger" })
 
-                <label for="tel_usu">Teléfono:</label><br />
+
+                <label for="tel_usu">Numéro de Teléfono:</label><br />
                 <input type="tel" id="tel_usu" asp-for="tel_usu" name="tel_usu" required pattern="\d+" title="Solo se permiten números" /><br />
                 @Html.ValidationMessageFor(model => model.tel_usu, "", new { @class = "text-danger" })
 
                 <label for="contras_usu">Contraseña:</label><br />
-                <input type="password" id="contras_usu" asp-for="contras_usu" name="contras_usu" required /><br />
+
+                <div class="input-contras-container">
+                    <input type="password" id="contras_usu" asp-for="contras_usu" name="contras_usu" required />
+                    <span class="verContras" onclick="verContras('contras_usu')">👁️</span>
+                </div><br />
                 @Html.ValidationMessageFor(model => model.contras_usu, "", new { @class = "text-danger" })
 
-                <div class="contBoton">
-                    <button type="submit" class="botonForm">Registrar</button>
-                </div>
+            <div class="contBoton">
+
+                <button type="button" class="botonVol" onclick="cancelarFormulario()">Cancelar</button>
+                <button type="submit" class="botonForm">Registrar</button>
+
+            </div>
             </form>
+
         </div>
         <img class="imagenFondo" src="~/Imagenes/registro.jpg" alt="">
     </div>
 
 </body>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="@Url.Content("~/Scripts/validaciones.js")"></script>
+<!-- Mostrar Contraseña -->
 <script>
-    document.getElementById("registroForm").addEventListener("submit", function (event) {
-        event.preventDefault(); // Evita la recarga de la página
-
-        var formData = new FormData(this);
-
-        fetch('@Url.Action("RegistroCliente", "General")', {
-            method: "POST",
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                // Redirige si el registro fue exitoso               
-                window.location.href = "/Home/Index";
-            } else {
-                // Muestra el modal si hay error
-                mostrarModal("Error", data.message);
-            }
-        })
-        .catch(error => console.error("Error:", error));
-    });
+    function verContras(idInput) {
+        const input = document.getElementById(idInput);
+        if (input.type === 'password') {
+            input.type = 'text';
+        } else {
+            input.type = 'password';
+        }
+    }
 </script>
+
+<!-- Cancelar registro-->
+<script>
+    function cancelarFormulario() {
+        document.getElementById("guardarForm").reset(); // Limpia todos los inputs
+        window.location.href = "@Url.Action("IndexCliente", "Cliente")"; // Redirige al home
+    }
+</script>
+
 <style>
     .cajaTitulo {
         justify-items: center; /* Alinea horizontalmente */
@@ -106,4 +113,25 @@
         flex-direction: column; /* Elementos en columna */
     }
 
+    .input-contras-container {
+        position: relative;
+        display: inline-block;
+        width: 100%;
+    }
+
+        .input-contras-container input {
+            width: 100%;
+            padding-right: 40px; /* espacio para el icono */
+            box-sizing: border-box;
+        }
+
+    .verContras {
+        position: absolute;
+        top: 45%;
+        right: 10px;
+        transform: translateY(-50%);
+        cursor: pointer;
+        font-size: 18px;
+        user-select: none;
+    }
 </style>

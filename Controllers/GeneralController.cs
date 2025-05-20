@@ -1,6 +1,7 @@
 ﻿using Clinipet.Dtos;
 using Clinipet.Repositories;
 using Clinipet.Services;
+using Clinipet.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,60 +14,123 @@ namespace Clinipet.Controllers
     public class GeneralController : Controller
     {
         // GET: General
-        public ActionResult Index()
-        {
-            return View();
-        }
-        public ActionResult CerrarSesionYVolver()
-        {
-            Session.Clear(); // Elimina todas las variables de sesión
-            return RedirectToAction("Index", "Home"); // Redirige al inicio
-        }
-
+        
         //Login igual para todos los roles
         public ActionResult Login()
         {
-            return View();
+            try
+            {
+                if (Session["Nombre"] != null && Session["RolUsu"] != null)
+                {
+                    int rol = (int)Session["RolUsu"];
+
+                    switch (rol)
+                    {
+                        case 1:
+                            return RedirectToAction("IndexAdmin", "Administrador");   // Index para admin
+                        case 2:
+                            return RedirectToAction("IndexAsistente", "Asistente");  // Index para cliente
+                        case 3:
+                            return RedirectToAction("IndexCliente", "Cliente");  // Index para cliente
+                        case 4:
+                            return RedirectToAction("IndexVeterinario", "Veterinario"); // Index para veterinario                      
+                        default:
+                            return RedirectToAction("Index", "Home");  // Una página por defecto
+                    }
+               
+                }
+            return View(); // Si no hay sesión, muestra el login
+            }
+            catch (Exception ex)
+            {
+                string mensaje = ex.Message;
+                return View("Error");
+            }
+        }
+        public ActionResult CerrarSesionYVolver()
+        {
+            try
+            {
+                Session.Clear(); // Elimina todas las variables de sesión
+                return RedirectToAction("Index", "Home"); // Redirige al inicio
+            }
+            catch (Exception ex)
+            {
+                string mensaje = ex.Message;
+                return View("Error");
+            }
         }
         //Cerrar Sesión
         public ActionResult CerrarSesion()
         {
-            Session.Clear();
-            FormsAuthentication.SignOut(); 
-            return RedirectToAction("Login", "General");
+            try
+            {
+                Session.Clear();
+                FormsAuthentication.SignOut(); 
+                return RedirectToAction("Login", "General");
+            }
+            catch (Exception ex)
+            {
+                string mensaje = ex.Message;
+                return View("Error");
+            }
         }
 
         public ActionResult SesionCerrada()
         {
-            // Evita que la página quede en la caché del navegador
-            Response.Cache.SetCacheability(HttpCacheability.NoCache);
-            Response.Cache.SetExpires(DateTime.UtcNow.AddSeconds(-1));
-            Response.Cache.SetNoStore();
+            try
+            {
+                // Evita que la página quede en la caché del navegador
+                Response.Cache.SetCacheability(HttpCacheability.NoCache);
+                Response.Cache.SetExpires(DateTime.UtcNow.AddSeconds(-1));
+                Response.Cache.SetNoStore();
 
-            return View(); // Renderiza la vista "SesionCerrada.cshtml" en lugar de redirigir nuevamente
-        }   
-
-        
+                return View(); // Renderiza la vista "SesionCerrada.cshtml" en lugar de redirigir nuevamente
+            }
+            catch (Exception ex)
+            {
+                string mensaje = ex.Message;
+                return View("Error");
+            }
+        }       
         public ActionResult RegistroCliente()
         {
-            UserDto user = new UserDto();
-            return View(user);
+            try
+            {
+                UserDto user = new UserDto();
+                return View(user);
+            }
+            catch (Exception ex)
+            {
+                string mensaje = ex.Message;
+                return View("Error"); // Muestra la vista en caso de que ocurra una excepción.
+            }
         }
+
+        [ValidarRolUtility(3)]
         public ActionResult RegistroMascota()
         {
-            if (Session["UsuLoguedo"] != null)
+            try
             {
-                GeneralService generalService = new GeneralService();
-                ViewBag.Razas = generalService.ObtenerRazasSelect();
-                ViewBag.Tipos = generalService.ObtenerTiposSelect();
+                if (Session["UsuLoguedo"] != null)
+                {
+                    GeneralService generalService = new GeneralService();
+                    ViewBag.Razas = generalService.ObtenerRazasSelect();
+                    ViewBag.Tipos = generalService.ObtenerTiposSelect();
 
-                return View();
+                    return View();
+                }
+                else
+                {
+
+                    return RedirectToAction("Login", "General");
+                }
             }
-            else
+            catch (Exception ex)
             {
-
-                return RedirectToAction("Login", "General");
-            }           
+                string mensaje = ex.Message;
+                return View("Error"); // Muestra la vista en caso de que ocurra una excepción.
+            }
 
         }
 
@@ -74,8 +138,10 @@ namespace Clinipet.Controllers
         [HttpPost]
         public ActionResult Login(UserDto nuevoUsu)
         {
+            
             try
             {
+               
                 System.Diagnostics.Debug.WriteLine("Datos recibidos - num_ident: " + nuevoUsu.num_ident + " contras_usu: " + nuevoUsu.contras_usu);
                 GeneralService userService = new GeneralService();
                 UserDto userResponse = userService.Login(nuevoUsu);
@@ -91,8 +157,9 @@ namespace Clinipet.Controllers
                         Session["Nombre"] = userResponse.nom_usu;
                         Session["Apellido"] = userResponse.apel_usu;
                         Session["Num_docu"] = userResponse.num_ident;
-                        Session["Rol"] = userResponse.id_rol;
+                        Session["RolUsu"] = userResponse.id_rol;
                         Session["Contras"] = userResponse.contras_usu;
+                        Session["Correo"] = userResponse.correo_usu;
 
                         // Si necesita cambiar la contraseña, redirige a la vista de cambio de contraseña
                         if (userResponse.cambio_contras == true)
@@ -104,7 +171,7 @@ namespace Clinipet.Controllers
                             // Si no necesita cambiar la contraseña, redirige al índice de cada usuario
                             if (userResponse.id_rol == 1) //Administrador
                             {
-                                return Json(new { success = true, redirectUrl = Url.Action("IndexAdmin", "Admin"), message = "Inicio de sesión exitoso" });
+                                return Json(new { success = true, redirectUrl = Url.Action("IndexAdmin", "Administrador"), message = "Inicio de sesión exitoso" });
                             }
                             if (userResponse.id_rol == 2) //Asistente
                             {
@@ -133,25 +200,27 @@ namespace Clinipet.Controllers
 
 
 
-        [HttpPost]
+        [HttpPost]        
         public ActionResult RegistroCliente(UserDto nuevoUsu)
         {
+            
             try
-            {
+            {               
                 GeneralService userService = new GeneralService(); // instancia el UserService.
                 UserDto userResponse = userService.RegistrarCliente(nuevoUsu); // Llama al método de creación de usuario.
-                Console.WriteLine(userResponse.correo_usu);
+              
                 if (userResponse.Response == 1)
                 {
-                    return Json(new { success = true, message = userResponse.Mensaje }); // Si la creación fue exitosa.
+                    userResponse.Mensaje = "Cliente registrado exitosamente.";     
+                    return Json(new { success = true, redirectUrl = Url.Action("Login", "General")});
 
                 }
                 else
                 {
                     if (userResponse.Response == -1)
                     {
-                        
-                        return Json(new { success = false, message = userResponse.Mensaje }); //Si el correo ya existe
+                       
+                        return Json(new { success = false, message = userResponse.Mensaje }); //Si el correo ya existe                      
                     }
                     else
                     {
@@ -162,7 +231,7 @@ namespace Clinipet.Controllers
                         }
                         else
                         {
-                            return RedirectToAction("About", "Home"); // Si el registro falla
+                            return View("Error"); // Si el registro falla
                         }                                            
                     }
 
@@ -171,11 +240,13 @@ namespace Clinipet.Controllers
             catch (Exception ex)
             {
                 string mensaje = ex.Message;
-                return View(); // Muestra la vista en caso de que ocurra una excepción.
+                return View("Error"); // Muestra la vista en caso de que ocurra una excepción.
             }
 
         }
+
         [HttpPost]
+        [ValidarRolUtility(3)]
         public ActionResult RegistroMascota(MascotaDto nuevaMasc)
         {
             try
@@ -194,7 +265,7 @@ namespace Clinipet.Controllers
                  
                     else
                     {
-                        return Json(new { success = false, message = "No se pudo confirmar la cita." });
+                        return Json(new { success = false, message = "No se pudo registrar la mascota." });
 
                     }
                 }
@@ -202,8 +273,7 @@ namespace Clinipet.Controllers
                 {
                     return RedirectToAction("Login", "General");
                 }
-            }
-            
+            }           
             catch (Exception ex)
             {
                     string mensaje = ex.Message;
@@ -215,14 +285,25 @@ namespace Clinipet.Controllers
         [HttpGet]
         public ActionResult CambiarContraseña()
         {
-            // Validar que esté iniciada la sesión
-            if (Session["Num_docu"] == null || Session["Rol"] == null)
+            try
             {
-                // Si no hay sesión, redirigir a Login
-                return RedirectToAction("Login", "General");
+                // Verificar si el usuario está logueado
+                if (Session["UsuLoguedo"] != null)
+                {
+                    return View();
+                }
+                else
+                {
+                    // Si no está logueado, redirigir al login
+                    return RedirectToAction("Login", "General");
+                }
             }
 
-            return View();
+            catch (Exception ex)
+            {
+                string mensaje = ex.Message;
+                return View(); // Muestra la vista en caso de que ocurra una excepción.
+            }
         }
 
 
@@ -230,27 +311,16 @@ namespace Clinipet.Controllers
         public ActionResult CambiarContraseña(UserDto user)
         {
             try
-            {
-                // Instanciamos el servicio.
+            {           
                 GeneralService contrasService = new GeneralService();
 
-                // Llamamos al método CambiarContraseña, pasando la contraseña actual y la nueva contraseña.
-                bool cambioExitoso = contrasService.CambiarContraseña(user.num_ident, user.contras_usu, user.contras_nueva);
+                // Llamar al método CambiarContraseña, pasando la contraseña actual y la nueva contraseña.
+                bool cambioExitoso = contrasService.CambiarContraseña(user.num_ident, user.contras_usu, user.contras_nueva, user.confirmar_contras);
 
                 if (cambioExitoso)
                 {
-                    if (user.id_rol == 2) // Asistente
-                    {
-                        ViewBag.MensajeExito = "Contraseña actualizada correctamente.";
-                        return RedirectToAction("IndexAsistente", "Asistente");
-                    }
-                    else if (user.id_rol == 4) // Veterinario
-                    {
-                        ViewBag.MensajeExito = "Contraseña actualizada correctamente.";
-                        return RedirectToAction("IndexVeterinario", "Veterinario");
-                    }
-
-                    return RedirectToAction("Login", "General");
+                    ViewBag.MensajeExito = "Contraseña actualizada correctamente.";
+                    return View(); 
                 }
                 else
                 {
@@ -262,10 +332,88 @@ namespace Clinipet.Controllers
             catch (Exception ex)
             {
                 // Si hay una excepción, la capturamos y mostramos un mensaje de error.
-                ViewBag.Error = "Error: " + ex.Message;
-                return View();
+                ViewBag.Error = ex.Message;
+                return View("Error");
             }
         }
+        [HttpPost]
+        public ActionResult OlvideContrasena(string num_ident)
+        {
+            try
+            {
+                GeneralService generalService = new GeneralService();
+                // Buscar el usuario por número de identidad
+                UserDto usuRespuesta = generalService.BuscarPorIdentidad(num_ident);
+
+                if (usuRespuesta != null)
+                {
+                    string correoUsuario = usuRespuesta.correo_usu; // Obtener el correo del usuario
+
+                    if (!string.IsNullOrEmpty(correoUsuario))
+                    {
+                        // Llamar al servicio de envío de correo
+                    
+                        generalService.EnviarCorreoRestablecimiento(usuRespuesta);
+                        return Json(new { success = true });
+                    
+                    }              
+                    return Json(new { success = false, message = "El usuario no tiene un correo registrado." });
+                
+                }
+                return Json(new { success = false, message = "Número de identidad no encontrado." });
+            }
+            catch (Exception ex)
+            {
+                // Si hay una excepción, la capturamos y mostramos un mensaje de error.
+                ViewBag.Error = ex.Message;
+                return View("Error");
+            }
+
+        }
+        [HttpGet]
+        public ActionResult RestablecerContras(string token)
+        {            
+            return View(new ContrasDto { Token = token });           
+        }
+
+        [HttpPost]
+        public ActionResult RestablecerContras(ContrasDto contras)
+        {
+            try
+            {
+
+                if (contras.NuevaContrasena != contras.ConfirmarContrasena)
+                {
+                    return Json(new { exito = false, mensaje = "Las contraseñas no coinciden." });
+                }
+
+                var generalService = new GeneralService();
+                int? idUsuario = generalService.ObtenerIdUsuarioPorToken(contras.Token);
+
+                if (idUsuario == null)
+                {
+                    return Json(new { exito = false, mensaje = "El enlace ha expirado o no es válido." });
+                }
+
+                bool resultado = generalService.RestablecerContrasena(idUsuario.Value, contras.NuevaContrasena);
+
+                if (resultado)
+                {
+                    return Json(new { exito = true, mensaje = "Tu contraseña ha sido actualizada con éxito.", redirectUrl = Url.Action("Login", "General") });
+                }
+                else
+                {
+                    return Json(new { exito = false, mensaje = "Error al actualizar la contraseña." });
+                }
+            }
+            catch (Exception ex)
+            {
+                // Si hay una excepción, la capturamos y mostramos un mensaje de error.
+                ViewBag.Error = ex.Message;
+                return View("Error");
+            }
+        }
+
     }
 
 }

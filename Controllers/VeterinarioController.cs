@@ -1,5 +1,6 @@
 ﻿using Clinipet.Dtos;
 using Clinipet.Services;
+using Clinipet.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,7 @@ namespace Clinipet.Controllers
     public class VeterinarioController : BaseController
     {
         // GET: Veterinario
+        [ValidarRolUtility(4)] //Validación para que solo rol 4 (veterinario) acceda a la vista
         public ActionResult IndexVeterinario()
         {
             try
@@ -31,6 +33,8 @@ namespace Clinipet.Controllers
                 return View("Error");  // Muestra la vista Error en caso de que ocurra una excepción.
             }
         }
+
+        [ValidarRolUtility(4)]
         public ActionResult PubCitas()
         {
             try
@@ -54,8 +58,10 @@ namespace Clinipet.Controllers
                 string mensaje = ex.Message;
                 return View("Error");
             }
-    }
+        }
+
         [HttpPost]
+        [ValidarRolUtility(4)]
         public ActionResult PublicarDisponibilidad(DisponibDto disponib)
         {
             try
@@ -69,11 +75,20 @@ namespace Clinipet.Controllers
 
                     if (disponibRespuesta.Response == 1)
                     {
-                        return Json(new { success = true, redirectUrl = Url.Action("IndexVeterinario", "Veterinario"), message = "Guardado exitosamente" });
+                        return Json(new
+                        {
+                            success = true,
+                            redirectUrl = Url.Action("IndexVeterinario", "Veterinario"),
+                            message = "Guardado exitosamente"
+                        });
                     }
                     else
                     {
-                        return RedirectToAction("About", "Home");
+                        return Json(new
+                        {
+                            success = false,
+                            message = "No se pudo guardar la disponibilidad. Inténtalo nuevamente."
+                        });
 
                     }
                 }
@@ -85,12 +100,17 @@ namespace Clinipet.Controllers
             }
             catch (Exception ex)
             {
-                string mensaje = ex.Message;
-
-                return View("Error"); 
+                // Captura cualquier excepción y la devuelve al cliente
+                return Json(new
+                {
+                    success = false,
+                    message = ex.Message
+                });
             }
 
         }
+
+        [ValidarRolUtility(4)]
         public ActionResult BuscarCliente()
         {
             try
@@ -112,7 +132,9 @@ namespace Clinipet.Controllers
                 return View("Error");
             }
         }
+
         [HttpPost]
+        [ValidarRolUtility(4)]
         public ActionResult BuscarCliente(string num_ident)
         {
             try
@@ -144,7 +166,8 @@ namespace Clinipet.Controllers
                 return View("Error");
             }
         }
-        
+
+        [ValidarRolUtility(4)]
         public ActionResult ElegirMascDescrip()
         {
             try
@@ -169,7 +192,9 @@ namespace Clinipet.Controllers
             }
 
         }
+
         [HttpPost]
+        [ValidarRolUtility(4)]
         public ActionResult ElegirCitaEspec(int id_mascota)
         {
             try
@@ -198,7 +223,8 @@ namespace Clinipet.Controllers
             }
 
         }
-        
+
+        [ValidarRolUtility(4)]
         public ActionResult HistorialCitas()
         {
             try
@@ -211,13 +237,24 @@ namespace Clinipet.Controllers
                     List<CitaEspecDto> citas = veterinarioService.ObtenerHistorialCitas(id_usu);
                     List<DisponibDto> disponib = veterinarioService.ObtenerDisponib(id_usu);
 
-                    var viewModel = new HistorialCitasDto
+                    // Agrupar la disponibilidad por día
+                    var disponibilidadAgrupada = disponib
+                        .GroupBy(d => d.nom_dia)
+                        .Select(g => new DisponibilidadAgrupadaDto
+                        {
+                            Dia = g.Key,
+                            Horas = g.Select(x => x.nom_hora).ToList()
+                        })
+                        .ToList();
+
+                    var modelo = new HistorialCitasDto
                     {
                         Citas = citas,
-                        Disponib = disponib
+                        Disponib = disponib,
+                        DisponibAgrupada = disponibilidadAgrupada
                     };
 
-                    return View(viewModel);
+                    return View(modelo);
 
                 }
                 else
@@ -233,7 +270,8 @@ namespace Clinipet.Controllers
             }
 
         }
-        
+
+        [ValidarRolUtility(4)]
         public ActionResult HistorialMascota(string num_ident)
         {
             try
@@ -248,7 +286,7 @@ namespace Clinipet.Controllers
                     {
                         citas = citas.Where(c => c.num_ident == num_ident).ToList(); // Filtrar por documento
                                                                                      // Si no hay resultados, enviar una bandera a la vista
-                                                                                     // Si no hay resultados, enviamos NULL en lugar de una lista vacía
+                                                                                    
                         if (!citas.Any())
                         {
                             ViewBag.DocumentoNoEncontrado = true;
@@ -271,6 +309,8 @@ namespace Clinipet.Controllers
             }
 
         }
+
+        [ValidarRolUtility(4)]
         public ActionResult ObtenerMascotas()
         {
             try
@@ -298,6 +338,7 @@ namespace Clinipet.Controllers
 
         }
 
+        [ValidarRolUtility(4)]
         public ActionResult DescripConsulta()
         {
             try
@@ -329,6 +370,7 @@ namespace Clinipet.Controllers
         }
        
         [HttpPost]
+        [ValidarRolUtility(4)]
         public ActionResult DescripConsulta(CitaEspecDto citaEsp)
         {
             try
@@ -371,6 +413,7 @@ namespace Clinipet.Controllers
             }
 
         }
+
 
     }
     

@@ -1,0 +1,78 @@
+﻿
+@{
+    ViewBag.Title = "IndexAdmin";
+}
+<link rel="stylesheet" href="@Url.Content("~/Estilos/estilos.css")">
+
+<div class="contenedor">
+    <h2 class="tituloIndex">¡Hola, Admin @Session["Nombre"]! </h2>
+
+    <div class="opciones">
+        <div class="opcion">
+            <img src="~/Imagenes/RegistroVeterinario.jpg" alt="Registrar veterinario">
+            <a href="@Url.Action("RegistroVeterinario", "Administrador")" class="links"><p>Registrar Veterinario</p></a>
+
+        </div>
+        <div class="opcion opcion2">
+            <img src="~/Imagenes/Regis_Asistente.jpg" alt="Registrar Asistente">
+            <a href="@Url.Action("RegistroAsistente", "Administrador")" class="links"><p>Registrar Asistente</p></a>
+
+        </div>
+        <div class="opcion">
+            <img src="~/Imagenes/GenerarReport.jpeg" class="imgServ" alt="Generar reporte">
+
+            <a href="@Url.Action("ReporteServicios", "Administrador")" target="_blank" class="links" id="enlaceReporte">
+                <p>Generar Reporte Servicios</p>
+            </a>
+
+        </div>
+        <div id="mensajeCarga" style="display:none; color: green; margin-top: 10px;">
+            Su reporte se está generando...
+        </div>
+
+        <div class="opcion opcion2">
+            <img src="~/Imagenes/Eliminar_Usu.jpeg" alt="Eliminar Usuarios">
+            <a href="@Url.Action("EliminarUsuarios", "Administrador")" class="links"><p>Eliminar Usuarios</p></a>
+
+        </div>
+    </div>
+</div>
+
+
+<style>
+    body {
+        background-image: url('/Imagenes/fondo_dispon.png');
+        background-size: cover; /* para cubrir toda la pantalla */
+        background-repeat: no-repeat;
+        background-attachment: fixed; /* para que no se mueva al hacer scroll */
+        background-position: center;
+    }
+
+    .tituloIndex {
+        margin-top: 55px;
+    }
+
+    .contenedor {
+        text-align: center;
+        padding: 0px;
+        overflow-x: auto;
+        max-width: 100%; /* Que ocupe todo el ancho */
+    }
+
+
+    .opcion img {
+        width: 100%;
+        border-radius: 25px;
+        margin-bottom: 30px;
+    }
+</style>
+<script>
+    document.getElementById("enlaceReporte").addEventListener("click", function (e) {
+        var confirmar = confirm("¿Está seguro de que desea generar el reporte?");
+        if (!confirmar) {
+            e.preventDefault(); // Detiene la acción si el usuario cancela
+        }
+        // Si acepta, continúa normalmente
+    });
+</script>
+

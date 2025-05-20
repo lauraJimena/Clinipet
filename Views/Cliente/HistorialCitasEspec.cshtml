@@ -16,7 +16,8 @@
     <thead>
         <tr>
             <th class="campoCorto">Servicio</th>
-            <th class="campoCorto">Día</th>
+            <th class="campoCorto">Veterinario</th>
+            <th class="campoCorto">Fecha</th>
             <th class="campoCorto">Hora</th>
             <th class="campoCorto">Mascota</th>
             <th class="campoCorto">Estado</th>
@@ -30,11 +31,12 @@
         {
         <tr>
             <td>@citaEsp.nom_serv</td>
-            <td>@citaEsp.nom_dia</td>
+            <td>@citaEsp.nom_usu</td>
+            <td>@citaEsp.fecha_cita.ToString("dd/MM/yyyy")</td>
             <td>@citaEsp.nom_hora</td>
             <td>@citaEsp.nom_masc</td>
             <td>@citaEsp.nom_estado</td>
-            <td>@citaEsp.nom_motivo</td>           
+            <td>@citaEsp.nom_motivo</td>
             <td>@citaEsp.diagnost</td>
             <td>@citaEsp.recomen</td>
         </tr>
@@ -82,7 +84,9 @@
         font-size: 1.02em;
         text-shadow: 1px 1px 3px white;
     }
-
+    .botonForm {
+        border: 0.3px solid #545454;
+    }
     .cajaImg {
         text-align: center;
     }

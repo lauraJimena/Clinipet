@@ -11,12 +11,12 @@
     <div class="opciones">
         
         <div class="opcion opcion2">
-            <img src="~/Imagenes/historial_cita.png" alt="Historial Citas">
+            <img src="~/Imagenes/cita_serv_general.png" alt="Historial Citas">
             <a href="@Url.Action("HistorialCitasGenerales", "Cliente")" class="links"><p>Citas Generales</p></a>
 
         </div>
         <div class="opcion">
-            <img src="~/Imagenes/mascota_regis.png" alt="Mascotas Registradas">
+            <img src="~/Imagenes/cita_espec.png" alt="Mascotas Registradas">
             <a href="@Url.Action("HistorialCitasEspec", "Cliente")" class="links"><p>Citas Especializadas</p></a>
 
         </div>
@@ -28,13 +28,15 @@
 </div>
 <style>
     body {
-        background-image: url('/Imagenes/fondo_masc_regis.png');
+        background-image: url('/Imagenes/elegir_cita.png');
         background-size: cover; /* para cubrir toda la pantalla */
         background-repeat: no-repeat;
         background-attachment: fixed; /* para que no se mueva al hacer scroll */
+        background-position: center;
     }
     .contenedor{
         margin-bottom:-10px;
+        
     }
     h2{
         margin-bottom:-10px;
@@ -50,6 +52,9 @@
     .cajaBoton {
         width: 100%;
         text-align: center;
+    }
+    .botonForm {
+        border: 0.3px solid #545454;
     }
 
 </style>

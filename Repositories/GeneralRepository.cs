@@ -91,21 +91,20 @@ namespace Clinipet.Repositories
             return existe;
         }
 
-        public UserDto Login(UserDto user)
+        public UserDto Login(string num_ident)
         {
             UserDto userResult = new UserDto();
 
             string SQL = "SELECT id_usu, nom_usu, apel_usu, num_ident, correo_usu, tel_usu, contras_usu, id_rol, id_estado, id_nivel, id_tipo_ident, id_espec, cambio_contras " +
                          "FROM usuario " +
-                         "WHERE num_ident = @num_ident AND contras_usu = @contras_usu;";
+                         "WHERE num_ident = @num_ident";
 
             DBContextUtility Connection = new DBContextUtility();
             Connection.Connect();
 
             using (SqlCommand command = new SqlCommand(SQL, Connection.CONN()))
             {
-                command.Parameters.AddWithValue("@num_ident", user.num_ident);
-                command.Parameters.AddWithValue("@contras_usu", user.contras_usu);
+                command.Parameters.AddWithValue("@num_ident", num_ident);
 
                 using (SqlDataReader reader = command.ExecuteReader())
                 {
@@ -313,18 +312,27 @@ namespace Clinipet.Repositories
                 command.Parameters.AddWithValue("@num_ident", numIdent);
                 using (SqlDataReader reader = command.ExecuteReader())
                 {
-                    if (reader.Read() && reader.GetString(0) == contrasenaActual)
+                    if (reader.Read())
                     {
-                        // Si la contraseña es correcta, la actualizamos
-                        string updateSQL = "UPDATE usuario SET contras_usu = @contras_nueva, cambio_contras = 0 WHERE num_ident = @num_ident";
-                        using (SqlCommand updateCommand = new SqlCommand(updateSQL, Connection.CONN()))
+                        string hashAlmacenado = reader.GetString(0);
+                        if (EncriptContrasUtility.VerificaContras(contrasenaActual, hashAlmacenado))
                         {
-                            updateCommand.Parameters.AddWithValue("@contras_nueva", nuevaContrasena);
-                            updateCommand.Parameters.AddWithValue("@num_ident", numIdent);
-                            int rowsAffected = updateCommand.ExecuteNonQuery();
-                            if (rowsAffected > 0)
+                            // Cerrar el reader antes de reutilizar la conexión
+                            reader.Close();
+
+                            // Hashear la nueva contraseña con PBKDF2
+                            string hashNueva = EncriptContrasUtility.EncripContras(nuevaContrasena);
+
+                            string updateSQL = "UPDATE usuario SET contras_usu = @contras_nueva, cambio_contras = 0 WHERE num_ident = @num_ident";
+                            using (SqlCommand updateCommand = new SqlCommand(updateSQL, Connection.CONN()))
                             {
-                                cambioExitoso = true;
+                                updateCommand.Parameters.AddWithValue("@contras_nueva", hashNueva);
+                                updateCommand.Parameters.AddWithValue("@num_ident", numIdent);
+                                int rowsAffected = updateCommand.ExecuteNonQuery();
+                                if (rowsAffected > 0)
+                                {
+                                    cambioExitoso = true;
+                                }
                             }
                         }
                     }
@@ -334,6 +342,108 @@ namespace Clinipet.Repositories
             Connection.Disconnect();
             return cambioExitoso;
         }
+        //Para obtener el correo del usuario
+        public UserDto ObtenerUsuarioPorIdentidad(string num_ident)
+        {
+            string sql = "SELECT id_usu, correo_usu, contras_usu " +
+                         "FROM usuario " +
+                         "WHERE num_ident = @num_ident";
+
+            DBContextUtility Connection = new DBContextUtility();
+            Connection.Connect();
+
+            using (SqlCommand command = new SqlCommand(sql, Connection.CONN()))
+            {
+                command.Parameters.AddWithValue("@num_ident", num_ident);
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        return new UserDto
+                        {
+                            id_usu = reader.GetInt32(0),
+                            correo_usu = reader.GetString(1),
+                            contras_usu = reader.GetString(2)
+                        };
+                    }
+                }
+            }
+
+            return null; // Si no se encuentra el usuario
+        }
+        public int GuardarTokenRecuperacion(int idUsuario, string token, DateTime fechaExpiracion)
+        {
+            int comando = 0;
+            DBContextUtility Connection = new DBContextUtility();
+            Connection.Connect();
+
+            string SQL = "INSERT INTO [clinipet].[dbo].[recuperacion_contrasena] " +
+                         "(IdUsuario, Token, FechaCreacion, FechaExpiracion) " +
+                         "VALUES (@IdUsuario, @Token, @FechaCreacion, @FechaExpiracion)";
+
+            using (SqlCommand command = new SqlCommand(SQL, Connection.CONN()))
+            {
+                command.Parameters.AddWithValue("@IdUsuario", idUsuario);
+                command.Parameters.AddWithValue("@Token", token);
+                command.Parameters.AddWithValue("@FechaCreacion", DateTime.Now);
+                command.Parameters.AddWithValue("@FechaExpiracion", fechaExpiracion);
+
+                comando = command.ExecuteNonQuery();
+            }
+
+            Connection.Disconnect();
+            return comando;
+        }
+        public int RestablecerContrasena(int idUsuario, string nuevaContrasena)
+        {
+            int comando = 0;
+            DBContextUtility Connection = new DBContextUtility();
+            Connection.Connect();
+
+            string SQL = "UPDATE usuario SET contras_usu = @NuevaContrasena WHERE id_usu = @IdUsuario";
+
+            using (SqlCommand command = new SqlCommand(SQL, Connection.CONN()))
+            {
+                command.Parameters.AddWithValue("@NuevaContrasena", nuevaContrasena);
+                command.Parameters.AddWithValue("@IdUsuario", idUsuario);
+
+                comando = command.ExecuteNonQuery();
+            }
+
+            Connection.Disconnect();
+            return comando;
+        }
+        public int? ObtenerIdUsuarioPorToken(string token)
+        {
+            int? idUsuario = null;
+            DBContextUtility Connection = new DBContextUtility();
+            Connection.Connect();
+
+            string SQL = "SELECT IdUsuario FROM [clinipet].[dbo].[recuperacion_contrasena] " +
+                         "WHERE Token = @Token AND FechaExpiracion > GETDATE()";
+
+            using (SqlCommand command = new SqlCommand(SQL, Connection.CONN()))
+            {
+                command.Parameters.AddWithValue("@Token", token);
+                SqlDataReader reader = command.ExecuteReader();
+
+                if (reader.Read())
+                {
+                    idUsuario = reader.GetInt32(0);
+                }
+
+                reader.Close();
+            }
+
+            Connection.Disconnect();
+            return idUsuario;
+        }
+
+
+
+
+
+
 
 
     }
