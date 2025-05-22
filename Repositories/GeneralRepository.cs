@@ -260,7 +260,7 @@ namespace Clinipet.Repositories
             DBContextUtility Connection = new DBContextUtility();
             Connection.Connect();
 
-            string sql = "SELECT " +
+            string sql = "SELECT DISTINCT " +
              "e.nom_espec AS EspecialidadServicio, " +
              "u.nom_usu + ' ' + u.apel_usu AS Veterinario, " +
              "di.nombre AS Dia, " +

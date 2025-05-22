@@ -119,12 +119,12 @@ namespace Clinipet.Utilities
                 throw; // Asegúrate de manejar esta excepción donde se llama a este método
             }
         }
-        public void EnviarCorreoRestablecimiento(string destinatario, string asunto, UserDto user, string token)
+        public void EnviarCorreoRestablecimiento(string destinatario, string asunto, UserDto user, string token, string baseUrl)
         {
             try
             {
          
-                string mensaje = ObtenerPlantillaRestab(user, token); // Pasa el token aquí
+                string mensaje = ObtenerPlantillaRestab(user, token, baseUrl); // Pasa el token aquí
                 email = new MailMessage(User, destinatario, asunto, mensaje)
                 {
                     IsBodyHtml = true
@@ -179,10 +179,10 @@ namespace Clinipet.Utilities
 
         }
         // Método para obtener la plantilla de restablcer contraseña
-        private string ObtenerPlantillaRestab(UserDto usu, string token)
+        private string ObtenerPlantillaRestab(UserDto usu, string token, string baseUrl)
         {
 
-            return ObtenerPlantillaRestablecer(usu, token);
+            return ObtenerPlantillaRestablecer(usu, token, baseUrl);
 
         }
 
@@ -340,11 +340,11 @@ namespace Clinipet.Utilities
 
         }
         // Plantilla de bienvenido 
-        private string ObtenerPlantillaRestablecer(UserDto user, string token)
+        private string ObtenerPlantillaRestablecer(UserDto user, string token, string baseUrl)
         {
            
-            string baseUrl = "https://localhost:44388/";
-            string urlCambio = $"{baseUrl}General/RestablecerContras?token={token}";
+            //string baseUrl = "https://localhost:44388/";
+            string urlCambio = $"{baseUrl}/General/RestablecerContras?token={token}";
 
             return $@"
     <body style='margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #9fb2a9;'>

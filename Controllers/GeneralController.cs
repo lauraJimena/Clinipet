@@ -350,8 +350,10 @@ namespace Clinipet.Controllers
                     if (!string.IsNullOrEmpty(correoUsuario))
                     {
                         // Llamar al servicio de envío de correo
-                    
-                        generalService.EnviarCorreoRestablecimiento(usuRespuesta);
+                        string baseUrl = $"{Request.Url.Scheme}://{Request.Url.Authority}{Request.ApplicationPath.TrimEnd('/')}";
+
+                        generalService.EnviarCorreoRestablecimiento(usuRespuesta, baseUrl);
+
                         return Json(new { success = true });
                     
                     }              

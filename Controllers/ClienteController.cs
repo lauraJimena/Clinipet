@@ -356,65 +356,40 @@ namespace Clinipet.Controllers
         {
             try
             {
-                ClienteService clienteService = new ClienteService(); // instancia el UserService.         
-                UserDto usuRespuesta = new UserDto();
-                MascotaDto mascota = clienteService.ObtenerMascotaPorId(id_mascota);
-                usuRespuesta.correo_usu = Session["Correo"].ToString();
-                usuRespuesta.nom_usu = Session["Nombre"].ToString();
-                usuRespuesta.apel_usu = Session["Apellido"].ToString();
-                usuRespuesta.num_ident = Session["Num_docu"].ToString();
 
+                if (Session["Correo"] == null || Session["Nombre"] == null)
+                {
+                    return Json(new { success = false, message = "Sesión expirada. Vuelve a iniciar sesión." });
+                }
+
+                ClienteService clienteService = new ClienteService();
+                MascotaDto mascota = clienteService.ObtenerMascotaPorId(nuevaCita.id_mascota);
+
+                UserDto usuRespuesta = new UserDto
+                {
+                    correo_usu = Session["Correo"].ToString(),
+                    nom_usu = Session["Nombre"].ToString(),
+                    apel_usu = Session["Apellido"].ToString(),
+                    num_ident = Session["Num_docu"].ToString()
+                };
 
                 CitaEspecDto citaRespuesta = clienteService.RegistrarCitaEspec(nuevaCita, usuRespuesta, mascota);
 
                 if (citaRespuesta.Response == 1)
-                    {
-
-                    return Json(new { success = true, redirectUrl = Url.Action("IndexCliente") });
-                    
-                    }
-                    else
-                    {
-                    // Aquí se devuelve el mensaje del trigger
-                    return Json(new { success = false, message = citaRespuesta.Mensaje ?? "No se pudo guardar correctamente" });
-                   
-                    }
-                                     
-            }
-            catch (Exception ex)
-            {
-                string mensaje = ex.Message;
-                return View("Error");   
-            }
-        }
-       
-        [HttpPost]
-        [ValidarRolUtility(3)]
-        /*public ActionResult ConfirmarCitaGeneral(CitaGeneralDto nuevaCita)
-        {
-            try
-            {
-                ClienteService clienteService = new ClienteService(); // instancia el UserService.
-                CitaGeneralDto citaGenResponse = clienteService.AgendarCitaGeneral(nuevaCita); // Llama al método de creación de usuario.
-               
-                if (citaGenResponse.Response == 1)
                 {
                     return Json(new { success = true, redirectUrl = Url.Action("IndexCliente") });
-                    
                 }
-
                 else
                 {
-                    
-                    return Json(new { success = false, message = "No se pudo confirmar la cita." });
+                    return Json(new { success = false, message = citaRespuesta.Mensaje ?? "No se pudo guardar correctamente" });
                 }
             }
             catch (Exception ex)
             {
-                string mensaje = ex.Message;
                 return View("Error");
             }
-        }*/
+
+        }
        
         public ActionResult ConfirmarCitaGeneral(CitaGeneralDto nuevaCita)
         {

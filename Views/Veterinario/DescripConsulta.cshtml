@@ -24,7 +24,7 @@
                 <textarea id="recomendaciones" name="recomen" rows="4" cols="70" placeholder="Escribe recomendaciones aquí..." required></textarea><br />
                 <input type="hidden" name="id_cita_esp" value="@ViewBag.IdCitaEsp" />
                 <div class="cajaBtn">
-                    <button type="button" class="botonForm botonVol" onclick="window.history.back();">Volver</button>
+                    <button type="button" class="botonForm botonVol" onclick="window.location.href='@Url.Action("BuscarCliente", "Veterinario")'">Volver</button>
                     <button type="submit" class="botonForm">Guardar</button>
 
                 </div>
