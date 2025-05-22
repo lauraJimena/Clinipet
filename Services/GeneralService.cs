@@ -203,7 +203,7 @@ namespace Clinipet.Services
                 {
                     throw new Exception("La nueva contraseña no puede ser igual a la anterior.");
                 }
-                if(confirmar_contras != nuevaContrasena)
+                if (confirmar_contras != nuevaContrasena)
                 {
                     throw new Exception("Las contraseñas no coinciden");
                 }

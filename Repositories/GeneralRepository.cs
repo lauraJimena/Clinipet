@@ -305,42 +305,52 @@ namespace Clinipet.Repositories
             DBContextUtility Connection = new DBContextUtility();
             Connection.Connect();
 
-            // Primero, verificamos si la contraseña actual es correcta
-            string SQL = "SELECT contras_usu FROM usuario WHERE num_ident = @num_ident";
-            using (SqlCommand command = new SqlCommand(SQL, Connection.CONN()))
+            try
             {
-                command.Parameters.AddWithValue("@num_ident", numIdent);
-                using (SqlDataReader reader = command.ExecuteReader())
+                string SQL = "SELECT contras_usu FROM usuario WHERE num_ident = @num_ident";
+                using (SqlCommand command = new SqlCommand(SQL, Connection.CONN()))
                 {
-                    if (reader.Read())
+                    command.Parameters.AddWithValue("@num_ident", numIdent);
+                    using (SqlDataReader reader = command.ExecuteReader())
                     {
-                        string hashAlmacenado = reader.GetString(0);
-                        if (EncriptContrasUtility.VerificaContras(contrasenaActual, hashAlmacenado))
+                        if (!reader.Read())
                         {
-                            // Cerrar el reader antes de reutilizar la conexión
-                            reader.Close();
+                            throw new Exception("Usuario no encontrado.");
+                        }
 
-                            // Hashear la nueva contraseña con PBKDF2
-                            string hashNueva = EncriptContrasUtility.EncripContras(nuevaContrasena);
+                        string hashAlmacenado = reader.GetString(0);
 
-                            string updateSQL = "UPDATE usuario SET contras_usu = @contras_nueva, cambio_contras = 0 WHERE num_ident = @num_ident";
-                            using (SqlCommand updateCommand = new SqlCommand(updateSQL, Connection.CONN()))
+                        if (!EncriptContrasUtility.VerificaContras(contrasenaActual, hashAlmacenado))
+                        {
+                            throw new Exception("La contraseña actual no es correcta.");
+                        }
+
+                        // Cerrar el reader antes de actualizar
+                        reader.Close();
+
+                        // Hashear nueva contraseña
+                        string hashNueva = EncriptContrasUtility.EncripContras(nuevaContrasena);
+
+                        string updateSQL = "UPDATE usuario SET contras_usu = @contras_nueva, cambio_contras = 0 WHERE num_ident = @num_ident";
+                        using (SqlCommand updateCommand = new SqlCommand(updateSQL, Connection.CONN()))
+                        {
+                            updateCommand.Parameters.AddWithValue("@contras_nueva", hashNueva);
+                            updateCommand.Parameters.AddWithValue("@num_ident", numIdent);
+                            int rowsAffected = updateCommand.ExecuteNonQuery();
+                            if (rowsAffected > 0)
                             {
-                                updateCommand.Parameters.AddWithValue("@contras_nueva", hashNueva);
-                                updateCommand.Parameters.AddWithValue("@num_ident", numIdent);
-                                int rowsAffected = updateCommand.ExecuteNonQuery();
-                                if (rowsAffected > 0)
-                                {
-                                    cambioExitoso = true;
-                                }
+                                cambioExitoso = true;
                             }
                         }
                     }
                 }
-            }
 
-            Connection.Disconnect();
-            return cambioExitoso;
+                return cambioExitoso;
+            }
+            finally //La conexión siempre se cerrará, incluso si ocurre una excepción dentro del try
+            {
+                Connection.Disconnect();
+            }
         }
         //Para obtener el correo del usuario
         public UserDto ObtenerUsuarioPorIdentidad(string num_ident)
