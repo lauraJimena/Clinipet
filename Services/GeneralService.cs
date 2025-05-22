@@ -232,7 +232,7 @@ namespace Clinipet.Services
             }
         }
        
-        public void EnviarCorreoRestablecimiento(UserDto usu)
+        public void EnviarCorreoRestablecimiento(UserDto usu, string baseUrl)
         {
             GeneralRepository repo = new GeneralRepository();
             //UserDto usuario = repo.BuscarPorCorreo(correo);
@@ -248,9 +248,12 @@ namespace Clinipet.Services
 
                 //Enviar Correo
                 EmailConfigUtility gestorCorreo = new EmailConfigUtility();
+
                 String destinatario = usu.correo_usu;
                 String asunto = "Restablecimiento de Contraseña";
-                gestorCorreo.EnviarCorreoRestablecimiento(destinatario, asunto, usu, token);
+               
+
+                gestorCorreo.EnviarCorreoRestablecimiento(destinatario, asunto, usu, token, baseUrl);
             }
         }
         public bool RestablecerContrasena(int idUsuario, string nuevaContrasena)

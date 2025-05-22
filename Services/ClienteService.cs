@@ -4,6 +4,7 @@ using Clinipet.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 
 namespace Clinipet.Services
@@ -38,6 +39,8 @@ namespace Clinipet.Services
                 citaModel.id_motivo = 1;
                 citaModel.id_servicio = clienteRepository.ObtenerIdServicioPorEspecialidad(citaModel.nom_espec);
                 citaModel.id_estado = 3; //Agendada
+                Console.WriteLine("ID del servicio encontrado: " + citaModel.id_servicio);
+
                 //citaModel.id_estado_dispon = 2;
                 //citaModel.id_servicio = 1;
 
@@ -52,10 +55,25 @@ namespace Clinipet.Services
                 {
                     citaEspecDto.Response = 1;
                     clienteRepository.ActualizarEstadoDispon(citaModel);
-                    EmailConfigUtility gestorCorreo = new EmailConfigUtility();
-                    String destinatario = usuModel.correo_usu;
-                    String asunto = "Cita confirmada exitosamente!";
-                    gestorCorreo.EnviarCorreoCita(destinatario, asunto, usuModel, citaModel, mascotaModel);
+
+                    //Ejecutar el envío del correo en segundo plano
+                    Task.Run(() =>
+                    {
+                        try
+                        {
+                            EmailConfigUtility gestorCorreo = new EmailConfigUtility();
+                            String destinatario = usuModel.correo_usu;
+                            String asunto = "Cita confirmada exitosamente!";
+                            gestorCorreo.EnviarCorreoCita(destinatario, asunto, usuModel, citaModel, mascotaModel);
+                        }
+                        catch (Exception ex)
+                        {
+
+                            // Puedes registrar el error si quieres en un log
+                            Console.WriteLine("Error al enviar correo: " + ex.Message);
+                        }
+                    });
+
                     citaEspecDto.Mensaje = "Cita confirmada exitosamente";
 
                 }
@@ -70,15 +88,15 @@ namespace Clinipet.Services
             catch (Exception ex)
             {
                 citaEspecDto.Response = 0;
-              
-                // Verificar si el mensaje contiene el error del trigger
+
                 if (ex.Message.Contains("La mascota ya tiene una cita activa"))
                 {
                     citaEspecDto.Mensaje = "La mascota ya tiene una cita activa en esa fecha y hora. Por favor selecciona otra disponibilidad.";
                 }
                 else
                 {
-                 
+                    Console.WriteLine("ERROR: " + ex.ToString());
+
 
                     // Mensaje genérico en caso de otro tipo de error
                     citaEspecDto.Mensaje = "Ocurrió un error inesperado. Intenta de nuevo más tarde.";
