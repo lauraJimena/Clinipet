@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="@Url.Content("~/Estilos/estilos.css")">
 
 
-<body class="bodyForm">
+
     <div class="contenedor">
         <div class="cont">
             <div class="cajaTitulo"><h2 class="titulo">Registro de Usuario</h2></div>
@@ -62,10 +62,10 @@
                 </div>
             </form>
         </div>
-        <img class="imagenFondo" src="~/Imagenes/fondo_RegistroUsu.jpeg" alt="">
+        <img class="imagenFondo" src="@Url.Content("~/Imagenes/fondo_RegistroUsu.jpeg")" alt="">
     </div>
 
-</body>
+
 
 <!-- Cancelar registro-->
 <script>
@@ -89,13 +89,16 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="@Url.Content("~/Scripts/Registros.js")"></script>
 <style>
+    body{
+        background-color: rgba(120, 168, 144, 0.92);
+    }
     .cajaTitulo {
         justify-items: center; /* Alinea horizontalmente */
     }
 
     .titulo {
         width: 150%;
-        margin-top: 0px;
+        margin-top: 5px;
         margin-bottom: 30px;
         margin-left: 0px;
     }
@@ -115,7 +118,7 @@
         margin-left: 40px;
         flex-direction: column; /* Elementos en columna */
     }
-
+    
     .input-contras-container {
         position: relative;
         display: inline-block;
@@ -131,7 +134,7 @@
     .verContras {
         position: absolute;
         top: 62%;
-        right: 10px;
+        right: 0px;
         transform: translateY(-50%);
         cursor: pointer;
         font-size: 18px;

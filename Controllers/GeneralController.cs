@@ -311,29 +311,27 @@ namespace Clinipet.Controllers
         public ActionResult CambiarContraseña(UserDto user)
         {
             try
-            {           
+            {
                 GeneralService contrasService = new GeneralService();
 
-                // Llamar al método CambiarContraseña, pasando la contraseña actual y la nueva contraseña.
-                bool cambioExitoso = contrasService.CambiarContraseña(user.num_ident, user.contras_usu, user.contras_nueva, user.confirmar_contras);
+                bool cambioExitoso = contrasService.CambiarContraseña(
+                    user.num_ident,
+                    user.contras_usu,
+                    user.contras_nueva,
+                    user.confirmar_contras
+                );
 
                 if (cambioExitoso)
                 {
                     ViewBag.MensajeExito = "Contraseña actualizada correctamente.";
-                    return View(); 
                 }
-                else
-                {
-                    // Si el cambio de contraseña falló, mostramos un error.
-                    ViewBag.Error = "Hubo un error al cambiar la contraseña.";
-                    return View();
-                }
+
+                return View();
             }
             catch (Exception ex)
             {
-                // Si hay una excepción, la capturamos y mostramos un mensaje de error.
-                ViewBag.Error = ex.Message;
-                return View("Error");
+                ViewBag.Error = ex.Message; // Aquí muestra el mensaje exacto del servicio
+                return View();
             }
         }
         [HttpPost]
@@ -352,8 +350,10 @@ namespace Clinipet.Controllers
                     if (!string.IsNullOrEmpty(correoUsuario))
                     {
                         // Llamar al servicio de envío de correo
-                    
-                        generalService.EnviarCorreoRestablecimiento(usuRespuesta);
+                        string baseUrl = $"{Request.Url.Scheme}://{Request.Url.Authority}{Request.ApplicationPath.TrimEnd('/')}";
+
+                        generalService.EnviarCorreoRestablecimiento(usuRespuesta, baseUrl);
+
                         return Json(new { success = true });
                     
                     }              

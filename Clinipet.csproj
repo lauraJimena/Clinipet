@@ -178,11 +178,13 @@
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="Imagenes\acerca.png" />
+    <Content Include="Imagenes\agendar_citas2.png" />
     <Content Include="Imagenes\banner_1.png" />
     <Content Include="Imagenes\banner_2.png" />
     <Content Include="Imagenes\banner_3.png" />
     <Content Include="Imagenes\cita_espec.png" />
     <Content Include="Imagenes\consultar_agenda.png" />
+    <Content Include="Imagenes\consultar_citas2.png" />
     <Content Include="Imagenes\consult_hist.png" />
     <Content Include="Imagenes\contacto.png" />
     <Content Include="Imagenes\correo_bienv.jpg" />
@@ -204,6 +206,7 @@
     <Content Include="Imagenes\fondo_index2.png" />
     <Content Include="Imagenes\fondo_login.png" />
     <Content Include="Imagenes\fondo_mascotas.png" />
+    <Content Include="Imagenes\fondo_RegistroUsu.jpeg" />
     <Content Include="Imagenes\fondo_reporte.jpg" />
     <Content Include="Imagenes\fondo_servicios.png" />
     <Content Include="Imagenes\fondo_masc_regis.png" />
@@ -222,6 +225,8 @@
     <Content Include="Imagenes\nuestro_equipo.png" />
     <Content Include="Imagenes\pub_dispon.png" />
     <Content Include="Imagenes\quienes_somos.png" />
+    <Content Include="Imagenes\registrar_usuario2.png" />
+    <Content Include="Imagenes\registro_mascot.jpeg" />
     <Content Include="Imagenes\RegisVete.jpeg" />
     <Content Include="Imagenes\RegistroVeterinario.jpg" />
     <Content Include="Imagenes\GenerarReport.jpeg" />
