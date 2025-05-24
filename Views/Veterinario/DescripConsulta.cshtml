@@ -10,19 +10,20 @@
         <div class="cajaForm">
             <form id="guardarForm">
                 <label for="motivo"><strong>Motivo de la consulta:</strong></label><br />
-                <select class="" id="motivo" name="id_motivo" required>
-                    <option value="" disabled selected hidden>Seleccione un motivo</option>
-                    @foreach (var motivo in ViewBag.Motivo)
-                    {
-                        <option value="@motivo.Value">@motivo.Text</option>
-                    }
-                </select><br />
+                    <select class="" id="motivo" name="id_motivo" required>
+                        <option value="" disabled selected hidden>Seleccione un motivo</option>
+                        @foreach (var motivo in ViewBag.Motivo)
+                        {
+                            <option value="@motivo.Value">@motivo.Text</option>
+                        }
+                    </select><br />
 
                 <label for="descripcion"><strong>Diagnóstico: </strong></label><br />
                 <textarea class="campo" id="diagnost" name="diagnost" cols="80" rows="4" placeholder="Escribe una descripción aquí..." required></textarea><br />
                 <label for="recomendaciones"><strong>Recomendaciones: </strong></label><br />
                 <textarea id="recomendaciones" name="recomen" rows="4" cols="70" placeholder="Escribe recomendaciones aquí..." required></textarea><br />
                 <input type="hidden" name="id_cita_esp" value="@ViewBag.IdCitaEsp" />
+                
                 <div class="cajaBtn">
                     <button type="button" class="botonForm botonVol" onclick="window.location.href='@Url.Action("BuscarCliente", "Veterinario")'">Volver</button>
                     <button type="submit" class="botonForm">Guardar</button>

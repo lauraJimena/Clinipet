@@ -160,6 +160,7 @@ namespace Clinipet.Controllers
                         Session["RolUsu"] = userResponse.id_rol;
                         Session["Contras"] = userResponse.contras_usu;
                         Session["Correo"] = userResponse.correo_usu;
+                        Session["Espec"] = userResponse.id_espec;
 
                         // Si necesita cambiar la contraseña, redirige a la vista de cambio de contraseña
                         if (userResponse.cambio_contras == true)
