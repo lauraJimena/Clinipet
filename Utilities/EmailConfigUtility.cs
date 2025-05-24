@@ -45,8 +45,9 @@ namespace Clinipet.Utilities
                 email.Headers.Add("X-MSMail-Priority", "High");
                 email.Headers.Add("Importance", "High");
 
-                // Crea el recurso LinkedResource para la imagen que se mostrará inline
-                LinkedResource logo = new LinkedResource(@"C:\Users\viher\source\repos\Prueba1\Prueba1\Imagenes\logo_clinipet-Photoroom.png", "image/png");
+
+                string rutaLogo = HostingEnvironment.MapPath("~/Imagenes/logo_clinipet_sin_fondo.png");
+                LinkedResource logo = new LinkedResource(rutaLogo, "image/png");                      
                 logo.ContentId = "LogoCliniPet";  // Este ID será utilizado en el HTML
                 logo.ContentType.Name = "logo_clinipet.png";
 
@@ -203,11 +204,12 @@ namespace Clinipet.Utilities
                 <div style='max-width: 600px; margin: auto; background-color: #ffffff; border: 1px solid #ddd; padding: 20px;'>
 
                     <!-- Encabezado -->
-                    <div style='display: flex; align-items: center; justify-content: center; gap: 20px; margin-bottom: 20px; background-color: #78a890; padding: 15px; '>
-                         <img src='cid:LogoCliniPet' alt='Logo CliniPet' style='max-width:165px;' />
-                        <h1 style='margin: 0; font-size: 24px; color: white; margin-top:8px;'>Cita agendada, {usu.nom_usu}!</h1>
+                    <div style='display: flex; align-items: center; justify-content: center; gap: 20px; margin-bottom: 20px; background-color: #78a890; padding: 15px;'>
+                        <img src='cid:LogoCliniPet' alt='Logo CliniPet' style='width: 150px; height: auto;' />
+                        <h1 style='margin: 0; font-size: 29px; color: white;'>Cita agendada, {usu.nom_usu}!</h1>
                     </div>
 
+                    
                     <!-- Texto de introducción -->
                     <p style='font-size: 16px;'>
                         Estimado(a) cliente, la cita de su mascota se agendó correctamente. Recuerde asistir 15 minutos antes de la hora de su cita.

@@ -21,7 +21,7 @@ namespace Clinipet.Controllers
             Response.Cache.SetCacheability(HttpCacheability.NoCache); // Indica al navegador que no debe guardar esta página en la caché.
             Response.Cache.SetNoStore(); // No guardar en ningún tipo de almacenamiento
 
-            Response.AppendHeader("Pragma", "no-cache");
+            Response.AppendHeader("Pragma", "no-cache"); //se ejecuta antes de que se ejecute cualquier acción del controlador
             Response.AppendHeader("Expires", "-1");
         }
     }
