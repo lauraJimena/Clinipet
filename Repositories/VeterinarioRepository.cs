@@ -529,6 +529,37 @@ namespace Clinipet.Repositories
             }
             return mascotas;
         }
+        public List<SelectListItem> ObtenerMotivosPorEspecialidad(int idEspecialidad)
+        {
+            List<SelectListItem> motivos = new List<SelectListItem>();
+            string sql = @"
+        SELECT id_motivo, nombre
+        FROM motivo
+        WHERE id_espec = @idEspecialidad";
+
+            DBContextUtility connection = new DBContextUtility();
+            connection.Connect();
+
+            using (SqlCommand command = new SqlCommand(sql, connection.CONN()))
+            {
+                command.Parameters.AddWithValue("@idEspecialidad", idEspecialidad);
+
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        motivos.Add(new SelectListItem
+                        {
+                            Value = reader.GetInt32(0).ToString(),
+                            Text = reader.GetString(1)
+                        });
+                    }
+                }
+            }
+
+            return motivos;
+        }
+
 
 
 

@@ -14,12 +14,23 @@
     <form id="Form" method="post" action="@Url.Action("ElegirMascota", "Cliente")">
 
         <div class="contenedorDias">
-            @foreach (var grupo in Model.GroupBy(d => d.nom_dia))//Agrupar por nom_dia
+            @{
+                var diasOrdenados = new[] { "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo" };
+                var gruposOrdenados = diasOrdenados
+                    .Select(dia => new
+                    {
+                        Dia = dia,
+                        Items = Model.Where(m => m.nom_dia.Equals(dia, StringComparison.OrdinalIgnoreCase)).ToList()
+                    })
+                    .Where(g => g.Items.Any());
+            }
+
+            @foreach (var grupo in gruposOrdenados)//Agrupar por nom_dia
             {
                 <div class="cajaDia">
-                    <strong>@grupo.Key.ToUpper()</strong>
+                    <strong>@grupo.Dia.ToUpper()</strong>
                     <div class="cajaHoras">
-                        @foreach (var item in grupo)
+                        @foreach (var item in grupo.Items)
                         {
                             <input type="hidden" name="id_usu" value="@Session["Id"]" />
                             <input type="radio" name="id_dispon" id="dispon_@item.id_dispon" value="@item.id_dispon" hidden required />
