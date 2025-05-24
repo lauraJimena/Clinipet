@@ -18,7 +18,7 @@ namespace Clinipet.Utilities
         //LAURA HERREÑO
         static string SERVER = "LAPTOP-8RV6USKP";  // Nombre de la instancia del servidor SQL
         static string DB_NAME = "clinipet";
-        static string DB_USER = "sa";
+        static string DB_USER = "userapp";
         static string DB_PASSWORD = "12345";
 
         static readonly string Conn = "server=" + SERVER + ";database=" + DB_NAME + ";user id=" + DB_USER + ";password=" + DB_PASSWORD + ";MultipleActiveResultSets=true";

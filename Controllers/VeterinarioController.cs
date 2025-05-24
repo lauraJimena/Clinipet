@@ -351,9 +351,15 @@ namespace Clinipet.Controllers
                         return View("Error");
                     }
                     VeterinarioService veterinarioService = new VeterinarioService();
-                    ViewBag.Motivo = veterinarioService.ObtenerMotivoSelect();             
+                    //ViewBag.Motivo = veterinarioService.ObtenerMotivoSelect();             
+                    //ViewBag.IdCitaEsp = id_cita_esp;
+                    //return View();           
+                    int idEspecialidad = (int)Session["Espec"];
+
+                    // Obtener motivos según especialidad
+                    ViewBag.Motivo = veterinarioService.ObtenerMotivoSelectPorEspecialidad(idEspecialidad);
                     ViewBag.IdCitaEsp = id_cita_esp;
-                    return View();           
+                    return View();
                 }
                 else
                 {

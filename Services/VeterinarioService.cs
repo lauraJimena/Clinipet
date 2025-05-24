@@ -272,6 +272,13 @@ namespace Clinipet.Services
             return mascotas;
 
         }
+        public List<SelectListItem> ObtenerMotivoSelectPorEspecialidad(int idEspecialidad)
+        {
+            VeterinarioRepository veterinarioRepository = new VeterinarioRepository();
+            return veterinarioRepository.ObtenerMotivosPorEspecialidad(idEspecialidad);
+
+        }
+
 
 
 

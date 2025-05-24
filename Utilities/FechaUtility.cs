@@ -27,9 +27,9 @@ namespace Clinipet.Utilities
             {
                 throw new ArgumentException("Día no válido: " + nombreDia);
             }
-
+            //Fecha del próximo día de la semana que coincida con ese nombre, tomando como referencia el día actual.
             DateTime hoy = DateTime.Today;
-            int diasFaltantes = ((int)diaDeseado - (int)hoy.DayOfWeek + 7) % 7;
+            int diasFaltantes = ((int)diaDeseado - (int)hoy.DayOfWeek + 7) % 7; // Calcula cuántos días faltan desde hoy hasta el próximo día deseado
             diasFaltantes = diasFaltantes == 0 ? 7 : diasFaltantes;
 
             return hoy.AddDays(diasFaltantes);
